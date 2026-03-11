@@ -3,6 +3,8 @@ import { Lexend, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import Header from './components/header'
+import { TooltipProvider } from '@/components/ui/tooltip'
+import TheSetting from './components/the-setting'
 
 const lexend = Lexend({
   variable: '--font-sans',
@@ -28,7 +30,12 @@ export default function RootLayout({
     <html lang='en' className={cn(lexend.variable, jetbrainsMono.variable)}>
       <body className='font-sans antialiased flex flex-col justify-between min-h-screen'>
         <Header />
-        <div className='grow'>{children}</div>
+        <div className='grow'>
+          <TooltipProvider>{children}</TooltipProvider>
+        </div>
+        <div className='fixed bottom-10 right-10 z-50'>
+          <TheSetting />
+        </div>
         <p>footer</p>
       </body>
     </html>
