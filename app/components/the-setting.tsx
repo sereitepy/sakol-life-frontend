@@ -1,16 +1,20 @@
-import { ThemeTogglerButton } from "@/components/animate-ui/components/buttons/theme-toggler";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Settings } from "lucide-react";
+import { ThemeTogglerButton } from '@/components/animate-ui/components/buttons/theme-toggler'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { Settings } from 'lucide-react'
 
 export default function TheSetting() {
   return (
-    <div>
+    <div className='hidden md:flex'>
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant='outline' size='icon' className='rounded-md'>
-            <Settings size={18} />
-          </Button>
+          <Settings
+            size={23}
+            className='text-primary cursor-pointer hover:text-accent-foreground'
+          />
         </PopoverTrigger>
         <PopoverContent className='w-fit p-3 rounded-md'>
           <ThemeTogglerButton />
