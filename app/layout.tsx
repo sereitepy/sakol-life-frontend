@@ -35,7 +35,7 @@ export default function RootLayout({
     >
       <body className='font-sans antialiased flex flex-col justify-between min-h-screen'>
         <Providers>
-          <div className='sticky top-0 shadow-xs shadow-input z-10 bg-card'>
+          <div className='sticky top-0 shadow-xs shadow-input z-10 bg-background'>
             <div className='max-w-687.5 mx-auto'>
               <Header />
             </div>
