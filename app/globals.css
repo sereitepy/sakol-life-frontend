@@ -52,11 +52,11 @@ html {
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(0.99 0.005 140);
+  --background: oklch(83.934% 0.03466 137.204);
   --foreground: oklch(0.2 0.05 140);
-  --card: oklch(0.97 0.01 140);
+  --card: oklch(90.03% 0.01819 135.153);
   --card-foreground: oklch(0.2 0.05 140);
-  --popover: oklch(1 0 0);
+  --popover: oklch(89.652% 0.01365 135.201);
   --popover-foreground: oklch(0.2 0.05 140);
   --primary: oklch(0.5 0.13 145);
   --primary-foreground: oklch(0.99 0.005 140);

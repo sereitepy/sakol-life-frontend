@@ -12,7 +12,7 @@ import Image from 'next/image'
 
 export default function Hero() {
   return (
-    <div className='relative p-8 md:p-10 lg:p-15 flex flex-col gap-5 overflow-hidden bg-accent/50 dark:bg-secondary/30 transition-all duration-150 ease-in-out'>
+    <div className='relative p-8 md:p-10 lg:p-15 flex flex-col gap-5 overflow-hidden bg-accent-foreground dark:bg-secondary/30 transition-all duration-150 ease-in-out'>
       <BackgroundBeams />
 
       <div className='relative flex flex-col md:flex-row items-center justify-between gap-8 lg:gap-10 w-full max-w-5xl mx-auto'>
@@ -23,14 +23,14 @@ export default function Hero() {
             <p>EDUCATION PLATFORM</p>
           </div>
 
-          <h1 className='text-3xl sm:text-4xl font-bold tracking-tight leading-tight'>
+          <h1 className='text-3xl sm:text-4xl font-bold tracking-tight leading-tight text-accent dark:text-secondary-foreground'>
             Discover Your&nbsp;
-            <span className='font-extrabold text-4xl sm:text-5xl bg-linear-to-r from-secondary-foreground to-primary bg-clip-text text-transparent'>
+            <span className='font-extrabold text-4xl sm:text-5xl bg-linear-to-r from-accent to-muted-foreground dark:from-secondary-foreground dark:to-primary bg-clip-text text-transparent'>
               Future Path
             </span>
           </h1>
 
-          <p className='text-secondary-foreground text-sm sm:text-base'>
+          <p className='text-accent dark:text-secondary-foreground text-sm sm:text-base'>
             Answer 14 simple questions and get personalized recommendations for
             your technology university major!
           </p>
@@ -65,32 +65,31 @@ export default function Hero() {
               </Avatar>
               <AvatarGroupCount>+200</AvatarGroupCount>
             </AvatarGroup>
-            <p className='text-secondary-foreground text-sm'>
+            <p className='text-accent dark:text-secondary-foreground text-sm'>
               Trusted by 200+ Cambodian students
             </p>
           </section>
         </section>
 
         {/* Right side */}
-        <section className='relative w-full md:w-auto md:shrink-0'>
+        <section className='relative w-full md:w-auto md:shrink-0 group cursor-pointer'>
           <div className='relative rounded-xl overflow-hidden'>
             <Image
               src='/images/cambodian_students.png'
               alt='Cambodian Students Studying'
               width={450}
               height={300}
-              className='w-full md:w-100 h-55 sm:h-65 md:h-75 object-cover hover:scale-110'
+              className='w-full md:w-100 h-55 sm:h-65 md:h-75 object-cover transition-transform duration-500 ease-out group-hover:scale-110'
             />
             {/* Dark overlay */}
-            <div className='absolute inset-0 bg-black/20 rounded-xl' />
+            <div className='absolute inset-0 bg-black/30 dark:bg-black/20 rounded-xl transition-opacity duration-300 group-hover:opacity-60' />
           </div>
 
-          <div className='absolute bottom-3 left-3 right-3'>
-            <div className='flex items-center justify-between gap-2 bg-card dark:bg-sidebar-accent px-3 rounded-md py-2 shadow-sm'>
+          <div className='absolute bottom-3 left-3 right-3 transition-transform duration-300 ease-out group-hover:-translate-y-1'>
+            <div className='flex items-center justify-between gap-2 bg-card dark:bg-sidebar-accent px-3 rounded-md py-2 shadow-sm transition-shadow duration-300 group-hover:shadow-md'>
               <div className='flex items-center gap-3'>
                 <CircleCheckBig
-                  color='#239d6a'
-                  className='bg-accent dark:bg-secondary-foreground p-1 rounded-sm shrink-0'
+                  className='text-primary bg-accent dark:bg-secondary-foreground p-1 rounded-sm shrink-0'
                   size={25}
                 />
                 <div>
