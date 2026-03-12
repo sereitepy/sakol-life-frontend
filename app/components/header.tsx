@@ -1,30 +1,25 @@
-'use client'
-
 import { ThemeTogglerButton } from '@/components/animate-ui/components/buttons/theme-toggler'
-import Logo from './logo'
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import { Menu, Palette, Settings } from 'lucide-react'
 import {
   Sheet,
   SheetContent,
-  SheetTrigger,
   SheetTitle,
+  SheetTrigger,
 } from '@/components/ui/sheet'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+import { Menu } from 'lucide-react'
+import Link from 'next/link'
+import Logo from './logo'
 
 export default function Header() {
   return (
-    <div className='p-5 flex items-center justify-between'>
+    <div className='py-3 flex items-center justify-between px-5 lg:px-20 max-w-687.5 mx-auto'>
       {/* Logo */}
-      <div className='flex items-center gap-2'>
-        <Logo />
-        <p className='font-bold text-lg tracking-tight'>Sakol Life</p>
-      </div>
+      <Link href={'/'}>
+        <div className='flex items-center gap-2'>
+          <Logo />
+          <p className='font-bold text-lg tracking-tight'>Sakol Life</p>
+        </div>
+      </Link>
 
       {/* Desktop nav */}
       <section className='hidden md:flex items-center gap-5'>

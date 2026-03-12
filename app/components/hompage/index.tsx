@@ -1,9 +1,9 @@
+import Hero from './hero'
+
 export default function Homepage() {
   return (
     <div>
-      hero
-      parters
-      how it works
+      <Hero /> parters how it works
     </div>
   )
 }
