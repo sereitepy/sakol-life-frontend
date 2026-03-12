@@ -17,7 +17,7 @@ export default function Hero() {
 
       <div className='relative flex flex-col md:flex-row items-center justify-between gap-8 lg:gap-10 w-full max-w-5xl mx-auto'>
         {/* Left side */}
-        <section className='flex flex-col gap-5 flex-1 w-full'>
+        <section className='flex flex-col gap-5 w-full md:w-[60%]'>
           <div className='text-sm font-semibold px-2 py-0.5 rounded-lg bg-secondary w-fit flex items-center gap-1'>
             <Birdhouse size={16} className='text-accent-foreground' />
             <p>EDUCATION PLATFORM</p>
@@ -72,14 +72,14 @@ export default function Hero() {
         </section>
 
         {/* Right side */}
-        <section className='relative w-full md:w-auto md:shrink-0 group cursor-pointer'>
+        <section className='relative w-full md:w-[40%] group cursor-pointer'>
           <div className='relative rounded-xl overflow-hidden'>
             <Image
               src='/images/cambodian_students.png'
               alt='Cambodian Students Studying'
               width={450}
               height={300}
-              className='w-full md:w-100 h-55 sm:h-65 md:h-75 object-cover transition-transform duration-500 ease-out group-hover:scale-110'
+              className='w-full h-55 sm:h-65 md:h-75 object-cover transition-transform duration-500 ease-out group-hover:scale-110'
             />
             {/* Dark overlay */}
             <div className='absolute inset-0 bg-black/30 dark:bg-black/20 rounded-xl transition-opacity duration-300 group-hover:opacity-60' />
