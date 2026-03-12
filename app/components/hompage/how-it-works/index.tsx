@@ -32,9 +32,9 @@ export default function HowItWorks() {
     },
   ]
   return (
-    <div className='flex items-center justify-center p-10 bg-chart-3/20 dark:bg-secondary flex-col gap-10'>
+    <div className='flex items-center justify-center p-8 md:p-10 bg-chart-3/20 dark:bg-secondary flex-col gap-5 md:gap-10'>
       <section className='flex flex-col gap-3 items-center justify-center'>
-        <h1 className='text-2xl font-bold'>How it works</h1>
+        <h1 className='text-2xl lg:text-3xl font-extrabold tracking-tight'>How it works</h1>
         <p className='text-accent-foreground'>
           Your jouney to a dream major in 3 simple steps
         </p>
@@ -45,7 +45,7 @@ export default function HowItWorks() {
           return (
             <div
               key={item.id}
-              className='relative p-7 rounded-md bg-chart-3/40 border-input flex flex-col gap-3 flex-1 
+              className='relative p-5 lg:p-7 rounded-md bg-chart-3/40 border-input flex flex-col gap-3 flex-1 
             transition-all duration-300 ease-out
             hover:-translate-y-2 hover:shadow-lg hover:bg-chart-3/60
             cursor-pointer group'
@@ -58,7 +58,7 @@ export default function HowItWorks() {
               </div>
               <h1 className='font-bold text-lg'>{item.title}</h1>
               <p className='text-accent-foreground'>{item.des}</p>
-              <p className='absolute top-0 right-5 opacity-30 text-8xl font-extrabold transition-opacity duration-300 group-hover:opacity-50'>
+              <p className='absolute top-1 lg:top-0 right-5 opacity-30 text-7xl lg:text-8xl font-extrabold transition-opacity duration-300 group-hover:opacity-50'>
                 {index + 1}
               </p>
             </div>
