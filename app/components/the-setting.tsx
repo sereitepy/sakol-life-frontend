@@ -1,10 +1,12 @@
 import { ThemeTogglerButton } from '@/components/animate-ui/components/buttons/theme-toggler'
+import { Button } from '@/components/ui/button'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Settings } from 'lucide-react'
+import { signOutAction } from '@/lib/auth/signout'
 
 export default function TheSetting() {
   return (
@@ -18,6 +20,15 @@ export default function TheSetting() {
         </PopoverTrigger>
         <PopoverContent className='w-fit p-3 rounded-md'>
           <ThemeTogglerButton />
+          <form action={signOutAction}>
+            <Button
+              type='submit'
+              variant='ghost'
+              className='rounded-md text-md font-semibold h-9'
+            >
+              Sign Out
+            </Button>
+          </form>
         </PopoverContent>
       </Popover>
     </div>
