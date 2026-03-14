@@ -6,15 +6,20 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Menu } from 'lucide-react'
 import Link from 'next/link'
 import Logo from './logo'
+import { getUser } from '@/lib/auth'
+import { signOutAction } from '@/lib/auth/signout'
 
-export default function Header() {
+export default async function Header() {
+  const user = await getUser()
+
   return (
     <div className='py-3 flex items-center justify-between px-5 lg:px-20 max-w-687.5 mx-auto'>
       {/* Logo */}
-      <Link href={'/'}>
+      <Link href='/'>
         <div className='flex items-center gap-2'>
           <Logo />
           <p className='font-bold text-lg tracking-tight'>Sakol Life</p>
@@ -27,18 +32,40 @@ export default function Header() {
           About Us
         </Link>
 
-        <Button
-          variant='default'
-          className='rounded-md text-md font-semibold w-21 h-9'
-        >
-          Sign Up
-        </Button>
-        <Button
-          variant='ghost'
-          className='rounded-md text-md font-semibold w-21 h-9'
-        >
-          Sign In
-        </Button>
+        {user ? (
+          <div className='flex items-center gap-3'>
+            <Link href='/profile'>
+              <Avatar>
+                <AvatarImage
+                  src={user.user_metadata?.avatar_url ?? ''}
+                  alt={user.email ?? 'Profile'}
+                />
+                <AvatarFallback>
+                  {user.email?.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
+          </div>
+        ) : (
+          <div className='flex items-center gap-2'>
+            <Link href='/signin'>
+              <Button
+                variant='ghost'
+                className='rounded-md text-md font-semibold h-9'
+              >
+                Sign In
+              </Button>
+            </Link>
+            <Link href='/signup'>
+              <Button
+                variant='default'
+                className='rounded-md text-md font-semibold h-9'
+              >
+                Sign Up
+              </Button>
+            </Link>
+          </div>
+        )}
       </section>
 
       {/* Mobile nav */}
@@ -58,21 +85,47 @@ export default function Header() {
               >
                 About Us
               </Link>
+              {user && (
+                <Link
+                  href='/profile'
+                  className='underline-animate font-semibold text-lg w-fit'
+                >
+                  Profile
+                </Link>
+              )}
             </nav>
             <div className='flex flex-col gap-3 mt-auto'>
-              <ThemeTogglerButton />
-              <Button
-                variant='default'
-                className='rounded-md font-semibold w-full'
-              >
-                Sign Up
-              </Button>
-              <Button
-                variant='ghost'
-                className='rounded-md font-semibold w-full'
-              >
-                Sign In
-              </Button>
+              <ThemeTogglerButton suppressHydrationWarning />
+              {user ? (
+                <form action={signOutAction}>
+                  <Button
+                    type='submit'
+                    variant='ghost'
+                    className='rounded-md font-semibold w-full'
+                  >
+                    Sign Out
+                  </Button>
+                </form>
+              ) : (
+                <>
+                  <Link href='/signin'>
+                    <Button
+                      variant='ghost'
+                      className='rounded-md font-semibold w-full'
+                    >
+                      Sign In
+                    </Button>
+                  </Link>
+                  <Link href='/signup'>
+                    <Button
+                      variant='default'
+                      className='rounded-md font-semibold w-full'
+                    >
+                      Sign Up
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </SheetContent>
         </Sheet>
