@@ -1,6 +1,3 @@
-import { ArrowRight, Birdhouse, CircleCheckBig } from 'lucide-react'
-import { BackgroundBeams } from '@/components/ui/beams'
-import { Button } from '@/components/ui/button'
 import {
   Avatar,
   AvatarFallback,
@@ -8,7 +5,11 @@ import {
   AvatarGroupCount,
   AvatarImage,
 } from '@/components/ui/avatar'
+import { BackgroundBeams } from '@/components/ui/beams'
+import { Button } from '@/components/ui/button'
+import { Birdhouse, CircleCheckBig } from 'lucide-react'
 import Image from 'next/image'
+import CTAButton from './cta'
 
 export default function Hero() {
   return (
@@ -16,7 +17,7 @@ export default function Hero() {
       <BackgroundBeams />
 
       <div className='relative flex flex-col md:flex-row items-center justify-between gap-8 lg:gap-10 w-full max-w-5xl mx-auto'>
-        {/* Left side */}
+        {/* left side */}
         <section className='flex flex-col gap-5 w-full md:w-[60%]'>
           <div className='text-sm font-semibold px-2 py-0.5 rounded-lg bg-secondary w-fit flex items-center gap-1'>
             <Birdhouse size={16} className='text-accent-foreground' />
@@ -37,9 +38,7 @@ export default function Hero() {
 
           {/* CTA buttons */}
           <div className='flex flex-col sm:flex-row items-start sm:items-center gap-3'>
-            <Button className='w-full sm:w-fit rounded-md text-md h-12 px-4 font-bold'>
-              Get Personal Package <ArrowRight size={20} className='ml-1' />
-            </Button>
+            <CTAButton />
             <Button
               variant='ghost'
               className='w-full sm:w-fit rounded-md text-md h-12 px-4 font-bold'
@@ -48,7 +47,7 @@ export default function Hero() {
             </Button>
           </div>
 
-          {/* Trusted */}
+          {/* trusted avatars */}
           <section className='flex items-center gap-4'>
             <AvatarGroup>
               <Avatar>
@@ -71,7 +70,7 @@ export default function Hero() {
           </section>
         </section>
 
-        {/* Right side */}
+        {/* right side */}
         <section className='relative w-full md:w-[40%] group cursor-pointer'>
           <div className='relative rounded-xl overflow-hidden'>
             <Image
@@ -81,7 +80,7 @@ export default function Hero() {
               height={300}
               className='w-full h-55 sm:h-65 md:h-75 object-cover transition-transform duration-500 ease-out group-hover:scale-110'
             />
-            {/* Dark overlay */}
+            {/* a bit of a dark overlay */}
             <div className='absolute inset-0 bg-black/30 dark:bg-black/20 rounded-xl transition-opacity duration-300 group-hover:opacity-60' />
           </div>
 
