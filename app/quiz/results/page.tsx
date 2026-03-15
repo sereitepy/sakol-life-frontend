@@ -1,6 +1,5 @@
-import GuestResultsGuard from "@/app/components/quiz/guest-results-guard"
-import ResultsClient from "@/app/components/quiz/results"
-
+import GuestResultsGuard from '@/app/components/quiz/results/guest-results-guard'
+import ResultsClient from '@/app/components/quiz/results/results'
 
 type Props = {
   searchParams: Promise<{

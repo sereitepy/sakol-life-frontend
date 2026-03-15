@@ -65,11 +65,10 @@ export async function fetchQuizQuestions(): Promise<Question[]> {
   return data.sort((a, b) => a.displayOrder - b.displayOrder)
 }
 
-// Submit quiz answers — body is { Q1: "A", Q2: 4, ... }
+// Submit quiz answers
 export async function submitQuizAnswers(
   answers: Answer[]
 ): Promise<QuizSubmitResponse> {
-  // Transform array of answers into the flat { questionCode: value } format the API expects
   const body: Record<string, string | number> = {}
   for (const answer of answers) {
     body[answer.questionCode] = answer.value
