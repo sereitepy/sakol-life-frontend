@@ -1,9 +1,10 @@
 'use client'
 
-import { ProfileResponse } from '@/lib/profile/action';
+import { ProfileResponse } from '@/lib/profile/action'
 import { useState } from 'react'
-import DashboardTab from './dashboard';
-
+import DashboardTab from './dashboard'
+import SurveyTab from './survey'
+import SettingsTab from './settings'
 
 type Tab = 'dashboard' | 'survey' | 'settings'
 
@@ -59,13 +60,13 @@ export default function ProfileShell({ profile, accessToken }: Props) {
           <DashboardTab profile={profile} accessToken={accessToken} />
         )}
         {activeTab === 'survey' && (
-          <div className='flex items-center justify-center py-32 text-muted-foreground text-sm'>
-            Survey Answers tab — coming soon
+          <div className='max-w-300 mx-auto px-6 py-8'>
+            <SurveyTab profile={profile} />
           </div>
         )}
         {activeTab === 'settings' && (
-          <div className='flex items-center justify-center py-32 text-muted-foreground text-sm'>
-            Account Settings tab — coming soon
+          <div className='max-w-300 mx-auto px-6 py-8'>
+            <SettingsTab profile={profile} accessToken={accessToken} />
           </div>
         )}
       </div>

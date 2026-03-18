@@ -33,11 +33,66 @@ export type MajorResult = {
   code: string
   nameEn: string
   nameKh: string
-  descriptionEn: string
-  descriptionKh: string
-  rank: number
-  similarityScore: number
-  similarityPercentage: number
+  descriptionEn: string | null
+  descriptionKh: string | null
+  faculty: string | null
+  degreeType: string | null
+  language: string | null
+  iconUrl: string | null
+  careerCategory: CareerCategory | null
+  jobOutlook: JobOutlook | null
+  jobDemandLevel: JobDemandLevel | null
+  salaryMin: number | null
+  salaryMax: number | null
+  riasecR: number
+  riasecI: number
+  riasecA: number
+  riasecS: number
+  riasecE: number
+  riasecC: number
+  subjects: MajorSubject[]
+  skills: MajorSkill[]
+  careerOpportunities: MajorCareerOpportunity[]
+  createdAt: string
+  updatedAt: string
+  // computed by API
+  rank?: number
+  similarityScore?: number
+  similarityPercentage?: number | undefined
+}
+
+export type CareerCategory =
+  | 'STEM'
+  | 'BUSINESS'
+  | 'ARTS'
+  | 'SOCIAL'
+  | 'HEALTH'
+  | 'EDUCATION'
+  | 'LAW'
+  | 'OTHER'
+
+export type JobOutlook = 'HIGH' | 'MEDIUM' | 'LOW'
+
+export type JobDemandLevel =
+  | 'VERY_HIGH'
+  | 'HIGH'
+  | 'MEDIUM'
+  | 'LOW'
+  | 'VERY_LOW'
+
+export type MajorSubject = {
+  id: string
+  displayOrder: number
+}
+
+export type MajorSkill = {
+  id: string
+  displayOrder: number
+}
+
+export type MajorCareerOpportunity = {
+  id: string
+  displayOrder: number
 }
 
 export type QuizSubmitResponse = {
