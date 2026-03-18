@@ -23,6 +23,7 @@ import {
   Palette,
   BarChart3,
   BookOpen,
+  TrendingUp,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -33,6 +34,7 @@ type Props = {
   profile: ProfileResponse
   accessToken: string
 }
+
 
 const MAJOR_ICONS: Record<
   string,
@@ -54,20 +56,14 @@ function getMajorIcon(code: string) {
   return MAJOR_ICONS[code] ?? MAJOR_ICONS.DEFAULT
 }
 
-type PersonalityTag = {
-  label: string
-  color: string
-}
+
+type PersonalityTag = { label: string; color: string }
 
 function derivePersonalityTags(
   answers: ProfileResponse['latestAnswers']
 ): PersonalityTag[] {
   const map: Record<string, string | number> = {}
-  for (const a of answers) {
-    map[a.questionCode] = a.answerValue
-  }
-
-  const tags: PersonalityTag[] = []
+  for (const a of answers) map[a.questionCode] = a.answerValue
 
   const q4a = Number(map['Q4_A'] ?? 0)
   const q4b = Number(map['Q4_B'] ?? 0)
@@ -77,6 +73,7 @@ function derivePersonalityTags(
   const q4f = Number(map['Q4_F'] ?? 0)
   const q4g = Number(map['Q4_G'] ?? 0)
 
+  const tags: PersonalityTag[] = []
   if (q4d >= 4 || q4a >= 4)
     tags.push({
       label: 'Visual Thinker',
@@ -104,7 +101,6 @@ function derivePersonalityTags(
       color: 'bg-primary/10 text-primary border-primary/20',
     })
 
-  // aalways show at least 2 fallback tags
   if (tags.length === 0) {
     tags.push({
       label: 'Curious Learner',
@@ -116,9 +112,9 @@ function derivePersonalityTags(
         'bg-secondary text-secondary-foreground border-secondary-foreground/10',
     })
   }
-
   return tags
 }
+
 
 function StatCard({
   icon: Icon,
@@ -158,7 +154,6 @@ function RecommendationCard({
   onClick: () => void
 }) {
   const { Icon, gradient } = getMajorIcon(code)
-
   return (
     <button
       onClick={onClick}
@@ -173,7 +168,6 @@ function RecommendationCard({
       >
         <Icon size={32} className='text-white/90' />
       </div>
-
       <div className='p-3.5'>
         <p className='font-bold text-sm text-foreground leading-snug'>
           {nameEn}
@@ -217,9 +211,9 @@ function ShortcutRow({
   )
 }
 
+
 export default function DashboardTab({ profile }: Props) {
   const router = useRouter()
-
   const {
     displayName,
     profilePictureUrl,
@@ -229,7 +223,7 @@ export default function DashboardTab({ profile }: Props) {
     role,
   } = profile
 
-  // pull the top 3 majors from sessionStorage if available (populated after quiz)
+  // Pull top 3 from sessionStorage (populated after quiz)
   let recommendations: Array<{
     code: string
     nameEn: string
@@ -241,12 +235,8 @@ export default function DashboardTab({ profile }: Props) {
       typeof window !== 'undefined'
         ? sessionStorage.getItem('quizResult')
         : null
-    if (stored) {
-      const parsed = JSON.parse(stored)
-      recommendations = (parsed.results ?? []).slice(0, 3)
-    }
+    if (stored) recommendations = (JSON.parse(stored).results ?? []).slice(0, 3)
   } catch {
-    // ignore
   }
 
   const personalityTags = derivePersonalityTags(latestAnswers)
@@ -262,14 +252,15 @@ export default function DashboardTab({ profile }: Props) {
 
   return (
     <div className='space-y-6'>
-      {/* profile Hero Card*/}
-      <div className='bg-card border border-border rounded-2xl p-6 flex items-center gap-5'>
-        {/* avatar */}
+      {/* Profile hero */}
+      <div className='bg-card border border-border rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5'>
         <div className='relative shrink-0'>
           {profilePictureUrl ? (
             <Image
               src={profilePictureUrl}
               alt={displayName}
+              width={64}
+              height={64}
               className='w-16 h-16 rounded-full object-cover ring-2 ring-border'
             />
           ) : (
@@ -284,7 +275,6 @@ export default function DashboardTab({ profile }: Props) {
           )}
         </div>
 
-        {/* Info */}
         <div className='flex-1 min-w-0'>
           <h1 className='text-xl font-bold text-foreground leading-tight'>
             {displayName}
@@ -293,21 +283,38 @@ export default function DashboardTab({ profile }: Props) {
             <MapPin size={12} />
             <span className='text-xs'>Phnom Penh, Cambodia</span>
           </div>
+          {/* Selected major badge */}
+          {selectedMajor && (
+            <div className='mt-2 flex items-center gap-2'>
+              <span className='text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20'>
+                🎓 {selectedMajor.nameEn}
+              </span>
+              {selectedMajor.jobOutlook && (
+                <span
+                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                    selectedMajor.jobOutlook === 'HIGH'
+                      ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400'
+                      : 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                  }`}
+                >
+                  {selectedMajor.jobOutlook} Demand
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Edit */}
         <Button
           variant='outline'
           size='sm'
           className='shrink-0 gap-1.5 rounded-xl border-border'
-          onClick={() => router.push('/profile/edit')}
+          onClick={() => router.push('/profile/settings')}
         >
-          <Pencil size={13} />
-          Edit Profile
+          <Pencil size={13} /> Edit Profile
         </Button>
       </div>
 
-      {/* 3 Stat Cards, below the profile section*/}
+      {/* 3 Stat cards */}
       <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
         <StatCard
           icon={Calendar}
@@ -317,11 +324,7 @@ export default function DashboardTab({ profile }: Props) {
         <StatCard
           icon={Target}
           label='Top Match'
-          value={
-            selectedMajor
-              ? selectedMajor.nameEn
-              : (recommendations[0]?.nameEn ?? '—')
-          }
+          value={selectedMajor?.nameEn ?? recommendations[0]?.nameEn ?? '—'}
         />
         <StatCard
           icon={Bookmark}
@@ -330,9 +333,9 @@ export default function DashboardTab({ profile }: Props) {
         />
       </div>
 
-      {/* section below the 3 stats card*/}
-      <div className='flex gap-6 items-start'>
-        {/* LEFT column */}
+      {/* Two-column section */}
+      <div className='flex flex-col lg:flex-row gap-6 items-start'>
+        {/* Left column */}
         <div className='flex-1 min-w-0 space-y-6'>
           {/* Recommendations */}
           <div className='bg-card border border-border rounded-2xl p-5'>
@@ -395,7 +398,7 @@ export default function DashboardTab({ profile }: Props) {
             )}
           </div>
 
-          {/* Assessment Status */}
+          {/* Assessment status */}
           <div className='bg-card border border-border rounded-2xl p-5'>
             <div className='flex items-start justify-between mb-1'>
               <div>
@@ -419,7 +422,6 @@ export default function DashboardTab({ profile }: Props) {
               </Button>
             </div>
 
-            {/* Progress bar */}
             <div className='mt-4 h-2 bg-muted rounded-full overflow-hidden'>
               <div
                 className='h-full bg-primary rounded-full transition-all duration-700'
@@ -427,7 +429,6 @@ export default function DashboardTab({ profile }: Props) {
               />
             </div>
 
-            {/* Personality Tags */}
             {hasQuiz && personalityTags.length > 0 && (
               <div className='mt-5'>
                 <p className='text-[10px] font-bold tracking-[0.12em] uppercase text-muted-foreground mb-2.5'>
@@ -448,9 +449,9 @@ export default function DashboardTab({ profile }: Props) {
           </div>
         </div>
 
-        {/* RIGHT column */}
-        <div className='w-64 shrink-0 space-y-4'>
-          {/* Quick Shortcuts */}
+        {/* Right column */}
+        <div className='w-full lg:w-64 shrink-0 space-y-4'>
+          {/* Quick shortcuts */}
           <div className='bg-card border border-border rounded-2xl p-4 space-y-2'>
             <h3 className='font-bold text-sm text-foreground mb-3'>
               Quick Shortcuts
@@ -470,9 +471,14 @@ export default function DashboardTab({ profile }: Props) {
               label='Scholarship Guide'
               onClick={() => router.push('/scholarships')}
             />
+            <ShortcutRow
+              icon={TrendingUp}
+              label='My Survey History'
+              onClick={() => router.push('/profile/survey')}
+            />
           </div>
 
-          {/* nneed Guidance CTA */}
+          {/* Need Guidance CTA */}
           <div className='bg-foreground text-background rounded-2xl p-5'>
             <div className='flex items-start gap-2 mb-1'>
               <User
