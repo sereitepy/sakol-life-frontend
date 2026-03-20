@@ -3,8 +3,10 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
-  const { searchParams, origin } = new URL(request.url)
+  const { searchParams } = new URL(request.url)
   const code = searchParams.get('code')
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!
 
   if (code) {
     const cookieStore = await cookies()
@@ -26,8 +28,8 @@ export async function GET(request: NextRequest) {
     )
 
     const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) return NextResponse.redirect(`${origin}/`)
+    if (!error) return NextResponse.redirect(`${siteUrl}/`)
   }
 
-  return NextResponse.redirect(`${origin}/signup?error=callback_failed`)
+  return NextResponse.redirect(`${siteUrl}/signup?error=callback_failed`)
 }
