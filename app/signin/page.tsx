@@ -33,7 +33,9 @@ export default function SignInPage() {
       }
       // merge any guest quiz answers into the signed-in account
       await handlePostAuth({ accessToken: result.accessToken })
-      router.push('/')
+      const redirectTo = localStorage.getItem('postAuthRedirect') ?? '/'
+      localStorage.removeItem('postAuthRedirect')
+      router.push(redirectTo)
       router.refresh()
     })
   }

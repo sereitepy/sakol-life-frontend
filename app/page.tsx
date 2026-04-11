@@ -1,5 +1,11 @@
-import Homepage from "./components/hompage";
+import Homepage from './components/hompage'
+import { PostAuthHandler } from './components/post-auth-handler'
 
 export default function Home() {
-  return <div><Homepage /></div>
+  return (
+    <div>
+      <PostAuthHandler />
+      <Homepage />
+    </div>
+  )
 }
