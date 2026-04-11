@@ -1,10 +1,13 @@
+import { Suspense } from 'react'
 import Homepage from './components/hompage'
 import { PostAuthHandler } from './components/post-auth-handler'
 
 export default function Home() {
   return (
     <div>
-      <PostAuthHandler />
+      <Suspense fallback={null}>
+        <PostAuthHandler />
+      </Suspense>
       <Homepage />
     </div>
   )
