@@ -3,11 +3,11 @@
 // Called client-side right after auth succeeds.
 // Reads quiz answers from sessionStorage and merges them into the user's account.
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL!
+const BACKEND_URL = process.env.BACKEND_URL
 
 // Builds the flat { Q1: "A", Q2: 4, ... } body from sessionStorage
 function getGuestAnswers(): Record<string, string | number> | null {
-  const raw = sessionStorage.getItem('quizAnswers')
+  const raw = localStorage.getItem('quizAnswers')
   if (!raw) return null
   try {
     return JSON.parse(raw)
@@ -18,7 +18,7 @@ function getGuestAnswers(): Record<string, string | number> | null {
 
 // Initializes a user profile (called once on first signup)
 async function initProfile(accessToken: string, displayName: string) {
-  await fetch(`${API_BASE_URL}/api/v1/profile/init`, {
+  await fetch(`${BACKEND_URL}/api/v1/profile/init`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ async function mergeGuestAttempt(
   accessToken: string,
   answers: Record<string, string | number>
 ) {
-  await fetch(`${API_BASE_URL}/api/v1/quiz/merge-guest-attempt`, {
+  await fetch(`${BACKEND_URL}/api/v1/quiz/merge-guest-attempt`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export async function handlePostAuth({
     if (answers) {
       await mergeGuestAttempt(accessToken, answers)
       // Clean up — answers are now saved server-side
-      sessionStorage.removeItem('quizAnswers')
+      localStorage.removeItem('quizAnswers')
     }
   } catch (err) {
     // Non-fatal — log but don't block the user

@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
     )
 
     const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) return NextResponse.redirect(`${siteUrl}/`)
+    if (!error) return NextResponse.redirect(`${siteUrl}/?postAuth=1`)
   }
 
   return NextResponse.redirect(`${siteUrl}/signup?error=callback_failed`)

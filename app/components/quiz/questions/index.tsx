@@ -127,7 +127,9 @@ export default function QuizClient({ questions }: Props) {
       const flat: Record<string, string | number> = {}
       for (const a of Object.values(finalAnswers))
         flat[a.questionCode] = a.value
-      sessionStorage.setItem('quizAnswers', JSON.stringify(flat))
+
+      localStorage.setItem('quizAnswers', JSON.stringify(flat))
+
       const result = await submitQuizAnswers(Object.values(finalAnswers))
       sessionStorage.setItem('quizResult', JSON.stringify(result))
       router.push('/quiz/results')

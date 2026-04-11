@@ -38,7 +38,7 @@ export default function GuestResultsGuard({ children }: Props) {
       if (cancelled) return
       const loggedIn = !error && !!data.user
       setIsGuest(!loggedIn)
-      setHasQuizAnswers(!!sessionStorage.getItem('quizAnswers'))
+      setHasQuizAnswers(!!localStorage.getItem('quizAnswers'))
     }
 
     checkAuth()
@@ -98,7 +98,7 @@ export default function GuestResultsGuard({ children }: Props) {
 
   // User chose to leave, so clear data then navigate
   function handleLeave() {
-    sessionStorage.removeItem('quizAnswers')
+    localStorage.removeItem('quizAnswers')
     sessionStorage.removeItem('quizResult')
     setOpen(false)
 
@@ -113,11 +113,13 @@ export default function GuestResultsGuard({ children }: Props) {
 
   function handleSignIn() {
     setOpen(false)
+    localStorage.setItem('postAuthRedirect', '/quiz/results')
     startTransition(() => router.push('/signin'))
   }
 
   function handleSignUp() {
     setOpen(false)
+    localStorage.setItem('postAuthRedirect', '/quiz/results')
     startTransition(() => router.push('/signup'))
   }
 

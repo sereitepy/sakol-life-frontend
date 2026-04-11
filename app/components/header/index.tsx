@@ -1,17 +1,17 @@
 import { ThemeTogglerButton } from '@/components/animate-ui/components/buttons/theme-toggler'
-import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   Sheet,
   SheetContent,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { getUser } from '@/lib/auth'
 import { Menu } from 'lucide-react'
 import Link from 'next/link'
-import Logo from './logo'
-import { getUser } from '@/lib/auth'
-import { signOutAction } from '@/lib/auth/signout'
+import Logo from '../logo'
+import SignOutButton from '../signout-button'
+import AuthLinks from './auth-links'
 
 export default async function Header() {
   const user = await getUser()
@@ -48,22 +48,7 @@ export default async function Header() {
           </div>
         ) : (
           <div className='flex items-center gap-2'>
-            <Link href='/signin'>
-              <Button
-                variant='ghost'
-                className='rounded-md text-md font-semibold h-9'
-              >
-                Sign In
-              </Button>
-            </Link>
-            <Link href='/signup'>
-              <Button
-                variant='default'
-                className='rounded-md text-md font-semibold h-9'
-              >
-                Sign Up
-              </Button>
-            </Link>
+            <AuthLinks />
           </div>
         )}
       </section>
@@ -97,33 +82,10 @@ export default async function Header() {
             <div className='flex flex-col gap-3 mt-auto'>
               <ThemeTogglerButton suppressHydrationWarning />
               {user ? (
-                <form action={signOutAction}>
-                  <Button
-                    type='submit'
-                    variant='ghost'
-                    className='rounded-md font-semibold w-full'
-                  >
-                    Sign Out
-                  </Button>
-                </form>
+                <SignOutButton className='rounded-md font-semibold w-full' />
               ) : (
                 <>
-                  <Link href='/signin'>
-                    <Button
-                      variant='ghost'
-                      className='rounded-md font-semibold w-full'
-                    >
-                      Sign In
-                    </Button>
-                  </Link>
-                  <Link href='/signup'>
-                    <Button
-                      variant='default'
-                      className='rounded-md font-semibold w-full'
-                    >
-                      Sign Up
-                    </Button>
-                  </Link>
+                  <AuthLinks mobile />
                 </>
               )}
             </div>
