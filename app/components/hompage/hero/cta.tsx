@@ -1,4 +1,3 @@
-// components/ui/cta-button.tsx
 'use client'
 
 import { useEffect, useState, useTransition } from 'react'
@@ -6,12 +5,23 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { fetchQuizHistory } from '@/lib/quiz/actions'
 import { Button } from '@/components/ui/button'
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from '@/components/ui/alert-dialog'
 
 type CTAState = 'loading' | 'dashboard' | 'quiz'
 
 export default function CTAButton() {
   const router = useRouter()
   const [state, setState] = useState<CTAState>('loading')
+  const [showDialog, setShowDialog] = useState(false)
   const [, startTransition] = useTransition()
 
   useEffect(() => {
@@ -25,19 +35,16 @@ export default function CTAButton() {
       const isLoggedIn = !error && !!data.user
 
       if (!isLoggedIn) {
-        // Guest — button is always "Get Personal Package"
         setState('quiz')
         return
       }
 
-      // Logged in — check sessionStorage first (fast path)
       const hasLocalResult = !!sessionStorage.getItem('quizResult')
       if (hasLocalResult) {
         setState('dashboard')
         return
       }
 
-      // sessionStorage is empty (e.g. browser was closed) — ask the API
       try {
         const session = await supabase.auth.getSession()
         const accessKey = session.data.session?.access_token
@@ -48,10 +55,8 @@ export default function CTAButton() {
 
         const history = await fetchQuizHistory(accessKey)
         if (cancelled) return
-
         setState(history.totalAttempts > 0 ? 'dashboard' : 'quiz')
       } catch {
-        // If the history call fails, default to showing the quiz CTA
         if (!cancelled) setState('quiz')
       }
     }
@@ -63,26 +68,76 @@ export default function CTAButton() {
   }, [])
 
   function handleClick() {
-    startTransition(() => {
-      if (state === 'dashboard') {
-        router.push('/profile')
-      } else {
-        const hasResults = !!sessionStorage.getItem('quizResult')
-        router.push(hasResults ? '/quiz/results' : '/quiz')
-      }
-    })
+    if (state === 'dashboard') {
+      startTransition(() => router.push('/profile'))
+      return
+    }
+
+    // Guest with previous results — show dialog
+    const hasPreviousResults = !!sessionStorage.getItem('quizResult')
+    if (hasPreviousResults) {
+      setShowDialog(true)
+      return
+    }
+
+    // No previous results — go straight to quiz
+    startTransition(() => router.push('/quiz'))
+  }
+
+  function handleViewResults() {
+    setShowDialog(false)
+    startTransition(() => router.push('/quiz/results'))
+  }
+
+  function handleRetake() {
+    sessionStorage.removeItem('quizResult')
+    sessionStorage.removeItem('chosenMajorId')
+    sessionStorage.removeItem('chosenMajorData')
+    setShowDialog(false)
+    startTransition(() => router.push('/quiz'))
   }
 
   return (
-    <Button
-      onClick={handleClick}
-      disabled={state === 'loading'}
-      className='w-full sm:w-fit rounded-md text-md h-12 px-4 font-bold'
-    >
-      {state === 'loading' && (
-        <span className='w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin mr-2' />
-      )}
-      {state === 'dashboard' ? 'Go to your Dashboard' : 'Get Personal Package'}
-    </Button>
+    <>
+      <Button
+        onClick={handleClick}
+        disabled={state === 'loading'}
+        className='w-full sm:w-fit rounded-md text-md h-12 px-4 font-bold'
+      >
+        {state === 'loading' && (
+          <span className='w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin mr-2' />
+        )}
+        {state === 'dashboard'
+          ? 'Go to your Dashboard'
+          : 'Get Personal Package'}
+      </Button>
+
+      <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
+        <AlertDialogContent className='max-w-md rounded-xl p-5'>
+          <AlertDialogHeader>
+            <AlertDialogTitle>You have a previous assessment</AlertDialogTitle>
+            <AlertDialogDescription className='text-sm text-muted-foreground leading-relaxed'>
+              You&apos;ve already completed a major recommendation assessment.
+              Would you like to review your results, or start a fresh
+              assessment?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className='flex-col gap-2 sm:flex-row'>
+            <AlertDialogCancel
+              onClick={handleRetake}
+              className='w-full sm:w-auto rounded-md'
+            >
+              Start fresh
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleViewResults}
+              className='w-full sm:w-auto rounded-md'
+            >
+              View my results
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   )
 }

@@ -1,5 +1,14 @@
-import Homepage from "./components/hompage";
+import { Suspense } from 'react'
+import Homepage from './components/hompage'
+import { PostAuthHandler } from './components/post-auth-handler'
 
 export default function Home() {
-  return <div><Homepage /></div>
+  return (
+    <div>
+      <Suspense fallback={null}>
+        <PostAuthHandler />
+      </Suspense>
+      <Homepage />
+    </div>
+  )
 }

@@ -69,7 +69,9 @@ export default function SignUpPage() {
           accessToken: result.accessToken,
           displayName: result.email.split('@')[0],
         })
-        router.push('/')
+        const redirectTo = localStorage.getItem('postAuthRedirect') ?? '/'
+        localStorage.removeItem('postAuthRedirect')
+        router.push(redirectTo)
         router.refresh()
       }
     })
