@@ -1,34 +1,34 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
-import { useRouter, useParams } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
 import {
+  AuthIdentity,
   fetchUniversityDetail,
   UniversityDetailResponse,
-  AuthIdentity,
 } from '@/lib/profile/action'
+import { createClient } from '@/lib/supabase/client'
 import {
   ArrowLeft,
-  MapPin,
-  ExternalLink,
-  CheckCircle2,
   BookOpen,
-  ClipboardList,
-  DollarSign,
-  GraduationCap,
   Building2,
-  Wifi,
-  Utensils,
-  FlaskConical,
-  Library,
-  Info,
   Calendar,
+  CheckCircle2,
   ChevronRight,
+  ClipboardList,
   Code2,
+  DollarSign,
+  ExternalLink,
+  FlaskConical,
+  GraduationCap,
+  Info,
+  Library,
+  MapPin,
+  Utensils,
+  Wifi,
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import Image from 'next/image'
+import { useParams, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 
 const FACILITY_ICONS: Record<string, React.ElementType> = {
