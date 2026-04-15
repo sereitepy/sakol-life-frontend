@@ -16,7 +16,7 @@ import {
   AlertDialogCancel,
 } from '@/components/ui/alert-dialog'
 
-type CTAState = 'loading' | 'dashboard' | 'quiz'
+type CTAState = 'loading' | 'quiz' | 'results'
 
 export default function CTAButton() {
   const router = useRouter()
@@ -29,33 +29,28 @@ export default function CTAButton() {
     let cancelled = false
 
     async function resolve() {
-      const { data, error } = await supabase.auth.getUser()
+      // Single call — getSession includes user info and token together
+      const { data } = await supabase.auth.getSession()
       if (cancelled) return
 
-      const isLoggedIn = !error && !!data.user
+      const session = data.session
 
-      if (!isLoggedIn) {
+      if (!session) {
         setState('quiz')
         return
       }
 
-      const hasLocalResult = !!sessionStorage.getItem('quizResult')
-      if (hasLocalResult) {
-        setState('dashboard')
+      // Logged in — check sessionStorage first (instant, no network)
+      if (sessionStorage.getItem('quizResult')) {
+        setState('results')
         return
       }
 
+      // Fall back to API only if sessionStorage is empty
       try {
-        const session = await supabase.auth.getSession()
-        const accessKey = session.data.session?.access_token
-        if (!accessKey) {
-          setState('quiz')
-          return
-        }
-
-        const history = await fetchQuizHistory(accessKey)
+        const history = await fetchQuizHistory(session.access_token)
         if (cancelled) return
-        setState(history.totalAttempts > 0 ? 'dashboard' : 'quiz')
+        setState(history.totalAttempts > 0 ? 'results' : 'quiz')
       } catch {
         if (!cancelled) setState('quiz')
       }
@@ -68,19 +63,23 @@ export default function CTAButton() {
   }, [])
 
   function handleClick() {
-    if (state === 'dashboard') {
-      startTransition(() => router.push('/profile'))
+    if (state === 'results') {
+      // Logged-in user with history — show same dialog as guest
+      const hasPreviousResults = !!sessionStorage.getItem('quizResult')
+      if (hasPreviousResults) {
+        setShowDialog(true)
+        return
+      }
+      startTransition(() => router.push('/quiz/results'))
       return
     }
 
-    // Guest with previous results — show dialog
-    const hasPreviousResults = !!sessionStorage.getItem('quizResult')
-    if (hasPreviousResults) {
+    // Guest with previous results in sessionStorage
+    if (sessionStorage.getItem('quizResult')) {
       setShowDialog(true)
       return
     }
 
-    // No previous results — go straight to quiz
     startTransition(() => router.push('/quiz'))
   }
 
@@ -107,9 +106,7 @@ export default function CTAButton() {
         {state === 'loading' && (
           <span className='w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin mr-2' />
         )}
-        {state === 'dashboard'
-          ? 'Go to your Dashboard'
-          : 'Get Personal Package'}
+        {state === 'results' ? 'View My Results' : 'Get Personal Package'}
       </Button>
 
       <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
