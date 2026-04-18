@@ -2,8 +2,8 @@
 
 import { ProfileResponse } from '@/lib/profile/action'
 import { useState } from 'react'
-import DashboardTab from './dashboard'
 import SurveyTab from './survey'
+import DashboardTab from './dashboard'
 import SettingsTab from './settings'
 
 type Tab = 'dashboard' | 'survey' | 'settings'
