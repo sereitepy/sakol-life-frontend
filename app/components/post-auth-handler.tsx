@@ -13,30 +13,36 @@ export function PostAuthHandler() {
 
     async function run() {
       const supabase = createClient()
-      const { data } = await supabase.auth.getSession()
-      const session = data.session
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser()
+      if (userError || !user) return
+
+      // Still need the session for the access token
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
       if (!session) return
 
-      const createdAt = session.user.created_at
-      const lastSignIn = session.user.last_sign_in_at
-      const isNewUser =
-        createdAt &&
-        lastSignIn &&
-        Math.abs(
-          new Date(createdAt).getTime() - new Date(lastSignIn).getTime()
-        ) < 10_000
+      const displayName =
+        user.user_metadata?.full_name ?? user.email?.split('@')[0] ?? 'User'
 
-      await handlePostAuth({
-        accessToken: session.access_token,
-        displayName: isNewUser
-          ? (session.user.user_metadata?.full_name ??
-            session.user.email?.split('@')[0] ??
-            'User')
-          : undefined,
-      })
+      try {
+        // return 200 if profile already exists
+        await handlePostAuth({
+          accessToken: session.access_token,
+          displayName,
+        })
+      } catch (err) {
+        console.error('[PostAuthHandler]', err)
+      }
 
-      // ← read saved redirect, then clear it
-      const redirectTo = localStorage.getItem('postAuthRedirect') ?? '/'
+      const redirectTo =
+        searchParams.get('postAuthRedirect') ??
+        localStorage.getItem('postAuthRedirect') ??
+        '/'
       localStorage.removeItem('postAuthRedirect')
       router.replace(redirectTo)
     }

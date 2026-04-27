@@ -4,13 +4,14 @@ import { signInWithGoogleAction } from '@/lib/auth/oauth'
 import { handlePostAuth } from '@/lib/auth/post-auth'
 import { signInAction } from '@/lib/auth/signin'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState, useTransition } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Suspense, useEffect, useRef, useState, useTransition } from 'react'
 import { GoogleIcon } from '../components/google-icon'
 
-export default function SignInPage() {
+function SignInContent() {
+  const searchParams = useSearchParams()
   const router = useRouter()
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState(() => searchParams.get('email') ?? '')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
@@ -153,5 +154,13 @@ export default function SignInPage() {
         </p>
       </div>
     </div>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense>
+      <SignInContent />
+    </Suspense>
   )
 }

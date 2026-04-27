@@ -1,6 +1,6 @@
 'use server'
 
-const BACKEND_URL = process.env.BACKEND_URL
+const NEXT_PUBLIC_BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
 export type QuestionFormat = 'SINGLE_CHOICE' | 'LIKERT'
 
@@ -108,7 +108,7 @@ export type QuizHistory = {
 
 // Fetch all quiz questions from the API
 export async function fetchQuizQuestions(): Promise<Question[]> {
-  const res = await fetch(`${BACKEND_URL}/api/v1/quiz/questions`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/questions`, {
     cache: 'no-store',
   })
 
@@ -129,7 +129,7 @@ export async function submitQuizAnswers(
     body[answer.questionCode] = answer.value
   }
 
-  const res = await fetch(`${BACKEND_URL}/api/v1/quiz/submit`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/submit`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -145,7 +145,7 @@ export async function submitQuizAnswers(
 export async function fetchQuizHistory(
   accessKey: string
 ): Promise<QuizHistory> {
-  const res = await fetch(`${BACKEND_URL}/api/v1/quiz/history`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/history`, {
     headers: { Authorization: `Bearer ${accessKey}` },
     cache: 'no-store',
   })
@@ -158,7 +158,7 @@ export async function fetchLatestMajorResults(
   attemptId: string,
   accessKey: string
 ): Promise<MajorResult[]> {
-  const res = await fetch(`${BACKEND_URL}/api/v1/majors/results/${attemptId}`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/majors/results/${attemptId}`, {
     headers: { Authorization: `Bearer ${accessKey}` },
     cache: 'no-store',
   })
