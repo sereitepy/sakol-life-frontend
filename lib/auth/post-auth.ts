@@ -3,7 +3,7 @@
 // Called client-side right after auth succeeds.
 // Reads quiz answers from sessionStorage and merges them into the user's account.
 
-const BACKEND_URL = process.env.BACKEND_URL
+const NEXT_PUBLIC_BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
 // Builds the flat { Q1: "A", Q2: 4, ... } body from sessionStorage
 function getGuestAnswers(): Record<string, string | number> | null {
@@ -18,7 +18,7 @@ function getGuestAnswers(): Record<string, string | number> | null {
 
 // Initializes a user profile (called once on first signup)
 async function initProfile(accessToken: string, displayName: string) {
-  await fetch(`${BACKEND_URL}/api/v1/profile/init`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/profile/init`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -26,6 +26,10 @@ async function initProfile(accessToken: string, displayName: string) {
     },
     body: JSON.stringify({ displayName }),
   })
+  if (!res.ok) {
+    const body = await res.text()
+    throw new Error(`initProfile failed ${res.status}: ${body}`)
+  }
 }
 
 // Merges guest quiz answers into the authenticated user's account
@@ -33,7 +37,7 @@ async function mergeGuestAttempt(
   accessToken: string,
   answers: Record<string, string | number>
 ) {
-  await fetch(`${BACKEND_URL}/api/v1/quiz/merge-guest-attempt`, {
+  await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/merge-guest-attempt`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -72,3 +76,4 @@ export async function handlePostAuth({
     console.error('[handlePostAuth] failed:', err)
   }
 }
+//lib/auth/post-auth.ts

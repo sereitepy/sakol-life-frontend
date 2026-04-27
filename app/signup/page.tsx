@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/client'
 import { handlePostAuth } from '@/lib/auth/post-auth'
 import { GoogleIcon } from '../components/google-icon'
 
-type Stage = 'form' | 'transitioning' | 'confirmation' | 'confirmed'
+type Stage = 'form' | 'transitioning' | 'confirmation' | 'confirmed' | 'exists'
 
 export default function SignUpPage() {
   const router = useRouter()
@@ -57,6 +57,10 @@ export default function SignUpPage() {
       const result = await signUpAction({ email, password })
 
       if (!result.success) {
+        if ('alreadyExists' in result) {
+          setStage('exists')
+          return
+        }
         setError(result.error)
         return
       }
@@ -85,22 +89,22 @@ export default function SignUpPage() {
 
   const busy = isPending || isGooglePending
 
-  const visible = 'opacity-100 translate-y-0 pointer-events-auto'
-  const hidden = 'opacity-0 translate-y-4 pointer-events-none'
-  const exitUp = 'opacity-0 -translate-y-4 pointer-events-none'
+  const visible = 'opacity-100 translate-y-0 pointer-events-auto visible'
+  const hidden = 'opacity-0 translate-y-4 pointer-events-none invisible'
+  const exitUp = 'opacity-0 -translate-y-4 pointer-events-none invisible'
 
   return (
     <div className='fixed inset-0 flex items-center justify-center bg-background'>
-      {/* ── Form stage ── */}
+      {/* form stage */}
       <div
         aria-hidden={stage !== 'form' && stage !== 'transitioning'}
         className={`absolute w-full flex items-center justify-center p-6 transition-all duration-350 ease-in-out
           ${stage === 'form' ? visible : ''}
           ${stage === 'transitioning' ? exitUp : ''}
-          ${stage === 'confirmation' || stage === 'confirmed' ? hidden : ''}
+          ${stage === 'confirmation' || stage === 'confirmed' || stage === 'exists' ? hidden : ''}
         `}
       >
-        <div className='w-full max-w-100 bg-card text-card-foreground border border-border rounded-(--radius) p-8 flex flex-col gap-5'>
+        <div className='w-full max-w-100 bg-card text-card-foreground border border-border rounded-lg p-8 flex flex-col gap-5'>
           <div className='flex flex-col gap-1'>
             <h1 className='text-2xl font-bold text-foreground'>
               Create account
@@ -272,8 +276,59 @@ export default function SignUpPage() {
           </button>
         </div>
       </div>
+
+      {/* already exists stage */}
+      <div
+        aria-hidden={stage !== 'exists'}
+        className={`absolute w-full flex items-center justify-center p-6 transition-all duration-350 ease-in-out
+    ${stage === 'exists' ? visible : hidden}
+  `}
+      >
+        <div className='w-full max-w-100 bg-card text-card-foreground border border-border rounded-(--radius) p-8 flex flex-col items-center gap-5 text-center'>
+          <div className='w-14 h-14 rounded-full bg-amber-500/15 flex items-center justify-center'>
+            <svg
+              width='28'
+              height='28'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='2.5'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              className='text-amber-500'
+            >
+              <circle cx='12' cy='12' r='10' />
+              <line x1='12' y1='8' x2='12' y2='12' />
+              <line x1='12' y1='16' x2='12.01' y2='16' />
+            </svg>
+          </div>
+          <div className='flex flex-col gap-2'>
+            <h1 className='text-2xl font-bold text-foreground'>
+              Account already exists
+            </h1>
+            <p className='text-sm text-muted-foreground leading-relaxed'>
+              <strong className='text-foreground font-medium'>{email}</strong>{' '}
+              is already registered. Would you like to sign in instead?
+            </p>
+          </div>
+          <div className='flex flex-col gap-3 w-full'>
+            <button
+              onClick={() =>
+                router.push(`/signin?email=${encodeURIComponent(email)}`)
+              }
+              className='w-full px-4 py-2.5 text-sm font-semibold bg-primary text-primary-foreground rounded-(--radius) cursor-pointer transition-all hover:brightness-110'
+            >
+              Sign in to existing account
+            </button>
+            <button
+              onClick={() => setStage('form')}
+              className='w-full px-4 py-2.5 text-sm font-semibold bg-background text-foreground border border-border rounded-(--radius) cursor-pointer transition-colors hover:bg-accent'
+            >
+              Use a different email
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
-
-

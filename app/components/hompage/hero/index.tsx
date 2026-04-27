@@ -32,7 +32,7 @@ export default function Hero() {
           </h1>
 
           <p className='text-accent dark:text-secondary-foreground text-sm sm:text-base'>
-            Answer 14 simple questions and get personalized recommendations for
+            Answer 12 simple questions and get personalized recommendations for
             your technology university major!
           </p>
 
