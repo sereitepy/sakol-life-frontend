@@ -12,6 +12,7 @@ type ActionResult =
       email: string
     }
   | { success: false; error: string }
+  | { success: false; alreadyExists: true; email: string }
 
 export async function signUpAction({
   email,
@@ -37,7 +38,6 @@ export async function signUpAction({
 
   revalidatePath('/', 'layout')
 
-  // Session present = email confirmation is OFF
   if (data.session) {
     return {
       success: true,
@@ -47,6 +47,11 @@ export async function signUpAction({
     }
   }
 
-  // Confirmation email sent
+  // Supabase returns a fake "success" with an obfuscated user when the email
+  // already exists. The tell: identities array is empty.
+  if (data.user && data.user.identities?.length === 0) {
+    return { success: false, alreadyExists: true, email }
+  }
+
   return { success: true, confirmationRequired: true }
 }

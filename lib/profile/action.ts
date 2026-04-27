@@ -1,6 +1,6 @@
 'use server'
 
-const BACKEND_URL = process.env.BACKEND_URL
+const NEXT_PUBLIC_BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
 export type SelectedMajor = {
   majorId: string
@@ -33,7 +33,7 @@ export async function initProfile(
   accessToken: string,
   displayName: string
 ): Promise<void> {
-  const res = await fetch(`${BACKEND_URL}/api/v1/profile/init`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/profile/init`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -48,7 +48,7 @@ export async function initProfile(
 export async function fetchProfile(
   accessToken: string
 ): Promise<ProfileResponse> {
-  const res = await fetch(`${BACKEND_URL}/api/v1/profile`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/profile`, {
     headers: { Authorization: `Bearer ${accessToken}` },
     cache: 'no-store',
   })
@@ -65,7 +65,7 @@ export async function updateProfile(
     profilePictureUrl?: string
   }
 ): Promise<void> {
-  const res = await fetch(`${BACKEND_URL}/api/v1/profile`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/profile`, {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -82,7 +82,7 @@ export type QuizHistory = { totalAttempts: number }
 export async function fetchQuizHistory(
   accessToken: string
 ): Promise<QuizHistory> {
-  const res = await fetch(`${BACKEND_URL}/api/v1/quiz/history`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/history`, {
     headers: { Authorization: `Bearer ${accessToken}` },
     cache: 'no-store',
   })
@@ -143,7 +143,7 @@ export async function selectMajor(
     ...buildIdentityHeaders(identity),
   }
 
-  const res = await fetch(`${BACKEND_URL}/api/v1/selected-major`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/selected-major`, {
     method: 'PUT',
     headers,
     body: JSON.stringify({ majorId }),
@@ -158,7 +158,7 @@ export async function selectMajor(
  * Deselects the current major.
  */
 export async function deselectMajor(identity: AuthIdentity): Promise<void> {
-  const res = await fetch(`${BACKEND_URL}/api/v1/selected-major`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/selected-major`, {
     method: 'DELETE',
     headers: buildIdentityHeaders(identity),
   })
@@ -188,7 +188,7 @@ export async function fetchUniversitiesForSelectedMajor(
   if (filters?.durationYears)
     params.set('durationYears', String(filters.durationYears))
 
-  const url = `${BACKEND_URL}/api/v1/selected-major/universities${params.toString() ? `?${params}` : ''}`
+  const url = `${NEXT_PUBLIC_BACKEND_URL}/api/v1/selected-major/universities${params.toString() ? `?${params}` : ''}`
 
   const res = await fetch(url, {
     headers: buildIdentityHeaders(identity),
@@ -268,7 +268,7 @@ export async function fetchMajorDetail(
   const headers: Record<string, string> = {}
   if (accessToken) headers['Authorization'] = `Bearer ${accessToken}`
 
-  const res = await fetch(`${BACKEND_URL}/api/v1/majors/${majorId}/detail`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/majors/${majorId}/detail`, {
     headers,
     cache: 'no-store',
   })
@@ -364,7 +364,7 @@ export async function fetchUniversityDetail(
   if (identity) Object.assign(headers, buildIdentityHeaders(identity))
 
   const res = await fetch(
-    `${BACKEND_URL}/api/v1/universities/${universityId}/detail`,
+    `${NEXT_PUBLIC_BACKEND_URL}/api/v1/universities/${universityId}/detail`,
     {
       headers,
       cache: 'no-store',
