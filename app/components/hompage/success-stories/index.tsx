@@ -186,7 +186,7 @@ export default function SuccessStories() {
                   width: cardWidth > 0 ? cardWidth : `${100 / visibleCount}%`,
                 }}
               >
-                <div className='p-6 bg-accent rounded-md flex flex-col gap-3 h-full hover:shadow-md  transition-transform duration-300'>
+                <div className='p-6 bg-card dark:bg-accent rounded-md flex flex-col gap-3 h-full hover:shadow-md  transition-transform duration-300'>
                   <div className='flex items-center gap-3'>
                     <Image
                       src={item.profile}
@@ -208,9 +208,8 @@ export default function SuccessStories() {
                       <StarIcon
                         key={i}
                         size={18}
-                        color='#FFD700'
                         weight='fill'
-                        className=''
+                        className='text-(--star-color)'
                       />
                     ))}
                   </div>
