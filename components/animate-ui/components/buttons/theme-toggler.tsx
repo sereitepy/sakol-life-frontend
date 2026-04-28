@@ -14,13 +14,8 @@ import {
 import { buttonVariants } from '@/components/animate-ui/components/buttons/icon'
 import { cn } from '@/lib/utils'
 
-const getIcon = (resolved: Resolved) => {
-  return resolved === 'dark' ? (
-    <Moon suppressHydrationWarning />
-  ) : (
-    <Sun suppressHydrationWarning />
-  )
-}
+const getIcon = (resolved: Resolved) =>
+  resolved === 'dark' ? <Moon /> : <Sun />
 
 type ThemeTogglerButtonProps = React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
@@ -37,19 +32,12 @@ function ThemeTogglerButton({
   className,
   ...props
 }: ThemeTogglerButtonProps) {
-  const { resolvedTheme, setTheme } = useTheme()
-  const [mounted, setMounted] = React.useState(false)
-  React.useEffect(() => { setMounted(true) }, [])
-
-  const currentTheme = (resolvedTheme ?? 'light') as ThemeSelection
-
-  if (!mounted) return <button className={cn(buttonVariants({ variant, size, className }))} disabled aria-hidden />
-
+  const { theme, resolvedTheme, setTheme } = useTheme()
 
   return (
     <ThemeTogglerPrimitive
-      theme={currentTheme}
-      resolvedTheme={currentTheme as Resolved}
+      theme={theme as ThemeSelection}
+      resolvedTheme={resolvedTheme as Resolved}
       setTheme={setTheme}
       direction={direction}
       onImmediateChange={onImmediateChange}
@@ -57,7 +45,6 @@ function ThemeTogglerButton({
       {({ resolved, toggleTheme }) => (
         <button
           data-slot='theme-toggler-button'
-          suppressHydrationWarning
           className={cn(buttonVariants({ variant, size, className }))}
           onClick={e => {
             onClick?.(e)
