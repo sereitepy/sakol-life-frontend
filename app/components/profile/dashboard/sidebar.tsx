@@ -24,7 +24,7 @@ export function QuickShortcuts() {
       <ShortcutRow
         icon={Building2}
         label='Universities Match'
-        onClick={() => router.push('/universities')}
+        onClick={() => router.push('/quiz/results/?tab=universities')}
       />
       <ShortcutRow
         icon={FileText}

@@ -50,7 +50,7 @@ export default function HowItWorks() {
               className='relative p-5 lg:p-7 rounded-md bg-card/50 dark:bg-chart-3/40 border-input flex flex-col gap-3 flex-1 
             transition-all duration-300 ease-out
             hover:-translate-y-2 hover:shadow-lg hover:bg-card/80 hover:dark:bg-chart-3/60
-            cursor-pointer group'
+             group'
             >
               <div
                 className='p-2 rounded-md dark:bg-accent w-fit transition-transform duration-300 group-hover:scale-110'
