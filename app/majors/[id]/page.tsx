@@ -558,7 +558,7 @@ export default function MajorDetailPage() {
 
             {/* Choose Major CTA */}
             <Button
-              className={`w-full rounded-xl font-bold py-5 ${chosen ? 'bg-green-500 hover:bg-green-600' : ''}`}
+              className={`w-full rounded-xl font-bold py-5 ${chosen ? 'bg-primary hover:bg-green-600' : ''}`}
               disabled={choosing}
               onClick={handleChoose}
             >
@@ -568,7 +568,7 @@ export default function MajorDetailPage() {
                   Saving…
                 </>
               ) : chosen ? (
-                '✓ Major Chosen — View Universities'
+                '✓ Major Chosen'
               ) : (
                 'Choose This Major'
               )}

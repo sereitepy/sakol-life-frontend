@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import {
   AuthIdentity,
   selectMajor,
-  SelectMajorResponse
+  SelectMajorResponse,
 } from '@/lib/profile/action'
 import { QuizSubmitResponse } from '@/lib/quiz/actions'
 import { createClient } from '@/lib/supabase/client'
@@ -17,7 +17,7 @@ import {
   Search,
   SlidersHorizontal,
   TrendingUp,
-  X
+  X,
 } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
@@ -40,14 +40,13 @@ type Props = { searchParams: SearchParams }
 // Constants
 
 const CAREER_CATEGORY_OPTIONS: { value: string; label: string }[] = [
-  { value: 'SOFTWARE_ENGINEERING', label: 'Software Engineering' },
+  { value: 'SOFTWARE_DEVELOPMENT', label: 'Software Development' },
   { value: 'ARTIFICIAL_INTELLIGENCE', label: 'Artificial Intelligence' },
   { value: 'DATA_ANALYTICS', label: 'Data Analytics' },
   { value: 'WEB_DEVELOPMENT', label: 'Web Development' },
   { value: 'CYBERSECURITY', label: 'Cybersecurity' },
   { value: 'NETWORKING', label: 'Networking' },
   { value: 'DIGITAL_DESIGN', label: 'Digital Design' },
-  { value: 'DATABASE', label: 'Database' },
   { value: 'INFORMATION_SYSTEMS', label: 'Information Systems' },
 ]
 
@@ -87,7 +86,6 @@ function toArray(val: string | string[] | undefined): string[] {
   return Array.isArray(val) ? val : [val]
 }
 
-
 export default function ResultsClient({ searchParams }: Props) {
   const router = useRouter()
   const pathname = usePathname()
@@ -107,6 +105,20 @@ export default function ResultsClient({ searchParams }: Props) {
   const selOutlooks = toArray(searchParams.outlook)
   const minScore = parseFloat(searchParams.minScore ?? '0.5')
 
+  const [inputValue, setInputValue] = useState(searchQuery)
+
+  // Debounce the URL update
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      updateUrl({ q: inputValue || null })
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [inputValue])
+
+  useEffect(() => {
+    setInputValue(searchQuery)
+  }, [searchQuery])
+  
   useEffect(() => {
     const stored = sessionStorage.getItem('quizResult')
     if (!stored) {
@@ -296,7 +308,7 @@ export default function ResultsClient({ searchParams }: Props) {
             <Checkbox
               checked={selCategories.includes(opt.value)}
               onCheckedChange={() => toggleFilter('category', opt.value)}
-              className='data-[state=checked]:bg-primary data-[state=checked]:border-primary'
+              className='data-[state=checked]:bg-primary data-[state=checked]:border-primary border-accent-foreground/20 rounded-sm'
             />
             <span className='text-sm text-foreground'>{opt.label}</span>
           </label>
@@ -313,7 +325,7 @@ export default function ResultsClient({ searchParams }: Props) {
             <Checkbox
               checked={selOutlooks.includes(opt.value)}
               onCheckedChange={() => toggleFilter('outlook', opt.value)}
-              className='data-[state=checked]:bg-primary data-[state=checked]:border-primary'
+              className='data-[state=checked]:bg-primary data-[state=checked]:border-primary border-accent-foreground/20 rounded-sm'
             />
             <span className={`text-sm ${opt.color}`}>{opt.label}</span>
           </label>
@@ -388,9 +400,9 @@ export default function ResultsClient({ searchParams }: Props) {
                   className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground'
                 />
                 <Input
-                  placeholder='Search majors, skills, or industries...'
-                  value={searchQuery}
-                  onChange={e => updateUrl({ q: e.target.value || null })}
+                  placeholder='Search majors...'
+                  value={inputValue}
+                  onChange={e => setInputValue(e.target.value)}
                   className='pl-9 bg-card border-border rounded-xl h-11 text-sm'
                 />
               </div>
