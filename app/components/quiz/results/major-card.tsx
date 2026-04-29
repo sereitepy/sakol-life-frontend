@@ -19,10 +19,10 @@ export const MAJOR_META: Record<
   string,
   { careerCategory: string; jobOutlook: string }
 > = {
-  CS: { careerCategory: 'SOFTWARE_ENGINEERING', jobOutlook: 'HIGH' },
+  SD: { careerCategory: 'SOFTWARE_DEVELOPMENT', jobOutlook: 'HIGH' },
+  CS: { careerCategory: 'SOFTWARE_DEVELOPMENT', jobOutlook: 'HIGH' },
   AI: { careerCategory: 'ARTIFICIAL_INTELLIGENCE', jobOutlook: 'HIGH' },
   DS: { careerCategory: 'DATA_ANALYTICS', jobOutlook: 'HIGH' },
-  MWD: { careerCategory: 'WEB_DEVELOPMENT', jobOutlook: 'HIGH' },
   CYB: { careerCategory: 'CYBERSECURITY', jobOutlook: 'HIGH' },
   NET: { careerCategory: 'NETWORKING', jobOutlook: 'MEDIUM' },
   DD: { careerCategory: 'DIGITAL_DESIGN', jobOutlook: 'MEDIUM' },
@@ -80,11 +80,11 @@ export default function MajorCard({
           🏆 TOP MATCH
         </div>
       )}
-      {isChosen && (
+      {/* {isChosen && (
         <div className='absolute -top-3 right-4 bg-green-500 text-white text-[10px] font-bold px-3 py-0.5 rounded-full flex items-center gap-1'>
           <CheckCircle2 size={10} /> CHOSEN
         </div>
-      )}
+      )} */}
 
       <div className='flex items-start justify-between'>
         <div
@@ -173,7 +173,7 @@ export default function MajorCard({
         <Button
           size='sm'
           disabled={isSelecting}
-          className={`flex-1 text-xs rounded-lg cursor-pointer ${isChosen ? 'bg-green-500 hover:bg-green-600' : ''}`}
+          className={`flex-1 text-xs rounded-lg cursor-pointer ${isChosen ? 'bg-chart-2 hover:bg-green-600' : ''}`}
           onClick={onChoose}
         >
           {isSelecting ? (

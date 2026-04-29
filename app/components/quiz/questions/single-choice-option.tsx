@@ -25,7 +25,7 @@ export function SingleChoiceOption({
         'border-2 cursor-pointer transition-colors duration-200',
         selected
           ? 'border-primary bg-primary/8'
-          : 'border-border bg-card hover:border-primary/40'
+          : 'border-secondary-foreground/15 dark:border-border bg-card hover:border-primary/40'
       )}
     >
       {/* Icon badge */}

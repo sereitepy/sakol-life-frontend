@@ -15,6 +15,7 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from '@/components/ui/alert-dialog'
+import { X } from 'lucide-react'
 
 type CTAState = 'loading' | 'quiz' | 'results'
 
@@ -23,6 +24,7 @@ export default function CTAButton() {
   const [state, setState] = useState<CTAState>('loading')
   const [showDialog, setShowDialog] = useState(false)
   const [, startTransition] = useTransition()
+  const [isPending, setIsPending] = useState(false)
 
   useEffect(() => {
     const supabase = createClient()
@@ -62,26 +64,26 @@ export default function CTAButton() {
     }
   }, [])
 
-  function handleClick() {
-    if (state === 'results') {
-      // Logged-in user with history — show same dialog as guest
-      const hasPreviousResults = !!sessionStorage.getItem('quizResult')
-      if (hasPreviousResults) {
-        setShowDialog(true)
-        return
-      }
-      startTransition(() => router.push('/quiz/results'))
-      return
-    }
-
-    // Guest with previous results in sessionStorage
-    if (sessionStorage.getItem('quizResult')) {
+function handleClick() {
+  if (state === 'results') {
+    const hasPreviousResults = !!sessionStorage.getItem('quizResult')
+    if (hasPreviousResults) {
       setShowDialog(true)
       return
     }
-
-    startTransition(() => router.push('/quiz'))
+    setIsPending(true)
+    startTransition(() => router.push('/quiz/results'))
+    return
   }
+
+  if (sessionStorage.getItem('quizResult')) {
+    setShowDialog(true)
+    return
+  }
+
+  setIsPending(true)
+  startTransition(() => router.push('/quiz'))
+}
 
   function handleViewResults() {
     setShowDialog(false)
@@ -111,6 +113,9 @@ export default function CTAButton() {
 
       <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
         <AlertDialogContent className='max-w-md rounded-xl p-5'>
+          <AlertDialogCancel className='w-0 border-0 m-0 p-0 absolute right-2 rounded-lg top-1 hover:bg-transparent'>
+            <X />
+          </AlertDialogCancel>
           <AlertDialogHeader>
             <AlertDialogTitle>You have a previous assessment</AlertDialogTitle>
             <AlertDialogDescription className='text-sm text-muted-foreground leading-relaxed'>
@@ -122,7 +127,7 @@ export default function CTAButton() {
           <AlertDialogFooter className='flex-col gap-2 sm:flex-row'>
             <AlertDialogCancel
               onClick={handleRetake}
-              className='w-full sm:w-auto rounded-md'
+              className='w-full sm:w-auto border-secondary-foreground/30'
             >
               Start fresh
             </AlertDialogCancel>
