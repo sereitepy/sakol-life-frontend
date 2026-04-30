@@ -5,6 +5,7 @@ import { useState } from 'react'
 import SurveyTab from './survey'
 import DashboardTab from './dashboard'
 import SettingsTab from './settings'
+import { QuizStateResult } from '@/lib/profile/latest-quiz-result'
 
 type Tab = 'dashboard' | 'survey' | 'settings'
 
@@ -17,14 +18,18 @@ const TABS: { id: Tab; label: string }[] = [
 type Props = {
   profile: ProfileResponse
   accessToken: string
+  quizState: QuizStateResult
 }
 
-export default function ProfileShell({ profile, accessToken }: Props) {
+export default function ProfileShell({
+  profile,
+  accessToken,
+  quizState,
+}: Props) {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
 
   return (
     <div className='min-h-screen bg-background'>
-      {/* the tab navigation btw (in profile page) */}
       <div className='border-b border-border bg-card/60 backdrop-blur-sm sticky top-0 z-10'>
         <div className='max-w-300 mx-auto px-6'>
           <nav className='flex gap-0'>
@@ -54,10 +59,13 @@ export default function ProfileShell({ profile, accessToken }: Props) {
         </div>
       </div>
 
-      {/* contents inside each tabs */}
       <div className='max-w-300 mx-auto px-6 py-8'>
         {activeTab === 'dashboard' && (
-          <DashboardTab profile={profile} accessToken={accessToken} />
+          <DashboardTab
+            profile={profile}
+            accessToken={accessToken}
+            quizState={quizState}
+          />
         )}
         {activeTab === 'survey' && (
           <div className='max-w-300 mx-auto px-6 py-8'>

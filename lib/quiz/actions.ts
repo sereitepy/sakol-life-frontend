@@ -129,16 +129,24 @@ export async function submitQuizAnswers(
     body[answer.questionCode] = answer.value
   }
 
+  const { createClient } = await import('@/lib/supabase/server')
+  const supabase = await createClient()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (session?.access_token) {
+    headers['Authorization'] = `Bearer ${session.access_token}`
+  }
+
   const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/submit`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify(body),
   })
 
-  if (!res.ok) {
-    throw new Error(`Failed to submit quiz: ${res.statusText}`)
-  }
-
+  if (!res.ok) throw new Error(`Failed to submit quiz: ${res.statusText}`)
   return res.json()
 }
 
@@ -158,11 +166,30 @@ export async function fetchLatestMajorResults(
   attemptId: string,
   accessKey: string
 ): Promise<MajorResult[]> {
-  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/majors/results/${attemptId}`, {
-    headers: { Authorization: `Bearer ${accessKey}` },
-    cache: 'no-store',
-  })
+  const res = await fetch(
+    `${NEXT_PUBLIC_BACKEND_URL}/api/v1/majors/results/${attemptId}`,
+    {
+      headers: { Authorization: `Bearer ${accessKey}` },
+      cache: 'no-store',
+    }
+  )
   if (!res.ok)
     throw new Error(`Failed to fetch major results: ${res.statusText}`)
+  return res.json()
+}
+
+export async function fetchLatestResults(
+  accessToken: string
+): Promise<QuizSubmitResponse> {
+  const res = await fetch(
+    `${NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/latest-results`,
+    {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      cache: 'no-store',
+    }
+  )
+  if (res.status === 404) throw new Error('NO_QUIZ_ATTEMPT')
+  if (!res.ok)
+    throw new Error(`Failed to fetch latest results: ${res.statusText}`)
   return res.json()
 }

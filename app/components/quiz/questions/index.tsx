@@ -130,6 +130,26 @@ export default function QuizClient({ questions }: Props) {
 
       localStorage.setItem('quizAnswers', JSON.stringify(flat))
 
+      // Clear any previously chosen major so the profile reflects the new attempt
+      const supabase = (await import('@/lib/supabase/client')).createClient()
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      if (session?.access_token) {
+        const { deselectMajor } = await import('@/lib/profile/action')
+        const identity = {
+          type: 'user' as const,
+          userId: session.user.id,
+          accessToken: session.access_token,
+        }
+        await deselectMajor(identity).catch(() => {})
+      }
+
+      // Also clear sessionStorage so the results page re-hydrates fresh
+      sessionStorage.removeItem('quizResult')
+      sessionStorage.removeItem('chosenMajorId')
+      sessionStorage.removeItem('chosenMajorData')
+
       const result = await submitQuizAnswers(Object.values(finalAnswers))
       sessionStorage.setItem('quizResult', JSON.stringify(result))
       router.push('/quiz/results')
