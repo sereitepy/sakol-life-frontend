@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import ProfileShell from '../components/profile'
 import { fetchProfile } from '@/lib/profile/action'
+import { fetchDashboardQuizState } from '@/lib/profile/latest-quiz-result'
 
 export default async function ProfilePage() {
   const supabase = await createClient()
@@ -22,11 +23,16 @@ export default async function ProfilePage() {
   try {
     profile = await fetchProfile(accessToken)
   } catch {
-    // Profile doesn't exist yet (first-time user, init still in progress)
-    // or backend is temporarily unavailable.
-    // Redirect to home with postAuth so PostAuthHandler can init and redirect back.
     redirect('/?postAuth=1&postAuthRedirect=/profile')
   }
 
-  return <ProfileShell profile={profile} accessToken={accessToken} />
+  const quizState = await fetchDashboardQuizState(accessToken)
+
+  return (
+    <ProfileShell
+      profile={profile}
+      accessToken={accessToken}
+      quizState={quizState}
+    />
+  )
 }

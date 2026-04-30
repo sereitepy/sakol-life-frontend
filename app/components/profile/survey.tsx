@@ -97,14 +97,23 @@ export default function SurveyTab({ profile }: Props) {
   const hasAnswers = latestAnswers.length > 0
 
   // Separate choice questions from scale questions for grouping
-  const choiceAnswers = latestAnswers.filter(a => {
-    const meta = QUESTION_META[a.questionCode]
-    return meta?.type === 'choice' || isNaN(Number(a.answerValue))
-  })
-  const scaleAnswers = latestAnswers.filter(a => {
-    const meta = QUESTION_META[a.questionCode]
-    return meta?.type === 'scale' && !isNaN(Number(a.answerValue))
-  })
+  const choiceAnswers = latestAnswers
+    .filter(a => {
+      const meta = QUESTION_META[a.questionCode]
+      return meta?.type === 'choice' || isNaN(Number(a.answerValue))
+    })
+    .sort((a, b) =>
+      a.questionCode.localeCompare(b.questionCode, undefined, { numeric: true })
+  )
+  
+  const scaleAnswers = latestAnswers
+    .filter(a => {
+      const meta = QUESTION_META[a.questionCode]
+      return meta?.type === 'scale' && !isNaN(Number(a.answerValue))
+    })
+    .sort((a, b) =>
+      a.questionCode.localeCompare(b.questionCode, undefined, { numeric: true })
+    )
 
   return (
     <div className='space-y-6'>
