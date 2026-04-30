@@ -118,21 +118,13 @@ export default function ResultsClient({ searchParams }: Props) {
   useEffect(() => {
     setInputValue(searchQuery)
   }, [searchQuery])
-  
+
   useEffect(() => {
-    const stored = sessionStorage.getItem('quizResult')
-    if (!stored) {
-      router.replace('/quiz')
-      return
-    }
-    setResult(JSON.parse(stored))
-
-    const savedMajor = sessionStorage.getItem('chosenMajorId')
-    if (savedMajor) setChosenMajorId(savedMajor)
-
     const supabase = createClient()
-    supabase.auth.getSession().then(({ data }) => {
+
+    supabase.auth.getSession().then(async ({ data }) => {
       const session = data.session
+
       if (session?.user && session.access_token) {
         setIdentity({
           type: 'user',
@@ -141,6 +133,37 @@ export default function ResultsClient({ searchParams }: Props) {
         })
       } else {
         setIdentity({ type: 'guest', guestSessionId: getGuestSessionId() })
+      }
+
+      // Try sessionStorage first (fresh submission or guest)
+      const stored = sessionStorage.getItem('quizResult')
+      if (stored) {
+        setResult(JSON.parse(stored))
+        const savedMajor = sessionStorage.getItem('chosenMajorId')
+        if (savedMajor) setChosenMajorId(savedMajor)
+        return
+      }
+
+      // sessionStorage is empty, if authenticated, re-hydrate from DB
+      if (session?.access_token) {
+        try {
+          const { fetchLatestResults } = await import('@/lib/quiz/actions')
+          const dbResult = await fetchLatestResults(session.access_token)
+          // Write back to sessionStorage so navigation within this session is instant
+          sessionStorage.setItem('quizResult', JSON.stringify(dbResult))
+          setResult(dbResult)
+        } catch (err: unknown) {
+          if (err instanceof Error && err.message === 'NO_QUIZ_ATTEMPT') {
+            // User is authenticated but has never taken the quiz
+            router.replace('/quiz')
+          } else {
+            console.error('Failed to restore quiz results:', err)
+            router.replace('/quiz')
+          }
+        }
+      } else {
+        // Guest with no sessionStorage, they need to retake the quiz
+        router.replace('/quiz')
       }
     })
   }, [router])

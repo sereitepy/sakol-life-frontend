@@ -8,14 +8,15 @@ import { StatCard } from '../shared/stat-card'
 import { RecommendationsPanel } from './recommendations-panel'
 import { AssessmentStatus } from './assessment-status'
 import { GuidanceCTA, QuickShortcuts } from './sidebar'
-
+import { QuizStateResult } from '@/lib/profile/latest-quiz-result'
 
 type Props = {
   profile: ProfileResponse
   accessToken: string
+  quizState: QuizStateResult
 }
 
-export default function DashboardTab({ profile }: Props) {
+export default function DashboardTab({ profile, quizState }: Props) {
   const {
     displayName,
     profilePictureUrl,
@@ -25,19 +26,7 @@ export default function DashboardTab({ profile }: Props) {
     role,
   } = profile
 
-  let recommendations: Array<{
-    code: string
-    nameEn: string
-    similarityPercentage: number
-    majorId: string
-  }> = []
-  try {
-    const stored =
-      typeof window !== 'undefined'
-        ? sessionStorage.getItem('quizResult')
-        : null
-    if (stored) recommendations = (JSON.parse(stored).results ?? []).slice(0, 3)
-  } catch {}
+  const { recommendations, topMatch } = quizState
 
   const personalityTags = derivePersonalityTags(latestAnswers)
   const answeredCount = latestAnswers.length
@@ -61,7 +50,7 @@ export default function DashboardTab({ profile }: Props) {
         <StatCard
           icon={Target}
           label='Top Match'
-          value={selectedMajor?.nameEn ?? recommendations[0]?.nameEn ?? '—'}
+          value={topMatch ? topMatch.nameEn : '—'}
         />
         <StatCard
           icon={Bookmark}
@@ -71,7 +60,6 @@ export default function DashboardTab({ profile }: Props) {
       </div>
 
       <div className='flex flex-col lg:flex-row gap-6 items-start'>
-        {/* Left column */}
         <div className='flex-1 min-w-0 space-y-6'>
           <RecommendationsPanel
             recommendations={recommendations}
@@ -84,8 +72,6 @@ export default function DashboardTab({ profile }: Props) {
             personalityTags={personalityTags}
           />
         </div>
-
-        {/* Right column */}
         <div className='w-full lg:w-64 shrink-0 space-y-4'>
           <QuickShortcuts />
           <GuidanceCTA />
