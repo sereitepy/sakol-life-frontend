@@ -5,7 +5,7 @@ export default function Logo() {
     <GraduationCap
       color='#239d6a'
       className='bg-accent p-1 rounded-sm'
-      size={30}
+      // size={30}
     />
   )
 }

@@ -1,10 +1,9 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { fetchProfile } from '@/lib/profile/action'
-import { fetchDashboardQuizState } from '@/lib/profile/latest-quiz-result'
-import DashboardTab from '../components/profile/dashboard'
+import SurveyContent from '../../components/profile/survey/survey-content'
 
-export default async function ProfilePage() {
+export default async function SurveyPage() {
   const supabase = await createClient()
   const {
     data: { user },
@@ -23,18 +22,8 @@ export default async function ProfilePage() {
   try {
     profile = await fetchProfile(accessToken)
   } catch {
-    redirect('/?postAuth=1&postAuthRedirect=/profile')
+    redirect('/?postAuth=1&postAuthRedirect=/profile/survey')
   }
 
-  const quizState = await fetchDashboardQuizState(accessToken)
-
-  return (
-    <div className=''>
-      <DashboardTab
-        profile={profile}
-        accessToken={accessToken}
-        quizState={quizState}
-      />
-    </div>
-  )
+  return <SurveyContent profile={profile} />
 }
