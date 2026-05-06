@@ -14,8 +14,8 @@ export function SurveySummaryCards({
   const stats = [
     { value: totalAttempts, label: 'Total Attempts' },
     { value: answeredCount, label: 'Questions Answered' },
-    { value: scaleCount, label: 'Interest Ratings' },
-    { value: choiceCount, label: 'Preference Choices' },
+    { value: scaleCount, label: 'Scale Ratings' },
+    { value: choiceCount, label: 'Choice Answers' },
   ]
 
   return (

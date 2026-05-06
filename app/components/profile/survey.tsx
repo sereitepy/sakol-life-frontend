@@ -1,94 +1,14 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { RotateCcw, CheckCircle2, Clock, ChevronRight } from 'lucide-react'
+import { RotateCcw, Clock, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ProfileResponse } from '@/lib/profile/action'
+import { QUESTION_META, AnswerRow } from './survey/answer-row'
+import { SurveySummaryCards } from './survey/summary-cards'
 
 type Props = {
   profile: ProfileResponse
-}
-
-const QUESTION_META: Record<
-  string,
-  { label: string; type: 'choice' | 'scale' }
-> = {
-  Q1: { label: 'Preferred learning style', type: 'choice' },
-  Q2: { label: 'Favourite subject area', type: 'scale' },
-  Q3: { label: 'Problem-solving approach', type: 'choice' },
-  Q4_A: { label: 'Interest: Visual & Design', type: 'scale' },
-  Q4_B: { label: 'Interest: Logic & Systems', type: 'scale' },
-  Q4_C: { label: 'Interest: Data & Analysis', type: 'scale' },
-  Q4_D: { label: 'Interest: Creative & Art', type: 'scale' },
-  Q4_E: { label: 'Interest: Detail & Precision', type: 'scale' },
-  Q4_F: { label: 'Interest: Structure & Planning', type: 'scale' },
-  Q4_G: { label: 'Interest: Hands-on Building', type: 'scale' },
-  Q5: { label: 'Work environment preference', type: 'choice' },
-  Q6: { label: 'Collaboration style', type: 'choice' },
-  Q7: { label: 'Comfort with technology', type: 'scale' },
-  Q8: { label: 'Interest in research', type: 'scale' },
-  Q9: { label: 'Communication preference', type: 'scale' },
-  Q10: { label: 'Career priority', type: 'choice' },
-  Q11: { label: 'Comfort with ambiguity', type: 'scale' },
-  Q12: { label: 'Study duration preference', type: 'choice' },
-  Q13: { label: 'Interest in leadership roles', type: 'scale' },
-  Q14: { label: 'Preferred project type', type: 'choice' },
-}
-
-function ScaleBar({ value }: { value: number }) {
-  const pct = (value / 5) * 100
-  const color =
-    value >= 4
-      ? 'bg-green-500'
-      : value >= 3
-        ? 'bg-primary'
-        : value >= 2
-          ? 'bg-yellow-500'
-          : 'bg-muted-foreground'
-
-  return (
-    <div className='flex items-center gap-3'>
-      <div className='flex-1 h-2 bg-muted rounded-full overflow-hidden'>
-        <div
-          className={`h-full rounded-full transition-all duration-500 ${color}`}
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-      <span className='text-xs font-bold text-foreground w-6 text-right'>
-        {value}/5
-      </span>
-    </div>
-  )
-}
-
-function AnswerRow({ code, value }: { code: string; value: string }) {
-  const meta = QUESTION_META[code] ?? { label: code, type: 'choice' }
-  const numVal = Number(value)
-  const isScale = meta.type === 'scale' && !isNaN(numVal)
-
-  return (
-    <div className='flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 py-3.5 border-b border-border last:border-0'>
-      <div className='flex-1 min-w-0'>
-        <div className='flex items-center gap-2'>
-          <span className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted px-2 py-0.5 rounded-md'>
-            {code}
-          </span>
-          <span className='text-sm font-semibold text-foreground'>
-            {meta.label}
-          </span>
-        </div>
-      </div>
-      <div className='sm:w-48 shrink-0'>
-        {isScale ? (
-          <ScaleBar value={numVal} />
-        ) : (
-          <span className='inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20'>
-            <CheckCircle2 size={11} /> Option {value}
-          </span>
-        )}
-      </div>
-    </div>
-  )
 }
 
 export default function SurveyTab({ profile }: Props) {
@@ -96,20 +16,19 @@ export default function SurveyTab({ profile }: Props) {
   const { latestAnswers, totalAttempts } = profile
   const hasAnswers = latestAnswers.length > 0
 
-  // Separate choice questions from scale questions for grouping
-  const choiceAnswers = latestAnswers
-    .filter(a => {
-      const meta = QUESTION_META[a.questionCode]
-      return meta?.type === 'choice' || isNaN(Number(a.answerValue))
-    })
-    .sort((a, b) =>
-      a.questionCode.localeCompare(b.questionCode, undefined, { numeric: true })
-  )
-  
   const scaleAnswers = latestAnswers
     .filter(a => {
       const meta = QUESTION_META[a.questionCode]
       return meta?.type === 'scale' && !isNaN(Number(a.answerValue))
+    })
+    .sort((a, b) =>
+      a.questionCode.localeCompare(b.questionCode, undefined, { numeric: true })
+    )
+
+  const choiceAnswers = latestAnswers
+    .filter(a => {
+      const meta = QUESTION_META[a.questionCode]
+      return meta?.type === 'choice' || isNaN(Number(a.answerValue))
     })
     .sort((a, b) =>
       a.questionCode.localeCompare(b.questionCode, undefined, { numeric: true })
@@ -159,41 +78,12 @@ export default function SurveyTab({ profile }: Props) {
         </div>
       ) : (
         <>
-          {/* Summary cards */}
-          <div className='grid grid-cols-2 sm:grid-cols-4 gap-3'>
-            <div className='bg-card border border-border rounded-2xl p-4 text-center'>
-              <p className='text-2xl font-extrabold text-foreground'>
-                {totalAttempts}
-              </p>
-              <p className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-1'>
-                Total Attempts
-              </p>
-            </div>
-            <div className='bg-card border border-border rounded-2xl p-4 text-center'>
-              <p className='text-2xl font-extrabold text-foreground'>
-                {latestAnswers.length}
-              </p>
-              <p className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-1'>
-                Questions Answered
-              </p>
-            </div>
-            <div className='bg-card border border-border rounded-2xl p-4 text-center'>
-              <p className='text-2xl font-extrabold text-foreground'>
-                {scaleAnswers.length}
-              </p>
-              <p className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-1'>
-                Interest Ratings
-              </p>
-            </div>
-            <div className='bg-card border border-border rounded-2xl p-4 text-center'>
-              <p className='text-2xl font-extrabold text-foreground'>
-                {choiceAnswers.length}
-              </p>
-              <p className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-1'>
-                Preference Choices
-              </p>
-            </div>
-          </div>
+          <SurveySummaryCards
+            totalAttempts={totalAttempts}
+            answeredCount={latestAnswers.length}
+            scaleCount={scaleAnswers.length}
+            choiceCount={choiceAnswers.length}
+          />
 
           {/* Attempt info bar */}
           <div className='flex items-center gap-2 px-4 py-3 bg-primary/5 border border-primary/20 rounded-xl'>
@@ -211,10 +101,10 @@ export default function SurveyTab({ profile }: Props) {
           {scaleAnswers.length > 0 && (
             <div className='bg-card border border-border rounded-2xl p-5'>
               <h3 className='font-bold text-base text-foreground mb-1'>
-                Interest Ratings
+                Scale Ratings
               </h3>
               <p className='text-xs text-muted-foreground mb-4'>
-                Your rated level of interest in each area (1 = low, 5 = high)
+                Your rated responses on a scale from 1 (low) to 5 (high)
               </p>
               <div>
                 {scaleAnswers.map(a => (
@@ -232,10 +122,10 @@ export default function SurveyTab({ profile }: Props) {
           {choiceAnswers.length > 0 && (
             <div className='bg-card border border-border rounded-2xl p-5'>
               <h3 className='font-bold text-base text-foreground mb-1'>
-                Preference Choices
+                Multiple Choice Answers
               </h3>
               <p className='text-xs text-muted-foreground mb-4'>
-                Your selected answers for multiple-choice questions
+                Your selected answers for each preference question
               </p>
               <div>
                 {choiceAnswers.map(a => (
