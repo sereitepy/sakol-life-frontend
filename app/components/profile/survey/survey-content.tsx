@@ -2,37 +2,107 @@
 
 import { useRouter } from 'next/navigation'
 import { RotateCcw, Sparkles } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { ProfileResponse } from '@/lib/profile/action'
 import { QUESTION_META } from './answer-row'
+import { SurveySummaryCards } from './summary-cards'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 
-function glowDot(active: boolean, isCurrent = false) {
-  if (isCurrent)
-    return 'w-8 h-8 rounded-full bg-primary shadow-[0_0_10px_#00e676] ring-4 ring-primary/20 flex items-center justify-center shrink-0'
-  if (active)
-    return 'w-5 h-5 rounded-full bg-primary shadow-[0_0_6px_#00e676] shrink-0'
-  return 'w-5 h-5 rounded-full bg-surface-container-highest border border-white/10 shrink-0'
+const SCALE_POINTS = [
+  {
+    value: 1,
+    maxW: 'max-w-12',
+    activeBg: 'bg-muted-foreground/20',
+    activeBorder: 'border-muted-foreground/60',
+    dotColor: 'bg-muted-foreground/50',
+    idleBorder: 'border-muted-foreground/30',
+  },
+  {
+    value: 2,
+    maxW: 'max-w-9',
+    activeBg: 'bg-muted-foreground/15',
+    activeBorder: 'border-muted-foreground/45',
+    dotColor: 'bg-muted-foreground/40',
+    idleBorder: 'border-muted-foreground/25',
+  },
+  {
+    value: 3,
+    maxW: 'max-w-7',
+    activeBg: 'bg-muted',
+    activeBorder: 'border-muted-foreground/40',
+    dotColor: 'bg-muted-foreground/30',
+    idleBorder: 'border-muted-foreground/20',
+  },
+  {
+    value: 4,
+    maxW: 'max-w-9',
+    activeBg: 'bg-primary/20',
+    activeBorder: 'border-primary/70',
+    dotColor: 'bg-primary/60',
+    idleBorder: 'border-primary/20',
+  },
+  {
+    value: 5,
+    maxW: 'max-w-12',
+    activeBg: 'bg-primary',
+    activeBorder: 'border-primary',
+    dotColor: 'bg-primary-foreground/70',
+    idleBorder: 'border-primary/25',
+  },
+] as const
+
+function ReadOnlyLikert({
+  value,
+  lowLabel,
+  highLabel,
+}: {
+  value: number
+  lowLabel: string
+  highLabel: string
+}) {
+  return (
+    <div className='flex items-center gap-2 w-full select-none'>
+      <span className='text-[10px] sm:text-xs font-medium text-muted-foreground leading-tight text-left shrink-0 w-1/5 min-w-0'>
+        {lowLabel}
+      </span>
+      <div className='flex items-center justify-center gap-1.5 sm:gap-2 flex-1'>
+        {SCALE_POINTS.map(point => {
+          const isSelected = value === point.value
+          return (
+            <div
+              key={point.value}
+              className={cn(
+                'flex-1 aspect-square rounded-full border-2 flex items-center justify-center',
+                point.maxW,
+                isSelected
+                  ? cn(
+                      point.activeBg,
+                      point.activeBorder,
+                      'scale-110 shadow-sm'
+                    )
+                  : cn('bg-transparent', point.idleBorder)
+              )}
+            >
+              {isSelected && (
+                <span
+                  className={cn('rounded-full w-[20%] h-[20%]', point.dotColor)}
+                />
+              )}
+            </div>
+          )
+        })}
+      </div>
+      <span className='text-[10px] sm:text-xs font-medium text-primary leading-tight text-right shrink-0 w-1/5 min-w-0'>
+        {highLabel}
+      </span>
+    </div>
+  )
 }
 
-function ScaleCard({
-  code,
-  value,
-  label,
-  questionText,
-  low,
-  high,
-}: {
-  code: string
-  value: number
-  label: string
-  questionText: string
-  low?: string
-  high?: string
-}) {
-  const MAX = 5
-  const dots = Array.from({ length: MAX }, (_, i) => i + 1)
+function ScaleCard({ code, value }: { code: string; value: number }) {
+  const meta = QUESTION_META[code]
+  if (!meta) return null
 
-  // label badge text based on value
   const badge =
     value >= 5
       ? 'Very High'
@@ -45,124 +115,86 @@ function ScaleCard({
             : 'Very Low'
 
   return (
-    <div className='glass-panel p-6 rounded-xl border border-white/10 hover:border-primary/30 transition-all duration-300 group'>
-      <div className='flex justify-between items-start mb-4'>
-        <div className='flex items-center gap-2'>
-          <span className='text-[10px] font-bold uppercase tracking-widest text-on-surface-variant bg-surface-container px-2 py-1 rounded'>
+    <div className='glass-panel p-[clamp(14px,2vw,24px)] rounded-xl border border-border cursor-default transition-all duration-300'>
+      <div className='flex items-start justify-between gap-3 mb-4'>
+        <div className='flex items-center gap-2 min-w-0'>
+          <span className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted px-2 py-1 rounded shrink-0'>
             {code}
           </span>
-          <h3 className='text-base font-semibold text-on-surface'>{label}</h3>
+          <h3 className='text-sm font-semibold text-foreground truncate'>
+            {meta.label}
+          </h3>
         </div>
-        <span className='text-xs font-bold text-primary px-3 py-1 bg-primary/10 rounded-full border border-primary/20 shrink-0 ml-4'>
+        <span className='text-xs font-bold text-primary px-3 py-1 bg-primary/10 rounded-full border border-primary/20 shrink-0'>
           {badge}
         </span>
       </div>
-
-      <p className='text-sm text-on-surface-variant mb-6 leading-relaxed'>
-        {questionText}
+      <p className='text-sm text-muted-foreground mb-5 leading-relaxed'>
+        {QUESTION_TEXT[code] ?? ''}
       </p>
-
-      {/* Dot matrix */}
-      <div className='flex items-center gap-3'>
-        {dots.map((dot, i) => {
-          const active = dot <= value
-          const isCurrent = dot === value
-          return (
-            <div key={dot} className='flex flex-col items-center gap-2 flex-1'>
-              <div className={`mx-auto ${glowDot(active, isCurrent)}`}>
-                {isCurrent && (
-                  <svg
-                    className='w-3 h-3 text-on-primary'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M5 13l4 4L19 7'
-                    />
-                  </svg>
-                )}
-              </div>
-              <span
-                className={`text-[10px] font-bold tracking-wide ${isCurrent ? 'text-primary' : 'text-on-surface-variant/50'}`}
-              >
-                {dot}
-              </span>
-            </div>
-          )
-        })}
-      </div>
-
-      {(low || high) && (
-        <div className='flex justify-between mt-3'>
-          <span className='text-[10px] text-outline'>{low}</span>
-          <span className='text-[10px] text-outline'>{high}</span>
-        </div>
-      )}
+      <ReadOnlyLikert
+        value={value}
+        lowLabel={meta.scaleLabel?.low ?? 'Low'}
+        highLabel={meta.scaleLabel?.high ?? 'High'}
+      />
     </div>
   )
 }
 
-function ChoiceCard({
-  code,
-  value,
-  label,
-  questionText,
-  options,
-}: {
-  code: string
-  value: string
-  label: string
-  questionText: string
-  options: Record<string, string>
-}) {
+function ChoiceCard({ code, value }: { code: string; value: string }) {
+  const meta = QUESTION_META[code]
+  if (!meta || !meta.options) return null
+
   return (
-    <div className='glass-panel p-6 rounded-xl border border-white/10 hover:border-primary/30 transition-all duration-300'>
-      <div className='flex items-center gap-2 mb-4'>
-        <span className='text-[10px] font-bold uppercase tracking-widest text-on-surface-variant bg-surface-container px-2 py-1 rounded'>
+    <div className='glass-panel p-[clamp(14px,2vw,24px)] rounded-xl border border-border cursor-default'>
+      <div className='flex items-center gap-2 mb-3'>
+        <span className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted px-2 py-1 rounded shrink-0'>
           {code}
         </span>
-        <h3 className='text-base font-semibold text-on-surface'>{label}</h3>
+        <h3 className='text-sm font-semibold text-foreground'>{meta.label}</h3>
       </div>
-
-      <p className='text-sm text-on-surface-variant mb-5 leading-relaxed'>
-        {questionText}
+      <p className='text-sm text-muted-foreground mb-4 leading-relaxed'>
+        {QUESTION_TEXT[code] ?? ''}
       </p>
-
-      <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
-        {Object.entries(options).map(([letter, text]) => {
+      <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
+        {Object.entries(meta.options).map(([letter, text]) => {
           const selected = letter === value
           return (
             <div
               key={letter}
-              className={`
-                flex items-start gap-3 p-4 rounded-lg border transition-all duration-200
-                ${
-                  selected
-                    ? 'border-primary/40 bg-primary/5'
-                    : 'border-white/10 bg-surface-container/50 opacity-50'
-                }
-              `}
+              className={cn(
+                'flex items-start gap-3 p-3 rounded-lg border cursor-default',
+                selected
+                  ? 'border-primary/40 bg-primary/5'
+                  : 'border-border bg-card/50 opacity-40'
+              )}
             >
-              {/* Radio dot */}
               <div
-                className={`mt-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${selected ? 'border-primary' : 'border-white/20'}`}
+                className={cn(
+                  'mt-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0',
+                  selected ? 'border-primary' : 'border-muted-foreground/30'
+                )}
               >
                 {selected && (
-                  <div className='w-2 h-2 rounded-full bg-primary shadow-[0_0_4px_#00e676]' />
+                  <div className='w-2 h-2 rounded-full bg-primary' />
                 )}
               </div>
               <div className='min-w-0'>
                 <span
-                  className={`text-[10px] font-extrabold tracking-widest mr-2 ${selected ? 'text-primary' : 'text-on-surface-variant'}`}
+                  className={cn(
+                    'text-[10px] font-extrabold tracking-widest mr-1.5',
+                    selected ? 'text-primary' : 'text-muted-foreground'
+                  )}
                 >
                   {letter}
                 </span>
                 <span
-                  className={`text-sm leading-snug ${selected ? 'text-on-surface font-medium' : 'text-on-surface-variant'}`}
+                  className={cn(
+                    'text-xs leading-snug',
+                    selected
+                      ? 'text-foreground font-medium'
+                      : 'text-muted-foreground'
+                  )}
                 >
                   {text}
                 </span>
@@ -171,27 +203,6 @@ function ChoiceCard({
           )
         })}
       </div>
-    </div>
-  )
-}
-
-function EmptyState({ onStart }: { onStart: () => void }) {
-  return (
-    <div className='glass-panel rounded-2xl p-16 flex flex-col items-center justify-center text-center border border-white/10'>
-      <div className='w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-3xl mb-5'>
-        🎯
-      </div>
-      <h2 className='text-lg font-bold text-on-surface mb-2'>No answers yet</h2>
-      <p className='text-sm text-on-surface-variant max-w-sm leading-relaxed mb-6'>
-        Complete the career assessment quiz to discover your recommended majors
-        and see a detailed breakdown of your answers here.
-      </p>
-      <button
-        onClick={onStart}
-        className='px-8 py-3 bg-primary text-on-primary font-bold rounded-lg hover:shadow-[0_0_20px_#00e67680] transition-all active:scale-95'
-      >
-        Take the Assessment
-      </button>
     </div>
   )
 }
@@ -205,7 +216,6 @@ export default function SurveyContent({
   const { latestAnswers, totalAttempts } = profile
   const hasAnswers = latestAnswers.length > 0
 
-  // Separate and sort
   const scaleAnswers = latestAnswers
     .filter(
       a =>
@@ -222,208 +232,145 @@ export default function SurveyContent({
       a.questionCode.localeCompare(b.questionCode, undefined, { numeric: true })
     )
 
-  const completionPct = Math.round((latestAnswers.length / 12) * 100)
-  const avgScale =
-    scaleAnswers.length > 0
-      ? (
-          scaleAnswers.reduce((s, a) => s + Number(a.answerValue), 0) /
-          scaleAnswers.length
-        ).toFixed(1)
-      : '—'
-
   return (
     <div className='flex min-h-[calc(100vh-57px)]'>
-      {/* ── Sidebar ── */}
-      <aside className='hidden lg:flex flex-col w-64 xl:w-72 shrink-0 border-r border-white/10 bg-surface-container-low p-6 sticky top-[57px] h-[calc(100vh-57px)] overflow-y-auto'>
-        <div className='space-y-8'>
-          {/* Summary stats */}
-          <section>
-            <p className='text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-3'>
-              Survey Summary
-            </p>
-            <div className='space-y-3'>
-              <div className='glass-panel p-4 rounded-xl border border-white/10'>
-                <span className='text-[10px] font-bold uppercase tracking-widest text-primary'>
-                  Completion Rate
-                </span>
-                <div className='mt-2 flex items-end gap-2'>
-                  <span className='text-3xl font-bold text-on-surface'>
-                    {completionPct}%
-                  </span>
-                </div>
-                <div className='mt-3 w-full bg-surface-container-highest h-1 rounded-full overflow-hidden'>
-                  <div
-                    className='h-full bg-primary shadow-[0_0_6px_#00e676] rounded-full transition-all duration-700'
-                    style={{ width: `${completionPct}%` }}
-                  />
-                </div>
+      <main className='flex-1 p-[clamp(16px,3vw,48px)] min-w-0'>
+        <div className='max-w-[min(1000px,100%)] mx-auto space-y-[clamp(12px,2vw,24px)]'>
+          <div className='space-y-[clamp(16px,2vw,28px)]'>
+            {/* Header */}
+            <div className='flex flex-col sm:flex-row sm:items-start justify-between gap-3'>
+              <div>
+                <h1 className='text-[clamp(18px,2.5vw,28px)] font-bold text-foreground tracking-tight'>
+                  Survey Answers
+                </h1>
+                <p className='text-sm text-muted-foreground mt-1'>
+                  {hasAnswers
+                    ? 'Detailed responses from your most recent assessment.'
+                    : 'Complete the assessment to see your answers here.'}
+                </p>
               </div>
+              {hasAnswers && (
+                <Button
+                  variant='secondary'
+                  onClick={() => router.push('/quiz')}
+                  className='flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5
+              border border-border text-foreground text-sm font-bold rounded-lg
+              hover:bg-muted transition-all shrink-0'
+                >
+                  <RotateCcw size={14} />
+                  Retake
+                </Button>
+              )}
+            </div>
 
-              <div className='glass-panel p-4 rounded-xl border border-white/10'>
-                <span className='text-[10px] font-bold uppercase tracking-widest text-primary'>
-                  Average Scale Score
-                </span>
-                <div className='mt-2'>
-                  <span className='text-3xl font-bold text-on-surface'>
-                    {avgScale}
-                  </span>
-                  {avgScale !== '—' && (
-                    <span className='text-sm text-outline ml-1'>/ 5.0</span>
-                  )}
+            {!hasAnswers ? (
+              <div className='glass-panel rounded-2xl border border-border p-[clamp(32px,6vw,64px)] flex flex-col items-center justify-center text-center'>
+                <div className='w-14 h-14 rounded-2xl bg-muted flex items-center justify-center text-2xl mb-4'>
+                  🎯
                 </div>
+                <h2 className='font-bold text-base text-foreground mb-1'>
+                  No answers yet
+                </h2>
+                <p className='text-sm text-muted-foreground max-w-sm leading-relaxed mb-5'>
+                  Complete the career assessment quiz to discover your
+                  recommended majors.
+                </p>
+                <button
+                  onClick={() => router.push('/quiz')}
+                  className='px-6 py-2.5 bg-primary text-primary-foreground font-bold rounded-lg transition-all active:scale-95'
+                >
+                  Take the Assessment
+                </button>
               </div>
-            </div>
-          </section>
+            ) : (
+              <>
+                <SurveySummaryCards
+                  totalAttempts={totalAttempts}
+                  answeredCount={latestAnswers.length}
+                  scaleCount={scaleAnswers.length}
+                  choiceCount={choiceAnswers.length}
+                />
 
-          {/* Quick nav */}
-          <section>
-            <p className='text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-3'>
-              Quick Navigation
-            </p>
-            <div className='space-y-1'>
-              {scaleAnswers.length > 0 && (
-                <a
-                  href='#scale-section'
-                  className='flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-all'
+                {scaleAnswers.length > 0 && (
+                  <section className='space-y-3'>
+                    <div className='flex items-center justify-between'>
+                      <h2 className='text-[clamp(14px,1.5vw,18px)] font-bold text-foreground'>
+                        Scale Ratings
+                      </h2>
+                      <span className='text-xs text-muted-foreground'>
+                        To change your answers, retake the quiz
+                      </span>
+                    </div>
+                    {scaleAnswers.map(a => (
+                      <ScaleCard
+                        key={a.questionCode}
+                        code={a.questionCode}
+                        value={Number(a.answerValue)}
+                      />
+                    ))}
+                  </section>
+                )}
+
+                {choiceAnswers.length > 0 && (
+                  <section className='space-y-3'>
+                    <div className='flex items-center justify-between'>
+                      <h2 className='text-[clamp(14px,1.5vw,18px)] font-bold text-foreground'>
+                        Multiple Choice
+                      </h2>
+                      <span className='text-xs text-muted-foreground'>
+                        To change your answers, retake the quiz
+                      </span>
+                    </div>
+                    {choiceAnswers.map(a => (
+                      <ChoiceCard
+                        key={a.questionCode}
+                        code={a.questionCode}
+                        value={a.answerValue}
+                      />
+                    ))}
+                  </section>
+                )}
+
+                {/* CTA */}
+                <div
+                  className='glass-panel rounded-2xl border border-primary/20 bg-primary/5
+              p-[clamp(20px,3vw,40px)] flex flex-col items-center text-center cursor-pointer
+              hover:border-primary/40 transition-all'
+                  onClick={() => router.push('/quiz/results')}
                 >
-                  <span className='w-1.5 h-1.5 rounded-full bg-primary shrink-0' />
-                  Scale Ratings
-                </a>
-              )}
-              {choiceAnswers.length > 0 && (
-                <a
-                  href='#choice-section'
-                  className='flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-all'
-                >
-                  <span className='w-1.5 h-1.5 rounded-full bg-primary shrink-0' />
-                  Choice Answers
-                </a>
-              )}
-            </div>
-          </section>
-
-          {/* Attempt count */}
-          {totalAttempts > 0 && (
-            <div className='glass-panel p-4 rounded-xl border border-white/10 text-center'>
-              <p className='text-2xl font-bold text-on-surface'>
-                {totalAttempts}
-              </p>
-              <p className='text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mt-1'>
-                Total Attempts
-              </p>
-            </div>
-          )}
-        </div>
-      </aside>
-
-      {/* ── Main content ── */}
-      <main className='flex-1 p-6 lg:p-8 xl:p-10'>
-        <div className='max-w-3xl mx-auto space-y-12 pb-16'>
-          {/* Page header */}
-          <header className='flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4'>
-            <div>
-              <h1 className='text-4xl font-bold text-on-surface tracking-tight mb-2'>
-                Survey Answers
-              </h1>
-              <p className='text-base text-on-surface-variant leading-relaxed'>
-                {hasAnswers
-                  ? `Your detailed responses from your most recent assessment.`
-                  : 'Complete the assessment to see your answers here.'}
-              </p>
-            </div>
-            {hasAnswers && (
-              <button
-                onClick={() => router.push('/quiz')}
-                className='flex items-center gap-2 px-5 py-2.5 border border-white/20 text-on-surface text-sm font-bold rounded-lg hover:bg-white/5 hover:shadow-[0_0_10px_rgba(0,230,118,0.15)] transition-all shrink-0'
-              >
-                <RotateCcw size={14} />
-                Retake
-              </button>
-            )}
-          </header>
-
-          {!hasAnswers ? (
-            <EmptyState onStart={() => router.push('/quiz')} />
-          ) : (
-            <>
-              {/* Scale section */}
-              {scaleAnswers.length > 0 && (
-                <section id='scale-section' className='space-y-4'>
-                  <h2 className='text-2xl font-bold text-on-surface'>
-                    Scale Ratings
-                  </h2>
-                  <div className='space-y-4'>
-                    {scaleAnswers.map(a => {
-                      const meta = QUESTION_META[a.questionCode]
-                      return (
-                        <ScaleCard
-                          key={a.questionCode}
-                          code={a.questionCode}
-                          value={Number(a.answerValue)}
-                          label={meta?.label ?? a.questionCode}
-                          questionText={QUESTION_TEXT[a.questionCode] ?? ''}
-                          low={meta?.scaleLabel?.low}
-                          high={meta?.scaleLabel?.high}
-                        />
-                      )
-                    })}
-                  </div>
-                </section>
-              )}
-
-              {/* Choice section */}
-              {choiceAnswers.length > 0 && (
-                <section id='choice-section' className='space-y-4'>
-                  <h2 className='text-2xl font-bold text-on-surface'>
-                    Multiple Choice
-                  </h2>
-                  <div className='space-y-4'>
-                    {choiceAnswers.map(a => {
-                      const meta = QUESTION_META[a.questionCode]
-                      return (
-                        <ChoiceCard
-                          key={a.questionCode}
-                          code={a.questionCode}
-                          value={a.answerValue}
-                          label={meta?.label ?? a.questionCode}
-                          questionText={QUESTION_TEXT[a.questionCode] ?? ''}
-                          options={meta?.options ?? {}}
-                        />
-                      )
-                    })}
-                  </div>
-                </section>
-              )}
-
-              {/* CTA */}
-              <section>
-                <div className='glass-panel p-10 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-transparent to-transparent text-center'>
-                  <Sparkles className='w-10 h-10 text-primary mx-auto mb-4' />
-                  <h2 className='text-2xl font-bold text-on-surface mb-3'>
+                  <Sparkles className='w-8 h-8 text-primary mb-3' />
+                  <h2 className='text-[clamp(14px,1.5vw,18px)] font-bold text-foreground mb-2'>
                     View Your Recommended Majors
                   </h2>
-                  <p className='text-base text-on-surface-variant max-w-md mx-auto mb-8 leading-relaxed'>
+                  <p className='text-sm text-muted-foreground max-w-md leading-relaxed mb-5'>
                     See how your answers map to the best-fit university majors
-                    curated for your profile.
+                    for your profile.
                   </p>
-                  <div className='flex flex-col sm:flex-row justify-center gap-4'>
-                    <button
-                      onClick={() => router.push('/quiz/results')}
-                      className='px-8 py-4 bg-primary text-on-primary font-bold rounded-lg hover:shadow-[0_0_20px_#00e67680] transition-all active:scale-95'
+                  <div className='flex flex-col sm:flex-row gap-3 w-full sm:w-auto'>
+                    <Button
+                      onClick={e => {
+                        e.stopPropagation()
+                        router.push('/quiz/results')
+                      }}
+                      className='px-6 text-md py-6 bg-primary text-primary-foreground font-bold rounded-lg transition-all active:scale-95 w-full sm:w-auto'
                     >
                       See My Results
-                    </button>
-                    <button
-                      onClick={() => router.push('/quiz')}
-                      className='px-8 py-4 border border-white/20 text-on-surface font-bold rounded-lg hover:bg-white/5 transition-all'
+                    </Button>
+                    <Button
+                      variant='outline'
+                      onClick={e => {
+                        e.stopPropagation()
+                        router.push('/quiz')
+                      }}
+                      className='px-6 text-md py-6 border border-border text-foreground font-bold rounded-lg hover:bg-muted transition-all w-full sm:w-auto'
                     >
                       Retake Assessment
-                    </button>
+                    </Button>
                   </div>
                 </div>
-              </section>
-            </>
-          )}
+              </>
+            )}
+          </div>
         </div>
       </main>
     </div>

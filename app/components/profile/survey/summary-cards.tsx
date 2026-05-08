@@ -23,9 +23,11 @@ export function SurveySummaryCards({
       {stats.map(s => (
         <div
           key={s.label}
-          className='bg-card border border-border rounded-2xl p-4 text-center'
+          className='glass-panel rounded-2xl border border-border p-[clamp(12px,1.5vw,20px)] text-center'
         >
-          <p className='text-2xl font-extrabold text-foreground'>{s.value}</p>
+          <p className='text-[clamp(20px,2.5vw,28px)] font-extrabold text-foreground'>
+            {s.value}
+          </p>
           <p className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-1'>
             {s.label}
           </p>
