@@ -6,6 +6,7 @@ import Header from './components/header'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import TheSetting from './components/the-setting'
 import { Providers } from './components/theme/providers'
+import Footer from "@/app/components/footer";
 
 const lexend = Lexend({
   variable: '--font-sans',
@@ -46,7 +47,7 @@ export default function RootLayout({
           <div className='fixed bottom-10 right-10 z-50'>
             <TheSetting />
           </div>
-          <p>footer</p>
+          <Footer />
         </Providers>
       </body>
     </html>
