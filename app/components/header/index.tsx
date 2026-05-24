@@ -8,7 +8,8 @@ import {
 } from '@/components/ui/sheet'
 import { getUser } from '@/lib/auth'
 import { Menu } from 'lucide-react'
-import Link from 'next/link'
+import Link from 'next/link' 
+<Link href="/about">About</Link>
 import Logo from '../logo'
 import SignOutButton from '../signout-button'
 import AuthLinks from './auth-links'
@@ -28,7 +29,7 @@ export default async function Header() {
 
       {/* Desktop nav */}
       <section className='hidden md:flex items-center gap-5'>
-        <Link href='#' className='underline-animate font-semibold'>
+        <Link href='/about' className='underline-animate font-semibold'>
           About Us
         </Link>
 
