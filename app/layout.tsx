@@ -8,13 +8,13 @@ import TheSetting from './components/the-setting'
 import { Providers } from './components/theme/providers'
 
 const lexend = Lexend({
-  variable: '--font-sans',
   subsets: ['latin'],
+  variable: '--font-lexend',
 })
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: '--font-mono',
+const jetbrains_mono = JetBrains_Mono({
   subsets: ['latin'],
+  variable: '--font-mono',
 })
 
 export const metadata: Metadata = {
@@ -30,8 +30,7 @@ export default function RootLayout({
   return (
     <html
       lang='en'
-      className={cn(lexend.variable, jetbrainsMono.variable)}
-      suppressHydrationWarning
+className={cn(lexend.variable, jetbrains_mono.variable)}      suppressHydrationWarning
     >
       <body className='font-sans antialiased flex flex-col justify-between min-h-screen'>
         <Providers>
