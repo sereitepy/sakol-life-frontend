@@ -4,19 +4,19 @@ const crew = [
   {
     name: 'Sereitepy Or',
     role: 'Full-Stack Developer',
-    src: '/Sereitepy Or.png',
+    src: '/images/sereitepy-or.png',
     rotate: 'group-hover:rotate-6',
   },
   {
     name: 'Reaskmey Meas',
     role: 'Project Researcher',
-    src: '/Reaksmey Meas.png',
+    src: '/images/reaksmey-meas.png',
     rotate: 'group-hover:-rotate-6',
   },
   {
     name: 'Ratanakvisal Chhouk',
     role: 'Market Researcher',
-    src: '/Ratanakvisal Chhouk.png',
+    src: '/images/ratanakvisal-chhouk.png',
     rotate: 'group-hover:rotate-12',
   },
 ]
@@ -30,7 +30,7 @@ export default function MeettheCrew() {
           Meet the Crew
         </h2>
         <p className='text-base sm:text-lg max-w-2xl mx-auto mb-20 text-muted-foreground'>
-          We are a group of MIS students passionate about bridging the gap between
+          We are a group of MIS students, passionate about bridging the gap between
           high school and a successful tech university decision.
         </p>
 

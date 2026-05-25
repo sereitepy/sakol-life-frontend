@@ -47,11 +47,11 @@ export default function Hero() {
 
           <div className='relative rounded-3xl overflow-hidden shadow-2xl rotate-1'>
             <Image
-              src='/cambodian_graduates.png'
+              src='/images/cambodian-graduates.png'
               alt='Cambodian graduates celebrating'
-              width={700}
-              height={500}
-              className='w-full h-[500px] object-cover transition-transform duration-500 ease-out group-hover:scale-105'
+              width={650}
+              height={400}
+              className='w-full h-[400px] object-cover transition-transform duration-500 ease-out group-hover:scale-105'
             />
             <div className='absolute inset-0 bg-black/10 dark:bg-black/20 rounded-3xl transition-opacity duration-300 group-hover:opacity-60' />
           </div>
