@@ -1,14 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { GraduationCap, Link2, Mail } from "lucide-react";
-
-const quickLinks = [
-  { label: "Home", href: "/" },
-  { label: "Take the Quiz", href: "/quiz" },
-  { label: "Majors", href: "/majors" },
-  { label: "Universities", href: "/universities" },
-  { label: "Scholarships", href: "/scholarships" },
-];
+import { GraduationCap, Mail } from "lucide-react";
+import { getUser } from "@/lib/auth";
 
 const supportLinks = [
   { label: "About Us", href: "/about" },
@@ -18,7 +11,21 @@ const supportLinks = [
   { label: "Terms of Service", href: "/terms" },
 ];
 
-export default function Footer() {
+export default async function Footer() {
+  const user = await getUser();
+
+  const quickLinks = [
+    { label: "Home", href: "/" },
+    { label: "View Demo", href: "/demo" },
+    { label: "Take the Quiz", href: "/quiz" },
+    ...(user
+      ? [
+          { label: "Majors", href: "/majors" },
+          { label: "Universities", href: "/universities" },
+        ]
+      : []),
+  ];
+
   return (
     <footer className="bg-chart-3/20 dark:bg-[oklch(0.3_0.06_148)] text-secondary-foreground dark:text-white/80">
       <div className="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-4 gap-10">
@@ -84,14 +91,7 @@ export default function Footer() {
           </h3>
           <div className="flex items-center gap-3">
             <a
-              href="https://sakol-life-google-site.vercel.app"
-              className="bg-secondary-foreground/10 dark:bg-white/10 hover:bg-secondary-foreground/20 dark:hover:bg-white/20 transition-colors duration-200 rounded-lg p-2"
-              aria-label="Website"
-            >
-              <Link2 className="w-4 h-4 text-secondary-foreground dark:text-white" />
-            </a>
-            <a
-              href="mailto:hello@sakollife.com"
+              href="mailto:rmeas@paragoniu.edu.kh"
               className="bg-secondary-foreground/10 dark:bg-white/10 hover:bg-secondary-foreground/20 dark:hover:bg-white/20 transition-colors duration-200 rounded-lg p-2"
               aria-label="Email"
             >
