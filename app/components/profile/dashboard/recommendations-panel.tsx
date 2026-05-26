@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { ArrowRight } from 'lucide-react'
 import { getMajorIcon } from '../shared/major-icons'
 import { ProfileResponse } from '@/lib/profile/action'
+import { Button } from '@/components/ui/button'
 
 type Recommendation = {
   code: string
@@ -38,37 +39,41 @@ function RecommendationCard({
   return (
     <button
       onClick={onClick}
-      className={`group relative text-left rounded-xl overflow-hidden glass-panel
-        h-[clamp(110px,18vw,150px)]
-        border transition-all duration-300 hover:scale-[1.02] cursor-pointer w-full
-        ${isChosen ? 'border-primary/50' : 'border-border'}`}
+      className={`group relative text-left rounded-xl overflow-hidden bg-card
+  h-[clamp(110px,18vw,150px)]
+  border transition-all duration-300 hover:scale-[1.02] cursor-pointer w-full
+  ${isChosen ? 'border-primary/50' : 'border-border'}`}
     >
+      {/* Colour overlay */}
       <div
-        className={`absolute inset-0 bg-gradient-to-br ${overlayClass} mix-blend-overlay transition-opacity group-hover:opacity-80`}
+        className={`absolute inset-0 bg-linear-to-br ${overlayClass} mix-blend-overlay transition-opacity group-hover:opacity-80`}
       />
 
+      {/* Match % pill */}
       <div
-        className='absolute top-3 right-3 bg-card/80 backdrop-blur-md
-        px-2.5 py-1 rounded-full border border-border text-foreground font-bold text-[clamp(9px,0.75vw,11px)]'
+        className='absolute top-4 right-4 bg-card backdrop-blur-md 
+  px-3 py-1 rounded-full border border-white/10 text-on-surface font-bold text-[clamp(9px,0.75vw,11px)]'
       >
         {percentage}% Match
       </div>
 
+      {/* Chosen badge */}
       {isChosen && (
         <div
-          className='absolute bottom-3 right-3 sm:bottom-auto sm:right-auto sm:top-3 sm:left-3
-          bg-primary/30 text-primary-foreground text-[10px] font-extrabold px-2 py-0.5 rounded-full'
+          className='absolute bottom-4 right-4 sm:bottom-auto sm:right-auto sm:top-4 sm:left-4 
+    bg-primary/30 text-on-primary text-[10px] font-extrabold px-2 py-0.5 rounded-full'
         >
           ✓ Chosen
         </div>
       )}
 
-      <div className='absolute inset-0 p-4 flex flex-col justify-end'>
+      {/* Content pinned to bottom */}
+      <div className='absolute inset-0 p-5 flex flex-col justify-end'>
         <Icon
           size={undefined}
-          className='text-foreground/80 mb-2 text-[clamp(18px,2vw,26px)]'
+          className='text-on-surface/80 mb-3 text-[clamp(22px,2.5vw,32px)]'
         />
-        <h4 className='text-[clamp(11px,1vw,14px)] font-bold text-foreground leading-tight'>
+        <h4 className='text-[clamp(12px,1vw,15px)] font-bold text-on-surface mb-1 leading-tight'>
           {nameEn}
         </h4>
       </div>
@@ -90,9 +95,9 @@ export function RecommendationsPanel({
   const router = useRouter()
 
   return (
-    <div className='bg-card rounded-xl border border-border p-[clamp(14px,2vw,24px)]'>
-      <div className='flex items-center justify-between mb-4'>
-        <h2 className='text-base font-bold text-foreground'>
+    <div className='bg-card rounded-xl border border-white/10 p-6'>
+      <div className='flex items-center justify-between mb-5'>
+        <h2 className='text-lg font-bold text-on-surface'>
           My Recommendations
         </h2>
         {hasQuiz && (
@@ -122,28 +127,30 @@ export function RecommendationsPanel({
       ) : hasQuiz ? (
         <div className='flex flex-col items-center justify-center py-12 text-center'>
           <p className='text-2xl mb-3'>📊</p>
-          <p className='text-sm text-muted-foreground mb-4'>
-            Your results are saved — view them below.
+          <p className='text-sm text-on-surface-variant mb-4'>
+            Your results are saved, view them below.
           </p>
-          <button
+          <Button
+            variant='outline'
             onClick={() => router.push('/quiz/results')}
-            className='px-5 py-2.5 border border-border text-foreground text-sm font-bold rounded-lg hover:bg-muted transition-all'
+            className='px-5 py-2.5 border border-white/20 text-on-surface text-sm font-bold rounded-lg hover:bg-white/5 transition-all'
           >
             View Results
-          </button>
+          </Button>
         </div>
       ) : (
         <div className='flex flex-col items-center justify-center py-12 text-center'>
           <p className='text-2xl mb-3'>🎯</p>
-          <p className='text-sm text-muted-foreground mb-4'>
+          <p className='text-sm text-on-surface-variant mb-4'>
             Take the quiz to get personalised major recommendations.
           </p>
-          <button
+          <Button
+            variant='outline'
             onClick={() => router.push('/quiz')}
-            className='px-6 py-2.5 bg-primary text-primary-foreground text-sm font-bold rounded-lg transition-all active:scale-95'
+            className='px-6 py-2.5 bg-primary text-on-primary text-sm font-bold rounded-lg hover:shadow-[0_0_16px_#00e67680] transition-all active:scale-95'
           >
             Start Assessment
-          </button>
+          </Button>
         </div>
       )}
     </div>
