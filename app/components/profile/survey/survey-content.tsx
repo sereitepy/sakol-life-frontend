@@ -101,7 +101,8 @@ function ReadOnlyLikert({
 
 function ScaleCard({ code, value }: { code: string; value: number }) {
   const meta = QUESTION_META[code]
-  if (!meta) return null
+  // Explicit narrowing guard for scale type
+  if (!meta || meta.type !== 'scale') return null
 
   const badge =
     value >= 5
@@ -143,7 +144,8 @@ function ScaleCard({ code, value }: { code: string; value: number }) {
 
 function ChoiceCard({ code, value }: { code: string; value: string }) {
   const meta = QUESTION_META[code]
-  if (!meta || !meta.options) return null
+  // Explicit narrowing guard for choice type
+  if (!meta || meta.type !== 'choice') return null
 
   return (
     <div className='bg-card p-[clamp(14px,2vw,24px)] rounded-xl border border-border cursor-default'>

@@ -60,7 +60,6 @@ export default function DashboardTab({ profile, quizState }: Props) {
                 ? `${topMatch.similarityPercentage}% Accuracy`
                 : undefined
             }
-            accent
           />
           <StatCard
             icon={Bookmark}

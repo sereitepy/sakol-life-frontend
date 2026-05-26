@@ -1,9 +1,20 @@
 import { CheckCircle2 } from 'lucide-react'
 
-export const QUESTION_META: Record<
-  string,
-  { label: string; type: 'choice' | 'scale' }
-> = {
+// 1. Define distinct types for Choice and Scale questions
+type ChoiceQuestion = {
+  label: string
+  type: 'choice'
+  options: Record<string, string>
+}
+
+type ScaleQuestion = {
+  label: string
+  type: 'scale'
+  scaleLabel: { low: string; high: string }
+}
+
+// 2. Use a union type for the Record
+export const QUESTION_META: Record<string, ChoiceQuestion | ScaleQuestion> = {
   Q1: {
     label: 'New app/phone behaviour',
     type: 'choice',
@@ -154,8 +165,12 @@ function ScaleBar({ value }: { value: number }) {
 }
 
 export function AnswerRow({ code, value }: { code: string; value: string }) {
-  // Used only as a fallback export — ScaleCard and ChoiceCard in survey-content handle rendering
-  const meta = QUESTION_META[code] ?? { label: code, type: 'choice' }
+  // Safe fallback if code is missing from metadata
+  const meta = QUESTION_META[code] ?? {
+    label: code,
+    type: 'choice',
+    options: {},
+  }
   const numVal = Number(value)
   const isScale = meta.type === 'scale' && !isNaN(numVal)
 
