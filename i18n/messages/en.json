@@ -1,0 +1,101 @@
+{
+  "nav": {
+    "home": "Home",
+    "quiz": "Career Quiz",
+    "majors": "Majors",
+    "universities": "Universities",
+    "profile": "Profile",
+    "signIn": "Sign In",
+    "signOut": "Sign Out"
+  },
+  "profile": {
+    "settings": {
+      "account-settings": "Account Settings",
+      "account-description": "Manage your profile information and preferences",
+      "settingsLabel": "Settings",
+      "navProfile": "Profile",
+      "navSecurity": "Security",
+      "navLanguage": "Language",
+      "navAccount": "Account",
+
+      "sectionProfile": "Profile information",
+      "sectionProfileDesc": "Update your display name, photo and language preference.",
+      "sectionSecurity": "Security",
+      "sectionSecurityDesc": "Change your password.",
+      "sectionLanguage": "Language & region",
+      "sectionLanguageDesc": "Choose the language you want to use across the site.",
+      "sectionAccount": "Account",
+      "sectionAccountDesc": "Sign out or permanently delete your account.",
+
+      "displayName": "Display name",
+      "displayNamePlaceholder": "Your name",
+      "preferredLanguage": "Content language",
+      "preferredLanguageHint": "Controls which language version of major descriptions and university info is shown.",
+      "saveChanges": "Save changes",
+      "saving": "Saving…",
+      "saved": "Saved!",
+      "saveError": "Failed to save. Please try again.",
+
+      "newPassword": "New password",
+      "newPasswordHint": "Must be at least 8 characters.",
+      "newPasswordPlaceholder": "Enter new password",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Confirm new password",
+      "updatePassword": "Update password",
+      "updatingPassword": "Updating…",
+      "passwordUpdated": "Password updated!",
+      "passwordMinLength": "Password must be at least 8 characters.",
+      "passwordMismatch": "Passwords do not match.",
+
+      "languageSaveNote": "Your language preference is saved to your account and remembered next time you log in.",
+
+      "signOut": "Sign out",
+      "signOutDescription": "Sign out of your account on this device.",
+      "deleteAccount": "Delete account",
+      "deleteAccountDescription": "Permanently delete your account, quiz history and all saved data. This cannot be undone.",
+      "delete": "Delete",
+      "administrator": "Administrator",
+      "student": "Student",
+      "uploadPhoto": "Upload photo",
+      "changePhoto": "Change photo",
+      "uploadingPhoto": "Uploading…",
+      "photoUploaded": "Photo updated!",
+      "photoUploadError": "Upload failed. Please try again.",
+      "photoSizeError": "Image must be under 5 MB.",
+      "photoTypeError": "Only JPG, PNG or WebP images are allowed.",
+
+      "deleteAccountConfirmTitle": "Are you absolutely sure?",
+      "deleteAccountConfirmDescription": "This will permanently delete your account, all quiz attempts, saved majors and answers. This cannot be undone.",
+      "deleteTypeToConfirm": "Type DELETE to confirm",
+      "deleteAccountConfirm": "Yes, delete my account",
+      "deleteAccountCancel": "Cancel",
+      "deletingAccount": "Deleting…",
+      "deleteAccountError": "Failed to delete account. Please contact support."
+    }
+  },
+  "quiz": {
+    "title": "Career Quiz",
+    "start": "Start Quiz",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "results": "Your Results"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong.",
+    "retry": "Try again",
+    "back": "Back",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "homepages": {
+    "title-first-half": "Discover Your",
+    "title-second-half": "Future Path",
+    "title-des": "Answer 12 simple questions and get personalized recommendations for your technology university major!",
+    "trusted": "Trusted by 200+ Cambodian students"
+  },
+  "header": {
+    "about-us": "About Us"
+  }
+}

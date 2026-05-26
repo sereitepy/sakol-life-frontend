@@ -2,6 +2,7 @@
 
 import { signOutAction } from '@/lib/auth/signout'
 import { Button } from '@/components/ui/button'
+import { LogOut } from 'lucide-react'
 
 function clearLocalData() {
   localStorage.removeItem('quizAnswers')
@@ -20,6 +21,7 @@ export default function SignOutButton({ className }: { className?: string }) {
 
   return (
     <Button variant='ghost' className={className} onClick={handleSignOut}>
+      <LogOut size={13} />
       Sign Out
     </Button>
   )

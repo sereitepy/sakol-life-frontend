@@ -7,7 +7,7 @@ import { ProfileHero } from './profile-hero'
 import { StatCard } from '../shared/stat-card'
 import { RecommendationsPanel } from './recommendations-panel'
 import { AssessmentStatus } from './assessment-status'
-import { GuidanceCTA, QuickShortcuts } from './sidebar'
+import { QuickShortcuts } from './sidebar'
 import { QuizStateResult } from '@/lib/profile/latest-quiz-result'
 
 type Props = {
@@ -33,50 +33,55 @@ export default function DashboardTab({ profile, quizState }: Props) {
   const hasQuiz = totalAttempts > 0
 
   return (
-    <div className='space-y-6'>
-      <ProfileHero
-        displayName={displayName}
-        profilePictureUrl={profilePictureUrl}
-        selectedMajor={selectedMajor}
-        role={role}
-      />
+    <main className='flex-1 p-[clamp(16px,3vw,48px)] min-w-0'>
+      <div className='max-w-[min(1000px,100%)] mx-auto space-y-[clamp(12px,2vw,24px)]'>
+        <QuickShortcuts />
 
-      <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
-        <StatCard
-          icon={Calendar}
-          label='Total Assessments'
-          value={hasQuiz ? `${totalAttempts} taken` : '—'}
+        <ProfileHero
+          displayName={displayName}
+          profilePictureUrl={profilePictureUrl}
+          selectedMajor={selectedMajor}
+          role={role}
         />
-        <StatCard
-          icon={Target}
-          label='Top Match'
-          value={topMatch ? topMatch.nameEn : '—'}
-        />
-        <StatCard
-          icon={Bookmark}
-          label='Selected Major'
-          value={selectedMajor ? selectedMajor.nameEn : 'None chosen'}
-        />
-      </div>
 
-      <div className='flex flex-col lg:flex-row gap-6 items-start'>
-        <div className='flex-1 min-w-0 space-y-6'>
-          <RecommendationsPanel
-            recommendations={recommendations}
-            selectedMajor={selectedMajor}
-            hasQuiz={hasQuiz}
+        <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
+          <StatCard
+            icon={Calendar}
+            label='Total Assessments'
+            value={hasQuiz ? `${totalAttempts} taken` : '—'}
+            meta='Updated Today'
           />
-          <AssessmentStatus
-            hasQuiz={hasQuiz}
-            answeredCount={answeredCount}
-            personalityTags={personalityTags}
+          <StatCard
+            icon={Target}
+            label='Top Match'
+            value={topMatch ? topMatch.nameEn : '—'}
+            meta={
+              topMatch
+                ? `${topMatch.similarityPercentage}% Accuracy`
+                : undefined
+            }
+            accent
+          />
+          <StatCard
+            icon={Bookmark}
+            label='Selected Major'
+            value={selectedMajor ? selectedMajor.nameEn : '—'}
+            meta='Active Journey'
           />
         </div>
-        <div className='w-full lg:w-64 shrink-0 space-y-4'>
-          <QuickShortcuts />
-          <GuidanceCTA />
-        </div>
+
+        <AssessmentStatus
+          hasQuiz={hasQuiz}
+          answeredCount={answeredCount}
+          personalityTags={personalityTags}
+        />
+
+        <RecommendationsPanel
+          recommendations={recommendations}
+          selectedMajor={selectedMajor}
+          hasQuiz={hasQuiz}
+        />
       </div>
-    </div>
+    </main>
   )
 }

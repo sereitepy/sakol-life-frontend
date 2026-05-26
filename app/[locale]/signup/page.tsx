@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { handlePostAuth } from '@/lib/auth/post-auth'
-import { GoogleIcon } from '../components/google-icon'
+import { GoogleIcon } from '../../components/google-icon'
 
 type Stage = 'form' | 'transitioning' | 'confirmation' | 'confirmed' | 'exists'
 

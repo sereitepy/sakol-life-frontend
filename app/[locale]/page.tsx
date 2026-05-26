@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
-import Homepage from './components/hompage'
-import { PostAuthHandler } from './components/post-auth-handler'
+import { PostAuthHandler } from '../components/post-auth-handler'
+import Homepage from '../components/hompage'
 
 export default function Home() {
   return (

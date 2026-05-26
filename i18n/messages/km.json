@@ -1,0 +1,101 @@
+{
+  "nav": {
+    "home": "ទំព័រដើម",
+    "quiz": "តេស្តអាជីព",
+    "majors": "ជំនាញ",
+    "universities": "សាកលវិទ្យាល័យ",
+    "profile": "គណនី",
+    "signIn": "ចូលប្រើ",
+    "signOut": "ចាកចេញ"
+  },
+  "profile": {
+    "settings": {
+      "account-settings": "ការកំណត់គណនី",
+      "account-description": "គ្រប់គ្រងព័ត៌មានប្រវត្តិរូប និងចំណូលចិត្តរបស់អ្នក",
+      "settingsLabel": "ការកំណត់",
+      "navProfile": "ប្រវត្តិរូប",
+      "navSecurity": "សុវត្ថិភាព",
+      "navLanguage": "ភាសា",
+      "navAccount": "គណនី",
+
+      "sectionProfile": "ព័ត៌មានប្រវត្តិរូប",
+      "sectionProfileDesc": "ធ្វើបច្ចុប្បន្នភាពឈ្មោះ រូបភាព និងចំណូលចិត្តភាសារបស់អ្នក។",
+      "sectionSecurity": "សុវត្ថិភាព",
+      "sectionSecurityDesc": "ផ្លាស់ប្តូរលេខសម្ងាត់របស់អ្នក។",
+      "sectionLanguage": "ភាសា និងតំបន់",
+      "sectionLanguageDesc": "ជ្រើសរើសភាសាដែលអ្នកចង់ប្រើពេញគ្រប់ទំព័រ។",
+      "sectionAccount": "គណនី",
+      "sectionAccountDesc": "ចាកចេញ ឬលុបគណនីជាអចិន្ត្រៃយ៍។",
+
+      "displayName": "ឈ្មោះបង្ហាញ",
+      "displayNamePlaceholder": "ឈ្មោះរបស់អ្នក",
+      "preferredLanguage": "ភាសាមាតិកា",
+      "preferredLanguageHint": "គ្រប់គ្រងភាសាដែលបង្ហាញសម្រាប់ការពិពណ៌នាជំនាញ និងព័ត៌មានសាកលវិទ្យាល័យ។",
+      "saveChanges": "រក្សាទុកការផ្លាស់ប្តូរ",
+      "saving": "កំពុងរក្សាទុក…",
+      "saved": "បានរក្សាទុក!",
+      "saveError": "រក្សាទុកមិនបាន។ សូមព្យាយាមម្តងទៀត។",
+
+      "newPassword": "លេខសម្ងាត់ថ្មី",
+      "newPasswordHint": "ត្រូវមានយ៉ាងហោចណាស់ ៨ តួអក្សរ។",
+      "newPasswordPlaceholder": "បញ្ចូលលេខសម្ងាត់ថ្មី",
+      "confirmPassword": "បញ្ជាក់លេខសម្ងាត់",
+      "confirmPasswordPlaceholder": "បញ្ជាក់លេខសម្ងាត់ថ្មី",
+      "updatePassword": "ផ្លាស់ប្តូរលេខសម្ងាត់",
+      "updatingPassword": "កំពុងផ្លាស់ប្តូរ…",
+      "passwordUpdated": "លេខសម្ងាត់ត្រូវបានធ្វើបច្ចុប្បន្នភាព!",
+      "passwordMinLength": "លេខសម្ងាត់ត្រូវមានយ៉ាងហោចណាស់ ៨ តួអក្សរ។",
+      "passwordMismatch": "លេខសម្ងាត់មិនត្រូវគ្នា។",
+
+      "languageSaveNote": "ការកំណត់ភាសារបស់អ្នកត្រូវបានរក្សាទុកក្នុងគណនី ហើយនឹងត្រូវបានចងចាំនៅពេលអ្នកចូលប្រើម្តងទៀត។",
+
+      "signOut": "ចាកចេញ",
+      "signOutDescription": "ចាកចេញពីគណនីរបស់អ្នកនៅលើឧបករណ៍នេះ។",
+      "deleteAccount": "លុបគណនី",
+      "deleteAccountDescription": "លុបគណនី ប្រវត្តិតេស្ត និងទិន្នន័យដែលបានរក្សាទុកទាំងអស់ជាអចិន្ត្រៃយ៍។ មិនអាចត្រឡប់វិញបាន។",
+      "delete": "លុប",
+      "administrator": "អ្នកគ្រប់គ្រង",
+      "student": "និស្សិត",
+      "uploadPhoto": "បញ្ចូលរូបភាព",
+      "changePhoto": "ផ្លាស់ប្តូររូបភាព",
+      "uploadingPhoto": "កំពុងបញ្ចូល…",
+      "photoUploaded": "រូបភាពបានធ្វើបច្ចុប្បន្នភាព!",
+      "photoUploadError": "បញ្ចូលមិនបាន។ សូមព្យាយាមម្តងទៀត។",
+      "photoSizeError": "រូបភាពត្រូវតិចជាង ៥ MB។",
+      "photoTypeError": "អនុញ្ញាតតែ JPG, PNG ឬ WebP ប៉ុណ្ណោះ។",
+
+      "deleteAccountConfirmTitle": "តើអ្នកប្រាកដប្រជាទេ?",
+      "deleteAccountConfirmDescription": "វានឹងលុបគណនី ការព្យាយាមតេស្តទាំងអស់ ជំនាញដែលបានរក្សាទុក និងចម្លើយជាអចិន្ត្រៃយ៍។ មិនអាចត្រឡប់វិញបាន។",
+      "deleteTypeToConfirm": "វាយ DELETE ដើម្បីបញ្ជាក់",
+      "deleteAccountConfirm": "បាទ/ចាស លុបគណនីខ្ញុំ",
+      "deleteAccountCancel": "បោះបង់",
+      "deletingAccount": "កំពុងលុប…",
+      "deleteAccountError": "លុបគណនីមិនបាន។ សូមទាក់ទងផ្នែកជំនួយ។"
+    }
+  },
+  "quiz": {
+    "title": "តេស្តអាជីព",
+    "start": "ចាប់ផ្តើមតេស្ត",
+    "next": "បន្ទាប់",
+    "previous": "ត្រឡប់",
+    "submit": "បញ្ជូន",
+    "results": "លទ្ធផលរបស់អ្នក"
+  },
+  "common": {
+    "loading": "កំពុងផ្ទុក…",
+    "error": "មានបញ្ហាកើតឡើង។",
+    "retry": "ព្យាយាមម្តងទៀត",
+    "back": "ត្រឡប់",
+    "cancel": "បោះបង់",
+    "confirm": "បញ្ជាក់"
+  },
+  "homepages": {
+    "title-first-half": "ស្វែងរកផ្លូវ",
+    "title-second-half": "អនាគតរបស់អ្នក",
+    "title-des": "ឆ្លើយសំណួរសាមញ្ញចំនួន 12 និងទទួលបានការណែនាំផ្ទាល់ខ្លួនសម្រាប់សាកលវិទ្យាល័យបច្ចេកវិទ្យារបស់អ្នក!",
+    "trusted": "ជឿទុកចិត្តដោយនិស្សិតកម្ពុជា 200+"
+  },
+  "header": {
+    "about-us": "អំពីពួកយើង"
+  }
+}

@@ -5,7 +5,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Settings } from 'lucide-react'
-import SignOutButton from './signout-button'
 
 export default function TheSetting() {
   return (
@@ -19,7 +18,7 @@ export default function TheSetting() {
         </PopoverTrigger>
         <PopoverContent className='w-fit p-3 rounded-md'>
           <ThemeTogglerButton />
-          <SignOutButton className='rounded-md text-md font-semibold h-9' />
+          {/* <SignOutButton className='rounded-md text-md font-semibold h-9' /> */}
         </PopoverContent>
       </Popover>
     </div>
