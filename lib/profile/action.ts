@@ -374,3 +374,24 @@ export async function fetchUniversityDetail(
     throw new Error(`Failed to fetch university detail: ${res.statusText}`)
   return res.json()
 }
+
+/**
+ * Server-side profile fetch (for use in Server Components like Header).
+ * Returns null on any error so the header degrades gracefully.
+ */
+export async function getProfile(accessToken: string): Promise<ProfileResponse | null> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/profile`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        // Revalidate every 60 s — profile picture changes are not instant anyway
+        next: { revalidate: 60 },
+      }
+    )
+    if (!res.ok) return null
+    return res.json() as Promise<ProfileResponse>
+  } catch {
+    return null
+  }
+}

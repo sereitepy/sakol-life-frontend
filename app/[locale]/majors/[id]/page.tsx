@@ -540,21 +540,7 @@ export default function MajorDetailPage() {
               </div>
             )}
 
-            {/* Need Help CTA */}
-            <div className='bg-primary rounded-2xl p-5 text-primary-foreground'>
-              <div className='text-2xl mb-2 text-center'>🎓</div>
-              <h3 className='font-bold text-sm text-center mb-1'>Need Help?</h3>
-              <p className='text-xs opacity-80 text-center leading-relaxed mb-4'>
-                Reach out to us by detailing the questions that you have.
-              </p>
-              <Button
-                variant='outline'
-                className='w-full rounded-xl text-foreground border-primary-foreground/30 hover:bg-primary-foreground/10 font-bold'
-                onClick={() => router.push('/contact')}
-              >
-                Contact Us
-              </Button>
-            </div>
+            
 
             {/* Choose Major CTA */}
             <Button

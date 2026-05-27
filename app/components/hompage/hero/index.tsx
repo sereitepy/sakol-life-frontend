@@ -10,8 +10,10 @@ import { Button } from '@/components/ui/button'
 import { Birdhouse, CircleCheckBig } from 'lucide-react'
 import Image from 'next/image'
 import CTAButton from './cta'
+import { useTranslations } from 'next-intl'
 
 export default function Hero() {
+  const t = useTranslations('homepages')
   return (
     <div className='relative p-8 md:p-10 lg:p-15 flex flex-col gap-5 overflow-hidden bg-accent-foreground dark:bg-secondary/30 transition-all duration-150 ease-in-out'>
       <BackgroundBeams />
@@ -25,15 +27,14 @@ export default function Hero() {
           </div>
 
           <h1 className='text-3xl sm:text-4xl font-bold tracking-tight leading-tight text-accent dark:text-secondary-foreground'>
-            Discover Your&nbsp;
+            {t('title-first-half')}&nbsp;
             <span className='font-extrabold text-4xl sm:text-5xl bg-linear-to-r from-accent to-muted-foreground dark:from-secondary-foreground dark:to-primary bg-clip-text text-transparent'>
-              Future Path
+              {t('title-second-half')}
             </span>
           </h1>
 
           <p className='text-accent dark:text-secondary-foreground text-sm sm:text-base'>
-            Answer 12 simple questions and get personalized recommendations for
-            your technology university major!
+            {t("title-des")}
           </p>
 
           {/* CTA buttons */}
@@ -65,7 +66,7 @@ export default function Hero() {
               <AvatarGroupCount>+200</AvatarGroupCount>
             </AvatarGroup>
             <p className='text-accent dark:text-secondary-foreground text-sm'>
-              Trusted by 200+ Cambodian students
+              {t("trusted")}
             </p>
           </section>
         </section>

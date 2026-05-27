@@ -6,7 +6,7 @@ import { signInAction } from '@/lib/auth/signin'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useRef, useState, useTransition } from 'react'
-import { GoogleIcon } from '../components/google-icon'
+import { GoogleIcon } from '../../components/google-icon'
 
 function SignInContent() {
   const searchParams = useSearchParams()

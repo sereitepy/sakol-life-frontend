@@ -1,11 +1,15 @@
 import type { Metadata } from 'next'
 import { Lexend, JetBrains_Mono } from 'next/font/google'
-import './globals.css'
+import '../globals.css'
 import { cn } from '@/lib/utils'
-import Header from './components/header'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import TheSetting from './components/the-setting'
-import { Providers } from './components/theme/providers'
+import { Providers } from '../components/theme/providers'
+import Header from '../components/header'
+import TheSetting from '../components/the-setting'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages } from 'next-intl/server'
+import { notFound } from 'next/navigation'
+import { routing } from '@/i18n/routing'
 import Footer from "@/app/components/footer";
 
 const lexend = Lexend({
@@ -23,11 +27,20 @@ export const metadata: Metadata = {
   description: 'Navigate your future scholar',
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+type Props = {
   children: React.ReactNode
-}>) {
+  params: Promise<{ locale: string }>
+}
+
+export default async function RootLayout({ children, params }: Props) {
+  const { locale } = await params
+  // Validate locale
+  if (!routing.locales.includes(locale as 'en' | 'km')) {
+    notFound()
+  }
+
+  // Fetch messages server-side and pass to client provider
+  const messages = await getMessages()
   return (
     <html
       lang='en'
@@ -42,7 +55,11 @@ export default function RootLayout({
             </div>
           </div>
           <div className='grow'>
-            <TooltipProvider>{children}</TooltipProvider>
+            <TooltipProvider>
+              <NextIntlClientProvider messages={messages}>
+                {children}
+              </NextIntlClientProvider>
+            </TooltipProvider>
           </div>
           <div className='fixed bottom-10 right-10 z-50'>
             <TheSetting />
