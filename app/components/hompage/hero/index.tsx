@@ -34,7 +34,7 @@ export default function Hero() {
           </h1>
 
           <p className='text-accent dark:text-secondary-foreground text-sm sm:text-base'>
-            {t("title-des")}
+            {t('title-des')}
           </p>
 
           {/* CTA buttons */}
@@ -66,7 +66,7 @@ export default function Hero() {
               <AvatarGroupCount>+200</AvatarGroupCount>
             </AvatarGroup>
             <p className='text-accent dark:text-secondary-foreground text-sm'>
-              {t("trusted")}
+              {t('trusted')}
             </p>
           </section>
         </section>
@@ -74,13 +74,14 @@ export default function Hero() {
         {/* right side */}
         <section className='relative w-full md:w-[40%] group cursor-pointer'>
           <div className='relative rounded-xl overflow-hidden'>
-            <Image
-              src='/images/cambodian_students.png'
-              alt='Cambodian Students Studying'
-              width={450}
-              height={300}
-              className='w-full h-55 sm:h-65 md:h-75 object-cover transition-transform duration-500 ease-out group-hover:scale-110'
-            />
+            <div className='relative w-full h-50 sm:h-60 md:h-70 overflow-hidden'>
+              <Image
+                src='/images/group-work.jpeg'
+                alt='Cambodian Students Studying'
+                fill
+                className='object-cover scale-140 transition-transform duration-500 ease-out group-hover:scale-150'
+              />
+            </div>
             {/* a bit of a dark overlay */}
             <div className='absolute inset-0 bg-black/30 dark:bg-black/20 rounded-xl transition-opacity duration-300 group-hover:opacity-60' />
           </div>
