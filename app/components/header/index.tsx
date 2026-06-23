@@ -76,6 +76,12 @@ export default async function Header() {
 
         {/* Desktop nav */}
         <section className='hidden md:flex items-center gap-5'>
+          <Link href='/all-majors' className='underline-animate font-semibold'>
+            All Majors
+          </Link>
+          <Link href='/all-universities' className='underline-animate font-semibold'>
+            All Universities
+          </Link>
           <Link href='#' className='underline-animate font-semibold'>
             <Translation />
           </Link>
