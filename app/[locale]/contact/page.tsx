@@ -21,6 +21,8 @@ export default function ContactPage() {
     message: '',
   })
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   function handleChange(
     e: React.ChangeEvent<
@@ -30,13 +32,32 @@ export default function ContactPage() {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  function handleSubmit(e: React.MouseEvent) {
+  async function handleSubmit(e: React.MouseEvent) {
     e.preventDefault()
-    // TODO: wire up to your backend/email service
-    setSubmitted(true)
+    setError(null)
+    setLoading(true)
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || 'Something went wrong')
+      }
+
+      setSubmitted(true)
+    } catch (err: any) {
+      setError(err.message || 'Failed to send message. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const busy = !form.fullName || !form.email || !form.message
+  const busy = loading || !form.fullName || !form.email || !form.message
 
   return (
     <main className='min-h-screen bg-background text-foreground'>
@@ -113,7 +134,8 @@ export default function ContactPage() {
                     placeholder='John Doe'
                     value={form.fullName}
                     onChange={handleChange}
-                    className='w-full px-3 py-2.5 text-sm bg-input text-foreground border border-border rounded-(--radius) outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-3 focus:ring-ring/20 transition-colors'
+                    disabled={loading}
+                    className='w-full px-3 py-2.5 text-sm bg-input text-foreground border border-border rounded-(--radius) outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-3 focus:ring-ring/20 transition-colors disabled:opacity-50'
                   />
                 </div>
                 <div className='flex flex-col gap-1.5'>
@@ -130,7 +152,8 @@ export default function ContactPage() {
                     placeholder='john@example.com'
                     value={form.email}
                     onChange={handleChange}
-                    className='w-full px-3 py-2.5 text-sm bg-input text-foreground border border-border rounded-(--radius) outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-3 focus:ring-ring/20 transition-colors'
+                    disabled={loading}
+                    className='w-full px-3 py-2.5 text-sm bg-input text-foreground border border-border rounded-(--radius) outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-3 focus:ring-ring/20 transition-colors disabled:opacity-50'
                   />
                 </div>
               </div>
@@ -148,7 +171,8 @@ export default function ContactPage() {
                   name='subject'
                   value={form.subject}
                   onChange={handleChange}
-                  className='w-full px-3 py-2.5 text-sm bg-input text-foreground border border-border rounded-(--radius) outline-none focus:border-ring focus:ring-3 focus:ring-ring/20 transition-colors cursor-pointer'
+                  disabled={loading}
+                  className='w-full px-3 py-2.5 text-sm bg-input text-foreground border border-border rounded-(--radius) outline-none focus:border-ring focus:ring-3 focus:ring-ring/20 transition-colors cursor-pointer disabled:opacity-50'
                 >
                   {subjects.map(s => (
                     <option key={s} value={s}>
@@ -173,9 +197,20 @@ export default function ContactPage() {
                   placeholder='How can we assist you today?'
                   value={form.message}
                   onChange={handleChange}
-                  className='w-full px-3 py-2.5 text-sm bg-input text-foreground border border-border rounded-(--radius) outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-3 focus:ring-ring/20 transition-colors resize-none'
+                  disabled={loading}
+                  className='w-full px-3 py-2.5 text-sm bg-input text-foreground border border-border rounded-(--radius) outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-3 focus:ring-ring/20 transition-colors resize-none disabled:opacity-50'
                 />
               </div>
+
+              {/* Error */}
+              {error && (
+                <p
+                  role='alert'
+                  className='text-sm text-destructive px-3 py-2 bg-destructive/10 border border-destructive/30 rounded-(--radius)'
+                >
+                  {error}
+                </p>
+              )}
 
               <button
                 onClick={handleSubmit}
@@ -183,7 +218,7 @@ export default function ContactPage() {
                 className='mt-1 w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-primary text-primary-foreground rounded-(--radius) cursor-pointer transition-all hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed'
               >
                 <Send className='w-4 h-4' />
-                Send Message
+                {loading ? 'Sending…' : 'Send Message'}
               </button>
             </div>
           )}
@@ -238,7 +273,6 @@ export default function ContactPage() {
                 </p>
               </div>
             </div>
-            {/* Office image */}
             <div className='relative w-full h-36 rounded-lg overflow-hidden'>
               <Image
                 src='/images/piu_office.jpg'
