@@ -9,7 +9,8 @@ import {
 import { getUser } from '@/lib/auth'
 import { getProfile } from '@/lib/profile/action' // ← add this server-side fetch
 import { Menu } from 'lucide-react'
-import Link from 'next/link'
+import Link from 'next/link' 
+<Link href="/about">About</Link>
 import Logo from '../logo'
 import SignOutButton from '../signout-button'
 import AuthLinks from './auth-links'
@@ -82,7 +83,7 @@ export default async function Header() {
           <Link href='/all-universities' className='underline-animate font-semibold'>
             All Universities
           </Link>
-          <Link href='#' className='underline-animate font-semibold'>
+          <Link href='/about' className='underline-animate font-semibold'>
             <Translation />
           </Link>
           {user ? (

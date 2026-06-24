@@ -1,10 +1,12 @@
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 export default function Partnership() {
+    const t = useTranslations('homepages')
   return (
     <div className='p-5 flex items-center justify-center flex-col gap-5'>
       <h1 className='text-sm font-semibold text-muted-foreground'>
-        PARTNERS & UNIVERSITIES
+        {t("partners-universities")}
       </h1>
       <section className='flex items-center gap-3'>
         {/* RUPP */}

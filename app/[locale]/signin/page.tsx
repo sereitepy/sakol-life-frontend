@@ -7,6 +7,9 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useRef, useState, useTransition } from 'react'
 import { GoogleIcon } from '../../components/google-icon'
+import { useTranslations } from 'next-intl'
+
+
 
 function SignInContent() {
   const searchParams = useSearchParams()
@@ -48,15 +51,16 @@ function SignInContent() {
   }
 
   const busy = isPending || isGooglePending
+  const t = useTranslations('signin')
 
   return (
     <div className='fixed inset-0 flex items-center justify-center bg-background p-6'>
       <div className='w-full max-w-100 bg-card text-card-foreground border border-border rounded-(--radius) p-8 flex flex-col gap-5'>
         {/* Header */}
         <div className='flex flex-col gap-1'>
-          <h1 className='text-2xl font-bold text-foreground'>Welcome back</h1>
+          <h1 className='text-2xl font-bold text-foreground'>{t('welcome')}</h1>
           <p className='text-sm text-muted-foreground'>
-            Sign in to your account
+            {t('sign-in')}
           </p>
         </div>
 
@@ -89,7 +93,7 @@ function SignInContent() {
               htmlFor='email'
               className='text-sm font-medium text-foreground'
             >
-              Email
+              {t('email')}
             </label>
             <input
               ref={emailRef}
@@ -110,7 +114,7 @@ function SignInContent() {
               htmlFor='password'
               className='text-sm font-medium text-foreground'
             >
-              Password
+              {t('password')}
             </label>
             <input
               id='password'
@@ -144,12 +148,12 @@ function SignInContent() {
         </form>
 
         <p className='text-center text-sm text-muted-foreground'>
-          Don&apos;t have an account?{' '}
+          {t('dont')}{' '}
           <Link
             href='/signup'
             className='text-primary font-medium hover:underline'
           >
-            Sign up
+            {t('sign-up')}
           </Link>
         </p>
       </div>

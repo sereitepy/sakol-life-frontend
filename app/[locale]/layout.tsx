@@ -12,13 +12,13 @@ import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 
 const lexend = Lexend({
-  variable: '--font-sans',
   subsets: ['latin'],
+  variable: '--font-lexend',
 })
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: '--font-mono',
+const jetbrains_mono = JetBrains_Mono({
   subsets: ['latin'],
+  variable: '--font-mono',
 })
 
 export const metadata: Metadata = {
@@ -33,38 +33,47 @@ type Props = {
 
 export default async function RootLayout({ children, params }: Props) {
   const { locale } = await params
-  // Validate locale
+
+  // 1. Validate locale against your i18n routing setup
   if (!routing.locales.includes(locale as 'en' | 'km')) {
     notFound()
   }
 
-  // Fetch messages server-side and pass to client provider
+  // 2. Fetch messages server-side for the current locale
   const messages = await getMessages()
+
   return (
     <html
-      lang='en'
-      className={cn(lexend.variable, jetbrainsMono.variable)}
+      lang={locale}
+      className={cn(lexend.variable, jetbrains_mono.variable)}
       suppressHydrationWarning
     >
       <body className='font-sans antialiased flex flex-col justify-between min-h-screen'>
-        <Providers>
-          <div className='sticky top-0 shadow-xs shadow-input z-10 bg-background'>
-            <div className='max-w-687.5 mx-auto'>
-              <Header />
+        {/* 3. NextIntlClientProvider wraps at a high level so all Client Components get translations */}
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Providers>
+            {/* Sticky Header Navigation */}
+            <div className='sticky top-0 shadow-xs shadow-input z-10 bg-background'>
+              <div className='max-w-687.5 mx-auto'>
+                <Header />
+              </div>
             </div>
-          </div>
-          <div className='grow'>
-            <TooltipProvider>
-              <NextIntlClientProvider messages={messages}>
+
+            {/* Main Application Area */}
+            <div className='grow'>
+              <TooltipProvider>
                 {children}
-              </NextIntlClientProvider>
-            </TooltipProvider>
-          </div>
-          <div className='fixed bottom-10 right-10 z-50'>
-            <TheSetting />
-          </div>
-          <p>footer</p>
-        </Providers>
+              </TooltipProvider>
+            </div>
+
+            {/* Settings Widget */}
+            <div className='fixed bottom-10 right-10 z-50'>
+              <TheSetting />
+            </div>
+
+            <p className='p-4 text-center text-sm text-muted-foreground'>footer</p>
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

@@ -23,7 +23,7 @@ export default function Hero() {
         <section className='flex flex-col gap-5 w-full md:w-[60%]'>
           <div className='text-sm font-semibold px-2 py-0.5 rounded-lg bg-secondary w-fit flex items-center gap-1'>
             <Birdhouse size={16} className='text-accent-foreground' />
-            <p>EDUCATION PLATFORM</p>
+            <p>{t('edu')}</p>
           </div>
 
           <h1 className='text-3xl sm:text-4xl font-bold tracking-tight leading-tight text-accent dark:text-secondary-foreground'>
@@ -44,7 +44,7 @@ export default function Hero() {
               variant='ghost'
               className='w-full sm:w-fit rounded-md text-md h-12 px-4 font-bold'
             >
-              View Demo
+              {t("button-2")}
             </Button>
           </div>
 
@@ -94,14 +94,14 @@ export default function Hero() {
                   size={25}
                 />
                 <div>
-                  <p className='font-bold text-sm'>Match Found</p>
+                  <p className='font-bold text-sm'>{t("match")}</p>
                   <p className='text-xs sm:text-sm font-light'>
-                    Computer Science at Paragon IU
+                    {t("cs")}
                   </p>
                 </div>
               </div>
               <p className='text-primary font-bold text-xs shrink-0'>
-                98% Match
+                {t("98")}
               </p>
             </div>
           </div>

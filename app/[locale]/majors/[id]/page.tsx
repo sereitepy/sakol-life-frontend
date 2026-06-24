@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { useTranslations, useLocale } from 'next-intl'
 import {
   fetchMajorDetail,
   MajorDetailResponse,
@@ -32,7 +33,6 @@ import {
 import { Button } from '@/components/ui/button'
 
 // Icon map for subjects / career opps
-
 const ICON_MAP: Record<string, React.ElementType> = {
   code: Code2,
   database: Database,
@@ -52,36 +52,6 @@ function getIcon(key: string | null): React.ElementType {
   return ICON_MAP[key ?? 'default'] ?? ICON_MAP.default
 }
 
-const DEMAND_CONFIG: Record<
-  string,
-  { label: string; color: string; barColor: string; width: string }
-> = {
-  VERY_HIGH: {
-    label: 'Very High',
-    color: 'text-red-500',
-    barColor: 'bg-red-500',
-    width: 'w-full',
-  },
-  HIGH: {
-    label: 'High',
-    color: 'text-green-500',
-    barColor: 'bg-green-500',
-    width: 'w-4/5',
-  },
-  MEDIUM: {
-    label: 'Medium',
-    color: 'text-yellow-500',
-    barColor: 'bg-yellow-500',
-    width: 'w-3/5',
-  },
-  LOW: {
-    label: 'Low',
-    color: 'text-muted-foreground',
-    barColor: 'bg-muted-foreground',
-    width: 'w-2/5',
-  },
-}
-
 const MAJOR_ICONS: Record<string, string> = {
   AI: '🤖',
   NET: '🌐',
@@ -96,7 +66,6 @@ const MAJOR_ICONS: Record<string, string> = {
 }
 
 // Stat pill
-
 function StatPill({
   icon: Icon,
   label,
@@ -122,7 +91,6 @@ function StatPill({
 }
 
 // Section wrapper
-
 function Section({
   title,
   icon,
@@ -143,11 +111,15 @@ function Section({
 }
 
 // Main page
-
 export default function MajorDetailPage() {
   const router = useRouter()
   const params = useParams<{ id: string }>()
   const majorId = params.id
+  
+  // Normalizing to lowercase kebab standard mapping
+  const t = useTranslations('major-detail')
+  const locale = useLocale() 
+  const isKhmer = locale === 'km'
 
   const [major, setMajor] = useState<MajorDetailResponse | null>(null)
   const [loading, setLoading] = useState(true)
@@ -155,6 +127,41 @@ export default function MajorDetailPage() {
   const [choosing, setChoosing] = useState(false)
   const [chosen, setChosen] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  // Defensive lookup wrapper to ensure fallback handles text properly if JSON key goes missing
+  const getTranslation = (key: string, fallbackText: string): string => {
+    return t.has(key) ? t(key) : fallbackText
+  }
+
+  const DEMAND_CONFIG: Record<
+    string,
+    { label: string; color: string; barColor: string; width: string }
+  > = {
+    VERY_HIGH: {
+      label: getTranslation('demandVeryHigh', 'Very High Demand'),
+      color: 'text-red-500',
+      barColor: 'bg-red-500',
+      width: 'w-full',
+    },
+    HIGH: {
+      label: getTranslation('demandHigh', 'High Demand'),
+      color: 'text-green-500',
+      barColor: 'bg-green-500',
+      width: 'w-4/5',
+    },
+    MEDIUM: {
+      label: getTranslation('demandMedium', 'Medium Demand'),
+      color: 'text-yellow-500',
+      barColor: 'bg-yellow-500',
+      width: 'w-3/5',
+    },
+    LOW: {
+      label: getTranslation('demandLow', 'Low Demand'),
+      color: 'text-muted-foreground',
+      barColor: 'bg-muted-foreground',
+      width: 'w-2/5',
+    },
+  }
 
   useEffect(() => {
     const supabase = createClient()
@@ -173,12 +180,11 @@ export default function MajorDetailPage() {
         const detail = await fetchMajorDetail(majorId, session?.access_token)
         setMajor(detail)
 
-        // Check if already chosen
         const storedId = sessionStorage.getItem('chosenMajorId')
         if (storedId === majorId) setChosen(true)
       } catch (e) {
         console.error(e)
-        setError('Failed to load major details.')
+        setError(getTranslation('errorLoading', 'Failed to retrieve major detail contents.'))
       } finally {
         setLoading(false)
       }
@@ -192,8 +198,7 @@ export default function MajorDetailPage() {
     }
     setChoosing(true)
     try {
-      const guestId =
-        sessionStorage.getItem('guestSessionId') ?? crypto.randomUUID()
+      const guestId = sessionStorage.getItem('guestSessionId') ?? crypto.randomUUID()
       const id: AuthIdentity = identity ?? {
         type: 'guest',
         guestSessionId: guestId,
@@ -223,22 +228,21 @@ export default function MajorDetailPage() {
         <div className='text-center'>
           <p className='text-2xl mb-2'>😕</p>
           <p className='font-semibold text-foreground'>
-            {error ?? 'Major not found'}
+            {error || getTranslation('majorNotFound', 'Major information could not be found.')}
           </p>
           <Button
             variant='outline'
             className='mt-4'
             onClick={() => router.back()}
           >
-            Go Back
+            {getTranslation('goBack', 'Go Back')}
           </Button>
         </div>
       </div>
     )
   }
 
-  const demand =
-    DEMAND_CONFIG[major.jobMarket.demandLevel] ?? DEMAND_CONFIG.MEDIUM
+  const demand = DEMAND_CONFIG[major.jobMarket.demandLevel] ?? DEMAND_CONFIG.MEDIUM
   const emoji = MAJOR_ICONS[major.code] ?? MAJOR_ICONS.DEFAULT
 
   return (
@@ -249,7 +253,7 @@ export default function MajorDetailPage() {
           onClick={() => router.back()}
           className='flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer'
         >
-          <ArrowLeft size={15} /> Back to Results
+          <ArrowLeft size={15} /> {getTranslation('backToResults', 'Back to Results')}
         </button>
       </div>
 
@@ -268,8 +272,8 @@ export default function MajorDetailPage() {
                 {major.updatedAt && (
                   <span className='flex items-center gap-1 text-xs text-muted-foreground'>
                     <Clock size={11} />
-                    Updated{' '}
-                    {new Date(major.updatedAt).toLocaleDateString('en-US', {
+                    {getTranslation('updated', 'Updated')}{' '}
+                    {new Date(major.updatedAt).toLocaleDateString(isKhmer ? 'km-KH' : 'en-US', {
                       month: 'long',
                       year: 'numeric',
                     })}
@@ -278,11 +282,11 @@ export default function MajorDetailPage() {
               </div>
 
               <h1 className='text-3xl sm:text-4xl font-extrabold text-foreground leading-tight mb-3'>
-                {major.nameEn}
+                {isKhmer ? (major.nameKh ?? major.nameEn) : major.nameEn}
               </h1>
-              {major.descriptionEn && (
+              {((isKhmer && major.descriptionKh) || major.descriptionEn) && (
                 <p className='text-muted-foreground leading-relaxed max-w-2xl'>
-                  {major.descriptionEn}
+                  {isKhmer ? (major.descriptionKh ?? major.descriptionEn) : major.descriptionEn}
                 </p>
               )}
             </div>
@@ -316,10 +320,10 @@ export default function MajorDetailPage() {
                   </span>
                 </div>
                 <p className='text-xs font-bold text-foreground'>
-                  Excellent Match
+                  {getTranslation('excellentMatch', 'Excellent Match')}
                 </p>
                 <p className='text-[10px] text-muted-foreground'>
-                  Based on your interests
+                  {getTranslation('basedOnInterests', 'Based on your interests')}
                 </p>
               </div>
             )}
@@ -330,12 +334,16 @@ export default function MajorDetailPage() {
             {major.degreeType && (
               <StatPill
                 icon={GraduationCap}
-                label='Degree'
+                label={getTranslation('labelDegree', 'Degree')}
                 value={major.degreeType}
               />
             )}
             {major.language && (
-              <StatPill icon={Globe2} label='Language' value={major.language} />
+              <StatPill 
+                icon={Globe2} 
+                label={getTranslation('labelLanguage', 'Language')} 
+                value={isKhmer && major.language === 'English' ? 'អង់គ្លេស' : major.language} 
+              />
             )}
           </div>
         </div>
@@ -346,10 +354,9 @@ export default function MajorDetailPage() {
           <div className='flex-1 min-w-0 space-y-6'>
             {/* What You'll Study */}
             {major.subjects.length > 0 && (
-              <Section title="What You'll Study" icon='📚'>
+              <Section title={getTranslation('titleStudy', "What You'll Study")} icon='📚'>
                 <p className='text-sm text-muted-foreground mb-4 leading-relaxed'>
-                  The curriculum balances theoretical foundations with practical
-                  application. Key subjects include:
+                  {getTranslation('studyDesc', 'Explore major subject fields required inside this academic course timeline')}
                 </p>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                   {major.subjects.map(s => {
@@ -361,11 +368,11 @@ export default function MajorDetailPage() {
                         </div>
                         <div>
                           <p className='font-bold text-sm text-foreground'>
-                            {s.nameEn}
+                            {isKhmer ? (s.nameKh ?? s.nameEn) : s.nameEn}
                           </p>
-                          {s.descriptionEn && (
+                          {((isKhmer && s.descriptionKh) || s.descriptionEn) && (
                             <p className='text-xs text-muted-foreground mt-0.5 leading-relaxed'>
-                              {s.descriptionEn}
+                              {isKhmer ? (s.descriptionKh ?? s.descriptionEn) : s.descriptionEn}
                             </p>
                           )}
                         </div>
@@ -377,13 +384,12 @@ export default function MajorDetailPage() {
             )}
 
             {/* Skills */}
-            {(major.technicalSkills.length > 0 ||
-              major.softSkills.length > 0) && (
-              <Section title="Skills You'll Gain" icon='🎯'>
+            {(major.technicalSkills.length > 0 || major.softSkills.length > 0) && (
+              <Section title={getTranslation('titleSkills', 'Skills Acquired')} icon='🎯'>
                 {major.technicalSkills.length > 0 && (
                   <div className='mb-4'>
                     <p className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2.5'>
-                      Technical Skills
+                      {getTranslation('subTechnicalSkills', 'Technical Skills')}
                     </p>
                     <div className='flex flex-wrap gap-2'>
                       {major.technicalSkills.map(s => (
@@ -391,7 +397,7 @@ export default function MajorDetailPage() {
                           key={s.id}
                           className='text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20'
                         >
-                          {s.nameEn}
+                          {isKhmer ? (s.nameKh ?? s.nameEn) : s.nameEn}
                         </span>
                       ))}
                     </div>
@@ -400,7 +406,7 @@ export default function MajorDetailPage() {
                 {major.softSkills.length > 0 && (
                   <div>
                     <p className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2.5'>
-                      Soft Skills
+                      {getTranslation('subSoftSkills', 'Soft Skills')}
                     </p>
                     <div className='flex flex-wrap gap-2'>
                       {major.softSkills.map(s => (
@@ -408,7 +414,7 @@ export default function MajorDetailPage() {
                           key={s.id}
                           className='text-xs font-semibold px-3 py-1.5 rounded-lg bg-accent text-accent-foreground border border-border'
                         >
-                          {s.nameEn}
+                          {isKhmer ? (s.nameKh ?? s.nameEn) : s.nameEn}
                         </span>
                       ))}
                     </div>
@@ -419,10 +425,9 @@ export default function MajorDetailPage() {
 
             {/* Career Opportunities */}
             {major.careerOpportunities.length > 0 && (
-              <Section title='Career Opportunities' icon='💼'>
+              <Section title={getTranslation('titleCareers', 'Career Opportunities')} icon='💼'>
                 <p className='text-sm text-muted-foreground mb-4 leading-relaxed'>
-                  Graduates are highly sought after across multiple industries
-                  in Cambodia and globally.
+                  {getTranslation('careersDesc', 'Potential career branches and professional fields awaiting graduation')}
                 </p>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
                   {major.careerOpportunities.map(c => {
@@ -436,7 +441,7 @@ export default function MajorDetailPage() {
                           <Icon size={15} className='text-muted-foreground' />
                         </div>
                         <span className='font-bold text-sm text-foreground'>
-                          {c.titleEn}
+                          {isKhmer ? (c.titleKh ?? c.titleEn) : c.titleEn}
                         </span>
                       </div>
                     )
@@ -451,12 +456,11 @@ export default function MajorDetailPage() {
             {/* Job Market */}
             <div className='bg-card border border-border rounded-2xl p-5'>
               <h3 className='font-bold text-base text-foreground flex items-center gap-2 mb-4'>
-                <TrendingUp size={16} className='text-primary' /> Job Market in
-                Cambodia
+                <TrendingUp size={16} className='text-primary' /> {getTranslation('jobMarketTitle', 'Job Market Outlook')}
               </h3>
               <div className='mb-3'>
                 <div className='flex justify-between items-center mb-1.5'>
-                  <span className='text-xs text-muted-foreground'>Demand</span>
+                  <span className='text-xs text-muted-foreground'>{getTranslation('demandLabel', 'Market Demand')}</span>
                   <span className={`text-xs font-bold ${demand.color}`}>
                     {demand.label}
                   </span>
@@ -467,15 +471,14 @@ export default function MajorDetailPage() {
                   />
                 </div>
                 <p className='text-[10px] text-muted-foreground mt-1.5'>
-                  Based on 2024 job posting data in Phnom Penh.
+                  {getTranslation('jobMarketDataYear', 'Current Regional Trends for 2026')}
                 </p>
               </div>
 
-              {(major.jobMarket.salaryMin > 0 ||
-                major.jobMarket.salaryMax > 0) && (
+              {(major.jobMarket.salaryMin > 0 || major.jobMarket.salaryMax > 0) && (
                 <div className='bg-background border border-border rounded-xl p-3.5 mb-4'>
                   <p className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1'>
-                    Entry Level Salary
+                    {getTranslation('entrySalaryLabel', 'Average Entry Salary')}
                   </p>
                   <p className='text-2xl font-extrabold text-foreground'>
                     ${major.jobMarket.salaryMin.toLocaleString()}
@@ -485,7 +488,7 @@ export default function MajorDetailPage() {
                     ${major.jobMarket.salaryMax.toLocaleString()}
                   </p>
                   <p className='text-xs text-muted-foreground'>
-                    per {major.jobMarket.period}
+                    {t.has('salaryPeriod') ? t('salaryPeriod', { period: major.jobMarket.period }) : `Per ${major.jobMarket.period}`}
                   </p>
                 </div>
               )}
@@ -494,7 +497,7 @@ export default function MajorDetailPage() {
                 className='w-full rounded-xl font-bold'
                 onClick={() => router.push(`/quiz/results?tab=universities`)}
               >
-                <Building2 size={14} className='mr-2' /> Find Universities
+                <Building2 size={14} className='mr-2' /> {getTranslation('btnFindUniversities', 'Find Universities')}
               </Button>
             </div>
 
@@ -502,7 +505,7 @@ export default function MajorDetailPage() {
             {major.relatedMajors.length > 0 && (
               <div className='bg-card border border-border rounded-2xl p-5'>
                 <h3 className='font-bold text-base text-foreground mb-4'>
-                  Related Majors
+                  {getTranslation('titleRelatedMajors', 'Related Majors')}
                 </h3>
                 <div className='space-y-3'>
                   {major.relatedMajors.map(rm => (
@@ -516,7 +519,7 @@ export default function MajorDetailPage() {
                       </div>
                       <div className='text-left min-w-0'>
                         <p className='font-bold text-sm text-foreground leading-snug'>
-                          {rm.nameEn}
+                          {isKhmer ? (rm.nameKh ?? rm.nameEn) : rm.nameEn}
                         </p>
                         {rm.careerCategory && (
                           <p className='text-xs text-muted-foreground truncate'>
@@ -535,12 +538,10 @@ export default function MajorDetailPage() {
                   onClick={() => router.push('/majors')}
                   className='mt-3 w-full text-xs font-semibold text-primary hover:underline text-center cursor-pointer'
                 >
-                  View All Majors
+                  {getTranslation('btnViewAllMajors', 'View All Majors')}
                 </button>
               </div>
             )}
-
-            
 
             {/* Choose Major CTA */}
             <Button
@@ -551,12 +552,12 @@ export default function MajorDetailPage() {
               {choosing ? (
                 <>
                   <span className='w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin mr-2' />
-                  Saving…
+                  {getTranslation('btnSaving', 'Saving Choice...')}
                 </>
               ) : chosen ? (
-                '✓ Major Chosen'
+                getTranslation('btnMajorChosen', 'Selected Specialization')
               ) : (
-                'Choose This Major'
+                getTranslation('btnChooseMajor', 'Choose This Major')
               )}
             </Button>
           </div>

@@ -2,15 +2,24 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
-const TABS = [
-  { href: '/profile', label: 'My Dashboard', small: 'Dashboard' },
-  { href: '/profile/survey', label: 'Quiz Answers', small: 'Quiz' },
-  { href: '/profile/settings', label: 'Account Settings', small: 'Account' },
+type TabItem = {
+  href: string
+  labelKey: string
+  smallKey: string
+}
+
+const TABS: TabItem[] = [
+  { href: '/profile', labelKey: 'dashboard', smallKey: 'dashboard_small' },
+  { href: '/profile/survey', labelKey: 'quiz_answers', smallKey: 'quiz_small' },
+  { href: '/profile/settings', labelKey: 'account_settings', smallKey: 'account_small' },
 ]
 
 export default function ProfileNav() {
   const pathname = usePathname()
+  const tNav = useTranslations('profile_nav')
+  
   // Strip locale prefix: /en/profile/settings → /profile/settings
   const strippedPath = pathname.replace(/^\/[a-z]{2}(-[A-Z]{2})?/, '')
 
@@ -18,6 +27,10 @@ export default function ProfileNav() {
     <nav className='flex gap-0' aria-label='Profile navigation'>
       {TABS.map(tab => {
         const isActive = strippedPath === tab.href
+
+        // Safely extract the translation variations matching runtime flags
+        const fullLabel = tNav.has(tab.labelKey) ? tNav(tab.labelKey) : tab.labelKey
+        const smallLabel = tNav.has(tab.smallKey) ? tNav(tab.smallKey) : tab.smallKey
 
         return (
           <Link
@@ -35,8 +48,11 @@ export default function ProfileNav() {
               }
             `}
           >
-            <span className='hidden md:inline'>{tab.label}</span>
-            <span className='md:hidden'>{tab.small}</span>
+            {/* Desktop and Tablet Viewports */}
+            <span className='hidden md:inline'>{fullLabel}</span>
+            
+            {/* Mobile Viewports */}
+            <span className='md:hidden'>{smallLabel}</span>
 
             {/* Active indicator bar */}
             {isActive && (
