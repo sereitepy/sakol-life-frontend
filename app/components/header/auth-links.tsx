@@ -3,12 +3,16 @@
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { useTranslations } from 'next-intl'
+
 
 const PROTECTED_PATHS = ['/quiz/results'] // add more paths here if needed
 
 export default function AuthLinks({ mobile }: { mobile?: boolean }) {
   const pathname = usePathname()
   const router = useRouter()
+  const t = useTranslations('header')
+
 
   function handleAuth(dest: '/signin' | '/signup') {
     if (PROTECTED_PATHS.includes(pathname)) {
@@ -25,14 +29,14 @@ export default function AuthLinks({ mobile }: { mobile?: boolean }) {
           className='rounded-md font-semibold w-full'
           onClick={() => handleAuth('/signin')}
         >
-          Sign In
+          {t('signIn')}
         </Button>
         <Button
           variant='default'
           className='rounded-md font-semibold w-full'
           onClick={() => handleAuth('/signup')}
         >
-          Sign Up
+          {t('signUp')}
         </Button>
       </>
     )
@@ -45,14 +49,14 @@ export default function AuthLinks({ mobile }: { mobile?: boolean }) {
         className='rounded-md text-md font-semibold h-9'
         onClick={() => handleAuth('/signin')}
       >
-        Sign In
+          {t('signIn')}
       </Button>
       <Button
         variant='default'
         className='rounded-md text-md font-semibold h-9'
         onClick={() => handleAuth('/signup')}
       >
-        Sign Up
+       {t('signUp')}
       </Button>
     </div>
   )

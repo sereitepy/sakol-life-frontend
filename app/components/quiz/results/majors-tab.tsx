@@ -13,8 +13,9 @@ import { ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState, useTransition } from 'react'
 import { CAREER_CATEGORY_OPTIONS, JOB_OUTLOOK_OPTIONS } from './constants'
-import FilterPanel from './filter-panel'
+import FilterPanel from './major-filters'
 import MajorCard, { MAJOR_META } from './major-card'
+import { useTranslations } from 'next-intl'
 
 type Props = {
   results: MajorResult[]
@@ -59,6 +60,19 @@ export default function MajorsTab({
   const [selectError, setSelectError] = useState<string | null>(null)
   const [showAll, setShowAll] = useState(false)
   const [showMobileFilters, setShowMobileFilters] = useState(false)
+
+  // Main translation hook
+  const t = useTranslations('major-tab')
+  
+  // Specific option dictionaries hooks for processing localized badges safely
+  const tCategories = useTranslations('career_categories')
+  const tOutlooks = useTranslations('job_outlooks')
+
+  // Safely extracts the dictionary translation key, handling both "namespace.key" and raw "key" values
+  const getDictKey = (labelKey?: string): string => {
+    if (!labelKey) return ''
+    return labelKey.includes('.') ? labelKey.split('.')[1] : labelKey
+  }
 
   const filtered = useMemo(() => {
     let items = [...results].sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
@@ -116,11 +130,10 @@ export default function MajorsTab({
     <>
       <div className='mb-4'>
         <h1 className='text-xl font-bold text-foreground'>
-          Your Recommended Majors
+          {t('your-rec-majors')}
         </h1>
         <p className='text-sm text-muted-foreground mt-0.5'>
-          Based on your quiz answers: {filtered.length} major
-          {filtered.length !== 1 ? 's' : ''} ranked by compatibility
+          {t('based')}{filtered.length} {t('major')}{filtered.length !== 1 ? 's' : ''} {t('ranked')}
         </p>
       </div>
 
@@ -137,7 +150,7 @@ export default function MajorsTab({
             className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground'
           />
           <Input
-            placeholder='Search majors...'
+            placeholder={t('try')} 
             value={inputValue}
             onChange={e => onSetInputValue(e.target.value)}
             className='pl-9 bg-card border-border rounded-xl h-11 text-sm'
@@ -149,7 +162,7 @@ export default function MajorsTab({
           onClick={() => setShowMobileFilters(v => !v)}
         >
           <SlidersHorizontal size={15} />
-          Filters
+          {t('filters')}
           {activeFilterCount > 0 && (
             <span className='ml-0.5 bg-primary text-primary-foreground text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center'>
               {activeFilterCount}
@@ -174,28 +187,47 @@ export default function MajorsTab({
 
       {(selCategories.length > 0 || selOutlooks.length > 0) && (
         <div className='flex flex-wrap gap-2 mb-4'>
-          {selCategories.map(f => (
-            <Badge
-              key={f}
-              variant='secondary'
-              className='cursor-pointer text-xs rounded-full'
-              onClick={() => onToggleFilter('category', f)}
-            >
-              {CAREER_CATEGORY_OPTIONS.find(o => o.value === f)?.label ?? f}{' '}
-              <X size={10} className='ml-1' />
-            </Badge>
-          ))}
-          {selOutlooks.map(f => (
-            <Badge
-              key={f}
-              variant='secondary'
-              className='cursor-pointer text-xs rounded-full'
-              onClick={() => onToggleFilter('outlook', f)}
-            >
-              {JOB_OUTLOOK_OPTIONS.find(o => o.value === f)?.label ?? f}{' '}
-              <X size={10} className='ml-1' />
-            </Badge>
-          ))}
+          {selCategories.map(f => {
+            const option = CAREER_CATEGORY_OPTIONS.find(o => o.value === f);
+            const dictionaryKey = getDictKey(option?.labelKey);
+            
+            // Tiered fallback strategy for the category badges
+            const label = tCategories.has(dictionaryKey)
+              ? tCategories(dictionaryKey)
+              : (option?.label || f.replace(/_/g, ' '))
+
+            return (
+              <Badge
+                key={f}
+                variant='secondary'
+                className='cursor-pointer text-xs rounded-full'
+                onClick={() => onToggleFilter('category', f)}
+              >
+                {label} <X size={10} className='ml-1' />
+              </Badge>
+            )
+          })}
+          
+          {selOutlooks.map(f => {
+            const option = JOB_OUTLOOK_OPTIONS.find(o => o.value === f);
+            const dictionaryKey = getDictKey(option?.labelKey);
+            
+            // Tiered fallback strategy for the outlook badges
+            const label = tOutlooks.has(dictionaryKey)
+              ? tOutlooks(dictionaryKey)
+              : (option?.label || f)
+
+            return (
+              <Badge
+                key={f}
+                variant='secondary'
+                className='cursor-pointer text-xs rounded-full'
+                onClick={() => onToggleFilter('outlook', f)}
+              >
+                {label} <X size={10} className='ml-1' />
+              </Badge>
+            )
+          })}
         </div>
       )}
 
@@ -216,9 +248,9 @@ export default function MajorsTab({
           {filtered.length === 0 ? (
             <div className='flex flex-col items-center justify-center py-16 text-center'>
               <p className='text-2xl mb-2'>🔍</p>
-              <p className='font-semibold text-foreground'>No majors found</p>
+              <p className='font-semibold text-foreground'>{t('no')}</p>
               <p className='text-sm text-muted-foreground mt-1'>
-                Try adjusting your search or filters
+                {t('try')}
               </p>
               <Button
                 variant='outline'
@@ -226,7 +258,7 @@ export default function MajorsTab({
                 className='mt-4'
                 onClick={onClearAll}
               >
-                Clear filters
+                {t('clear')}
               </Button>
             </div>
           ) : (
@@ -254,7 +286,7 @@ export default function MajorsTab({
                     onClick={() => setShowAll(true)}
                     className='flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer'
                   >
-                    Show more <ChevronDown size={14} />
+                    {t('show-more')} <ChevronDown size={14} />
                   </button>
                 </div>
               )}

@@ -83,7 +83,7 @@ export default async function Header() {
           <Link href='/all-universities' className='underline-animate font-semibold'>
             All Universities
           </Link>
-          <Link href='#' className='underline-animate font-semibold'>
+          <Link href='/about' className='underline-animate font-semibold'>
             <Translation />
           </Link>
           {user ? (

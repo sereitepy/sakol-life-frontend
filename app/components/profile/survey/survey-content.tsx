@@ -7,6 +7,7 @@ import { QUESTION_META } from './answer-row'
 import { SurveySummaryCards } from './summary-cards'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { useTranslations } from 'next-intl'
 
 const SCALE_POINTS = [
   {
@@ -100,20 +101,24 @@ function ReadOnlyLikert({
 }
 
 function ScaleCard({ code, value }: { code: string; value: number }) {
+  const tQuiz = useTranslations('quiz_meta')
+  const tBadges = useTranslations('scale_badges')
   const meta = QUESTION_META[code]
-  // Explicit narrowing guard for scale type
+
   if (!meta || meta.type !== 'scale') return null
 
-  const badge =
+  const badgeText =
     value >= 5
-      ? 'Very High'
+      ? tBadges('very_high')
       : value >= 4
-        ? 'High'
+        ? tBadges('high')
         : value >= 3
-          ? 'Moderate'
+          ? tBadges('moderate')
           : value >= 2
-            ? 'Low'
-            : 'Very Low'
+            ? tBadges('low')
+            : tBadges('very_low')
+
+  const localizedLabel = tQuiz.has(`${code}.label`) ? tQuiz(`${code}.label`) : code
 
   return (
     <div className='bg-card p-[clamp(14px,2vw,24px)] rounded-xl border border-border cursor-default transition-all duration-300'>
@@ -122,30 +127,33 @@ function ScaleCard({ code, value }: { code: string; value: number }) {
           <span className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted px-2 py-1 rounded shrink-0'>
             {code}
           </span>
-          <h3 className='text-sm font-semibold text-foreground truncate'>
-            {meta.label}
+          <h3 className='text-sm font-semibold text-foreground truncate break-words'>
+            {localizedLabel}
           </h3>
         </div>
-        <span className='text-xs font-bold text-primary px-3 py-1 bg-primary/10 rounded-full border border-primary/20 shrink-0'>
-          {badge}
+        <span className='text-xs font-bold text-primary px-3 py-1 bg-primary/10 rounded-full border border-primary/20 shrink-0 whitespace-nowrap'>
+          {badgeText}
         </span>
       </div>
-      <p className='text-sm text-muted-foreground mb-5 leading-relaxed'>
-        {QUESTION_TEXT[code] ?? ''}
-      </p>
       <ReadOnlyLikert
         value={value}
-        lowLabel={meta.scaleLabel?.low ?? 'Low'}
-        highLabel={meta.scaleLabel?.high ?? 'High'}
+        lowLabel={tBadges('low_label')}
+        highLabel={tBadges('high_label')}
       />
     </div>
   )
 }
 
 function ChoiceCard({ code, value }: { code: string; value: string }) {
+  const tQuiz = useTranslations('quiz_meta')
   const meta = QUESTION_META[code]
-  // Explicit narrowing guard for choice type
+
   if (!meta || meta.type !== 'choice') return null
+
+  // Safely grab structural option string keys from updated QUESTION_META config
+  const optionLetters = 'options' in meta ? meta.options : []
+
+  const localizedLabel = tQuiz.has(`${code}.label`) ? tQuiz(`${code}.label`) : code
 
   return (
     <div className='bg-card p-[clamp(14px,2vw,24px)] rounded-xl border border-border cursor-default'>
@@ -153,19 +161,18 @@ function ChoiceCard({ code, value }: { code: string; value: string }) {
         <span className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted px-2 py-1 rounded shrink-0'>
           {code}
         </span>
-        <h3 className='text-sm font-semibold text-foreground'>{meta.label}</h3>
+        <h3 className='text-sm font-semibold text-foreground break-words'>{localizedLabel}</h3>
       </div>
-      <p className='text-sm text-muted-foreground mb-4 leading-relaxed'>
-        {QUESTION_TEXT[code] ?? ''}
-      </p>
       <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-        {Object.entries(meta.options).map(([letter, text]) => {
+        {optionLetters.map((letter) => {
           const selected = letter === value
+          const optionText = tQuiz.has(`${code}.${letter}`) ? tQuiz(`${code}.${letter}`) : letter
+
           return (
             <div
               key={letter}
               className={cn(
-                'flex items-start gap-3 p-3 rounded-lg border cursor-default',
+                'flex items-start gap-3 p-3 rounded-lg border cursor-default min-w-0',
                 selected
                   ? 'border-primary/40 bg-primary/5'
                   : 'border-border bg-card/50 opacity-40'
@@ -181,7 +188,7 @@ function ChoiceCard({ code, value }: { code: string; value: string }) {
                   <div className='w-2 h-2 rounded-full bg-primary' />
                 )}
               </div>
-              <div className='min-w-0'>
+              <div className='min-w-0 flex-1'>
                 <span
                   className={cn(
                     'text-[10px] font-extrabold tracking-widest mr-1.5',
@@ -192,13 +199,13 @@ function ChoiceCard({ code, value }: { code: string; value: string }) {
                 </span>
                 <span
                   className={cn(
-                    'text-xs leading-snug',
+                    'text-xs leading-snug break-words',
                     selected
                       ? 'text-foreground font-medium'
                       : 'text-muted-foreground'
                   )}
                 >
-                  {text}
+                  {optionText}
                 </span>
               </div>
             </div>
@@ -215,6 +222,7 @@ export default function SurveyContent({
   profile: ProfileResponse
 }) {
   const router = useRouter()
+  const tContent = useTranslations('survey_content')
   const { latestAnswers, totalAttempts } = profile
   const hasAnswers = latestAnswers.length > 0
 
@@ -243,12 +251,12 @@ export default function SurveyContent({
             <div className='flex flex-col sm:flex-row sm:items-start justify-between gap-3'>
               <div>
                 <h1 className='text-[clamp(18px,2.5vw,28px)] font-bold text-foreground tracking-tight'>
-                  Survey Answers
+                  {tContent('title')}
                 </h1>
                 <p className='text-sm text-muted-foreground mt-1'>
                   {hasAnswers
-                    ? 'Detailed responses from your most recent assessment.'
-                    : 'Complete the assessment to see your answers here.'}
+                    ? tContent('desc_complete')
+                    : tContent('desc_empty')}
                 </p>
               </div>
               {hasAnswers && (
@@ -257,10 +265,10 @@ export default function SurveyContent({
                   onClick={() => router.push('/quiz')}
                   className='flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5
               border border-border text-foreground text-sm font-bold rounded-lg
-              hover:bg-muted transition-all shrink-0'
+              hover:bg-muted transition-all shrink-0 cursor-pointer'
                 >
                   <RotateCcw size={14} />
-                  Retake
+                  {tContent('retake_btn')}
                 </Button>
               )}
             </div>
@@ -271,17 +279,16 @@ export default function SurveyContent({
                   <CloudSunRain size={30} />
                 </div>
                 <h2 className='font-bold text-base text-foreground mb-1'>
-                  No answers yet
+                  {tContent('no_answers_title')}
                 </h2>
                 <p className='text-sm text-muted-foreground max-w-sm leading-relaxed mb-5'>
-                  Complete the career assessment quiz to discover your
-                  recommended majors.
+                  {tContent('no_answers_desc')}
                 </p>
                 <button
                   onClick={() => router.push('/quiz')}
-                  className='px-6 py-2.5 bg-primary text-primary-foreground font-bold rounded-lg transition-all active:scale-95'
+                  className='px-6 py-2.5 bg-primary text-primary-foreground font-bold rounded-lg transition-all active:scale-95 cursor-pointer'
                 >
-                  Take the Assessment
+                  {tContent('take_assessment_btn')}
                 </button>
               </div>
             ) : (
@@ -295,12 +302,12 @@ export default function SurveyContent({
 
                 {scaleAnswers.length > 0 && (
                   <section className='space-y-3'>
-                    <div className='flex items-center justify-between'>
+                    <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-1'>
                       <h2 className='text-[clamp(14px,1.5vw,18px)] font-bold text-foreground'>
-                        Scale Ratings
+                        {tContent('scale_ratings_title')}
                       </h2>
                       <span className='text-xs text-muted-foreground'>
-                        To change your answers, retake the quiz
+                        {tContent('change_answers_hint')}
                       </span>
                     </div>
                     {scaleAnswers.map(a => (
@@ -315,12 +322,12 @@ export default function SurveyContent({
 
                 {choiceAnswers.length > 0 && (
                   <section className='space-y-3'>
-                    <div className='flex items-center justify-between'>
+                    <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-1'>
                       <h2 className='text-[clamp(14px,1.5vw,18px)] font-bold text-foreground'>
-                        Multiple Choice
+                        {tContent('multiple_choice_title')}
                       </h2>
                       <span className='text-xs text-muted-foreground'>
-                        To change your answers, retake the quiz
+                        {tContent('change_answers_hint')}
                       </span>
                     </div>
                     {choiceAnswers.map(a => (
@@ -342,11 +349,10 @@ export default function SurveyContent({
                 >
                   <Sparkles className='w-8 h-8 text-primary mb-3' />
                   <h2 className='text-[clamp(14px,1.5vw,18px)] font-bold text-foreground mb-2'>
-                    View Your Recommended Majors
+                    {tContent('cta_title')}
                   </h2>
                   <p className='text-sm text-muted-foreground max-w-md leading-relaxed mb-5'>
-                    See how your answers map to the best-fit university majors
-                    for your profile.
+                    {tContent('cta_desc')}
                   </p>
                   <div className='flex flex-col sm:flex-row gap-3 w-full sm:w-auto'>
                     <Button
@@ -354,9 +360,9 @@ export default function SurveyContent({
                         e.stopPropagation()
                         router.push('/quiz/results')
                       }}
-                      className='px-6 text-md py-6 bg-primary text-primary-foreground font-bold rounded-lg transition-all active:scale-95 w-full sm:w-auto'
+                      className='px-6 text-md py-6 bg-primary text-primary-foreground font-bold rounded-lg transition-all active:scale-95 w-full sm:w-auto cursor-pointer'
                     >
-                      See My Results
+                      {tContent('see_results_btn')}
                     </Button>
                     <Button
                       variant='outline'
@@ -364,9 +370,9 @@ export default function SurveyContent({
                         e.stopPropagation()
                         router.push('/quiz')
                       }}
-                      className='px-6 text-md py-6 border border-border text-foreground font-bold rounded-lg hover:bg-muted transition-all w-full sm:w-auto'
+                      className='px-6 text-md py-6 border border-border text-foreground font-bold rounded-lg hover:bg-muted transition-all w-full sm:w-auto cursor-pointer'
                     >
-                      Retake Assessment
+                      {tContent('retake_btn')}
                     </Button>
                   </div>
                 </div>
@@ -377,19 +383,4 @@ export default function SurveyContent({
       </main>
     </div>
   )
-}
-
-const QUESTION_TEXT: Record<string, string> = {
-  Q1: 'When you get a new phone or download a new app, what do you usually do first?',
-  Q2: 'When you scroll through TikTok or Facebook, what kind of content do you usually stop and watch?',
-  Q3: 'Have you ever edited a video, designed a poster, or created digital content for school, fun, or social media?',
-  Q4: 'Your phone is acting strange, apps keep crashing and the internet stops working. What do you do?',
-  Q5: 'How comfortable are you helping a classmate or younger sibling figure out how to use an app or fix a technology problem?',
-  Q6: 'How much do you enjoy noticing patterns or figuring out why things work the way they do?',
-  Q7: 'Which of the following sounds most like how you use your phone every day?',
-  Q8: 'How interested are you in making things look visually appealing, such as editing photos, designing a poster for class, or choosing colors and fonts for a project?',
-  Q9: 'If you could build anything using technology and you knew it would actually work, what would you build?',
-  Q10: 'Which of these accomplishments would make you the most proud?',
-  Q11: 'How excited are you about the idea of studying a technology-related major at university?',
-  Q12: 'Which of these would you most want to learn more about?',
 }

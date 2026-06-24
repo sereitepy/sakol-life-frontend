@@ -1,30 +1,30 @@
 import { ArrowRight, Landmark, MapPin, School, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 
+// Static layout blueprint configured safely outside the component render cycle
 const insightCards = [
   {
     icon: <MapPin size={24} className='text-[var(--icon-bg-teal)]' />,
-    label: 'Tuition Fee',
-    desc: 'Check tuition fee',
+    translationKey: 'tuition',
   },
   {
     icon: <Landmark size={24} className='text-[var(--icon-bg-amber)]' />,
-    label: 'Scholarships',
-    desc: 'Hidden funding gems',
+    translationKey: 'scholarships',
   },
   {
     icon: <School size={24} className='text-[var(--icon-bg-violet)]' />,
-    label: 'Campus Facilities',
-    desc: 'What campus provides',
+    translationKey: 'facilities',
   },
   {
     icon: <TrendingUp size={24} className='text-[var(--icon-bg-teal)]' />,
-    label: 'Job Outlook',
-    desc: 'Real salary data',
+    translationKey: 'jobs',
   },
 ]
 
 export default function WhySakolLife() {
+  const t = useTranslations('about')
+  
   return (
     <section className='py-24 px-10 relative overflow-hidden bg-muted transition-all duration-150'>
       <div className='max-w-screen-xl mx-auto relative z-10'>
@@ -32,11 +32,10 @@ export default function WhySakolLife() {
         {/* heading */}
         <div className='text-center mb-20'>
           <h2 className='text-4xl font-extrabold mb-4 text-foreground'>
-            Why Sakol Life?
+            {t('why')}
           </h2>
           <p className='text-base sm:text-lg max-w-2xl mx-auto text-muted-foreground'>
-            We have built the tools you need to make the biggest decision of your
-            academic life easier, smarter, and way more fun.
+            {t('body-text')}
           </p>
         </div>
 
@@ -51,17 +50,17 @@ export default function WhySakolLife() {
                   <path d='M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z' />
                 </svg>
               </div>
-              <h3 className='text-2xl font-bold mb-4 text-foreground'>Magic Match Quiz</h3>
+              <h3 className='text-2xl font-bold mb-4 text-foreground'>{t('subheading1')}</h3>
               <p className='text-base sm:text-lg flex-grow text-muted-foreground'>
-                Our system analyzes your personality and passions to suggest tech
-                majors you will actually love.
+                {t('body-text-1')}
               </p>
               <div className='mt-8'>
                 <Link
                   href='/quiz'
                   className='inline-flex items-center gap-2 font-bold text-primary hover:gap-4 transition-all duration-200'
                 >
-                  Start your journey <ArrowRight size={18} />
+                  {t('button-1')}
+                  <ArrowRight size={18} />
                 </Link>
               </div>
             </div>
@@ -77,17 +76,23 @@ export default function WhySakolLife() {
 
               <div className='relative z-10'>
                 <h3 className='text-2xl font-bold mb-8'>
-                  University Insights. All in One Place.
+                  {t('subheading2')}
                 </h3>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
-                  {insightCards.map(({ icon, label, desc }) => (
+                  {insightCards.map(({ icon, translationKey }) => (
                     <div
-                      key={label}
+                      key={translationKey}
                       className='p-6 rounded-2xl border border-white/10 backdrop-blur-md bg-white/5'
                     >
                       <div className='mb-3'>{icon}</div>
-                      <p className='font-bold'>{label}</p>
-                      <p className='text-sm opacity-70'>{desc}</p>
+                      {/* Dynamic label translation */}
+                      <p className='font-bold'>
+                        {t(`insights.${translationKey}.label`)}
+                      </p>
+                      {/* Dynamic description translation */}
+                      <p className='text-sm opacity-70'>
+                        {t(`insights.${translationKey}.desc`)}
+                      </p>
                     </div>
                   ))}
                 </div>

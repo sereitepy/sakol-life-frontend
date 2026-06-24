@@ -3,6 +3,7 @@
 import { useEffect, useState, useTransition, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import {
   AlertDialog,
   AlertDialogContent,
@@ -23,6 +24,7 @@ type Props = {
 export default function GuestResultsGuard({ children }: Props) {
   const router = useRouter()
   const [, startTransition] = useTransition()
+  const t = useTranslations('GuestGuard')
 
   const [isGuest, setIsGuest] = useState(false)
   const [hasQuizAnswers, setHasQuizAnswers] = useState(false)
@@ -139,49 +141,44 @@ export default function GuestResultsGuard({ children }: Props) {
             size='icon'
             className='absolute right-3 top-3 h-7 w-7 rounded-sm text-muted-foreground hover:text-foreground'
             onClick={handleStay}
-            aria-label='Close'
+            aria-label={t('closeLabel')}
           >
             <X className='h-4 w-4' />
           </Button>
 
           <AlertDialogHeader>
-            <AlertDialogTitle className='flex items-center gap-2 pr-6'>
+            <AlertDialogTitle className='flex items-center gap-2 pr-6 text-foreground font-bold'>
               <span className='text-xl' aria-hidden='true'>
                 ⚠️
               </span>
-              Your results will be lost
+              {t('title')}
             </AlertDialogTitle>
-            <AlertDialogDescription className='text-sm text-muted-foreground leading-relaxed'>
-              You haven&apos;t saved your quiz results yet. If you leave this
-              page, your recommended majors and all quiz answers will be gone
-              forever.
-              <br />
-              <br />
-              Create a free account to keep your results and come back anytime.
+            <AlertDialogDescription className='text-sm text-muted-foreground leading-relaxed whitespace-pre-line'>
+              {t('description')}
             </AlertDialogDescription>
           </AlertDialogHeader>
 
-          <AlertDialogFooter className='flex-col gap-2 sm:flex-row'>
+          <AlertDialogFooter className='flex flex-col gap-2 sm:flex-row sm:justify-end mt-4'>
             <AlertDialogCancel
               onClick={handleLeave}
-              className='w-full border-border text-muted-foreground sm:w-auto rounded-md'
+              className='w-full border-border text-muted-foreground sm:w-auto rounded-xl font-medium order-3 sm:order-none'
             >
-              Leave anyway
+              {t('btnLeave')}
             </AlertDialogCancel>
 
             <AlertDialogAction
               onClick={handleSignIn}
               variant='outline'
-              className='w-full sm:w-auto rounded-md'
+              className='w-full sm:w-auto rounded-xl font-medium bg-background text-foreground border-border hover:bg-muted'
             >
-              Sign in
+              {t('btnSignIn')}
             </AlertDialogAction>
 
             <AlertDialogAction
               onClick={handleSignUp}
-              className='w-full bg-primary text-primary-foreground hover:brightness-110 sm:w-auto'
+              className='w-full bg-primary text-primary-foreground hover:brightness-110 sm:w-auto rounded-xl font-bold'
             >
-              Create free account
+              {t('btnSignUp')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

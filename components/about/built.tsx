@@ -1,7 +1,10 @@
 import { MapPin, ShieldCheck } from 'lucide-react'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
+
 
 export default function Builtby() {
+  const t = useTranslations('about')
   return (
     <section className='py-24 px-10 bg-card transition-all duration-150'>
       <div className='max-w-screen-xl mx-auto flex flex-col md:flex-row items-center gap-16'>
@@ -23,15 +26,14 @@ export default function Builtby() {
         {/* text */}
         <div className='w-full md:w-1/2 flex flex-col gap-8'>
           <h2 className='text-4xl font-extrabold leading-tight tracking-tight text-foreground'>
-            Built by MIS Students,{' '}
+            {t('title-first-built')}{' '}
             <span className='bg-linear-to-r from-primary to-muted-foreground dark:from-secondary-foreground dark:to-primary bg-clip-text text-transparent'>
-              For Future Techies
+              {t('title-second-built')}
             </span>
           </h2>
 
           <p className='text-base sm:text-lg leading-relaxed text-muted-foreground'>
-            We know exactly how it feels to stand where you are. The confusion,
-            the overwhelming choices, and the pressure of the future.
+         {t('title-built-des')}
           </p>
 
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
@@ -40,9 +42,9 @@ export default function Builtby() {
                 <MapPin size={20} className='text-primary' />
               </div>
               <div>
-                <h4 className='font-bold mb-1 text-foreground'>No Student Left Behind</h4>
+                <h4 className='font-bold mb-1 text-foreground'>{t('subheading4')}</h4>
                 <p className='text-sm text-muted-foreground'>
-                  Tailored info for students in both urban and rural areas.
+                  {t('body-text-2')}
                 </p>
               </div>
             </div>
@@ -52,9 +54,9 @@ export default function Builtby() {
                 <ShieldCheck size={20} className='text-secondary-foreground' />
               </div>
               <div>
-                <h4 className='font-bold mb-1 text-foreground'>Trusted Data</h4>
+                <h4 className='font-bold mb-1 text-foreground'>{t('subheading5')}</h4>
                 <p className='text-sm text-muted-foreground'>
-                  Validated info from Cambodian universities.
+                    {t('body-text-3')}
                 </p>
               </div>
             </div>

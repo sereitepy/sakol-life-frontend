@@ -1,7 +1,10 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+
 
 export default function Hero() {
+const t = useTranslations('about')
   return (
     <div className='relative px-10 py-24 flex flex-col overflow-hidden bg-accent-foreground dark:bg-secondary/30 transition-all duration-150 ease-in-out'>
       
@@ -17,21 +20,19 @@ export default function Hero() {
             >
               <path d="M11.48 3.499c.151-.377.689-.377.84 0l1.733 4.318a.45.45 0 0 0 .337.28l4.63.535c.404.047.566.547.262.822l-3.486 3.161a.45.45 0 0 0-.134.412l1.004 4.542c.088.397-.34.707-.694.501l-4.025-2.336a.45.45 0 0 0-.446 0l-4.025 2.336c-.354.206-.782-.104-.694-.501l1.004-4.542a.45.45 0 0 0-.134-.412L3.16 9.986c-.304-.275-.142-.775.262-.822l4.63-.535a.45.45 0 0 0 .337-.28l1.733-4.319Z" />
             </svg>
-            OUR MISSION
+           {t('mission')}
           </span>
 
           <h1 className='text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-accent dark:text-secondary-foreground'>
-            Empowering Cambodian{' '}
+            {t('title-first')}{' '}
             <span className='font-extrabold bg-linear-to-r from-primary to-muted-foreground dark:from-secondary-foreground dark:to-primary bg-clip-text text-transparent'>
-              Tech Leaders
+              {t('title-second')}
             </span>{' '}
-            of Tomorrow
+             {t('title-third')}
           </h1>
 
           <p className='text-accent dark:text-secondary-foreground text-sm sm:text-base leading-relaxed'>
-            Sakol Life is a dedicated platform designed to bridge the gap between
-            high school and higher education for Cambodian students. We focus on
-            tech-driven majors to align with national STEM development goals.
+            {t('title-des')}
           </p>
 
           <div className='flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto mt-2'>
@@ -40,7 +41,7 @@ export default function Hero() {
               asChild
             >
               <Link href='/quiz' className='flex items-center gap-2 justify-center'>
-                Take the Quiz
+                {t('quiz')}
                 <svg 
                   className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" 
                   fill="none" 

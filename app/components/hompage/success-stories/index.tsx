@@ -8,47 +8,39 @@ import {
 import { animate, motion, PanInfo, useMotionValue } from 'framer-motion'
 import Image from 'next/image'
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 
+// Static data blueprint safely placed outside the component context
 const data = [
   {
     id: 'sophea-chan',
     profile:
       'https://thumbs.dreamstime.com/b/avatar-asian-girl-happy-eastern-student-social-networks-vector-flat-illustration-188797892.jpg',
-    name: 'Sophea Chan',
-    role: 'Scholarship Winner, 2026',
-    text: "I was confused about which major to pick, and the quiz questions were spot on! I'm now studying Computer Science and I love it!",
+    translationKey: 'sophea-chan',
   },
   {
     id: 'sereitepy-or',
     profile:
       'https://www.shutterstock.com/image-vector/vector-bright-portrait-beautiful-brunette-600nw-2452267975.jpg',
-    name: 'Sereitepy Or',
-    role: 'MIS student at Paragon IU',
-    text: 'The university information were really helpful! Highly recommended!',
+    translationKey: 'sereitepy-or',
   },
   {
     id: 'bopha-ly',
     profile:
       'https://t4.ftcdn.net/jpg/02/79/66/93/360_F_279669366_Lk12QalYQKMczLEa4ySjhaLtx1M2u7e6.jpg',
-    name: 'Bopha Ly',
-    role: 'Digital Design Major',
-    text: 'Sakol Life helped me realized that my hobby could be a career. And the start of that career is a perfect fit technology major.',
+    translationKey: 'bpha-ly',
   },
   {
     id: 'sereitepsy-or',
     profile:
       'https://www.shutterstock.com/image-vector/vector-bright-portrait-beautiful-brunette-600nw-2452267975.jpg',
-    name: 'Sereitepy Or',
-    role: 'MIS student at Paragon IU',
-    text: 'The university information were really helpful! Highly recommended!',
+    translationKey: 'sereitepy-or',
   },
   {
     id: 'bopha-sly',
     profile:
       'https://t4.ftcdn.net/jpg/02/79/66/93/360_F_279669366_Lk12QalYQKMczLEa4ySjhaLtx1M2u7e6.jpg',
-    name: 'Bopha Ly',
-    role: 'Digital Design Major',
-    text: 'Sakol Life helped me realized that my hobby could be a career. And the start of that career is a perfect fit technology major.',
+    translationKey: 'bpha-ly',
   },
 ]
 
@@ -61,6 +53,7 @@ export default function SuccessStories() {
   const currentRef = useRef(0)
   const x = useMotionValue(0)
   const maxIndex = Math.max(0, data.length - visibleCount)
+  const t = useTranslations('homepages')
 
   useLayoutEffect(() => {
     const measure = () => {
@@ -143,10 +136,10 @@ export default function SuccessStories() {
         <div className='flex items-center justify-between gap-3'>
           <section className='flex flex-col gap-3'>
             <h1 className='text-2xl lg:text-3xl font-extrabold tracking-tight'>
-              Success Stories
+               {t("success-stories")}
             </h1>
             <p className='text-accent-foreground'>
-              Hear from students who found their path with Sakol Life
+              {t("body-text-4")}
             </p>
           </section>
 
@@ -190,15 +183,17 @@ export default function SuccessStories() {
                   <div className='flex items-center gap-3'>
                     <Image
                       src={item.profile}
-                      alt={item.name}
+                      alt={t(`testimonials.${item.translationKey}.name`)}
                       width={45}
                       height={45}
                       className='rounded-full w-11 h-11 object-cover shrink-0'
                     />
                     <div>
-                      <h2 className='font-semibold'>{item.name}</h2>
+                      <h2 className='font-semibold'>
+                        {t(`testimonials.${item.translationKey}.name`)}
+                      </h2>
                       <p className='text-accent-foreground font-light text-sm'>
-                        {item.role}
+                        {t(`testimonials.${item.translationKey}.role`)}
                       </p>
                     </div>
                   </div>
@@ -215,7 +210,7 @@ export default function SuccessStories() {
                   </div>
 
                   <p className='text-sm leading-relaxed'>
-                    &quot;{item.text}&quot;
+                    &quot;{t(`testimonials.${item.translationKey}.text`)}&quot;
                   </p>
                 </div>
               </motion.div>
@@ -223,7 +218,7 @@ export default function SuccessStories() {
           </motion.div>
         </div>
 
-        {/* 5 stars rating */}
+        {/* dots slider pagination indicators */}
         <div className='flex items-center justify-center gap-2 mt-1'>
           {Array.from({ length: maxIndex + 1 }).map((_, i) => (
             <button

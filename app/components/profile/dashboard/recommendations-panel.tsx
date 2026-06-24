@@ -5,10 +5,12 @@ import { ArrowRight } from 'lucide-react'
 import { getMajorIcon } from '../shared/major-icons'
 import { ProfileResponse } from '@/lib/profile/action'
 import { Button } from '@/components/ui/button'
+import { useTranslations, useLocale } from 'next-intl'
 
 type Recommendation = {
   code: string
   nameEn: string
+  nameKm?: string // Added safe schema type alignment matching localized fields
   similarityPercentage: number
   majorId: string
 }
@@ -21,20 +23,21 @@ const CARD_OVERLAYS = [
 
 function RecommendationCard({
   code,
-  nameEn,
+  displayName,
   percentage,
   isChosen,
   overlayClass,
   onClick,
 }: {
   code: string
-  nameEn: string
+  displayName: string
   percentage: number
   isChosen: boolean
   overlayClass: string
   onClick: () => void
 }) {
   const { Icon } = getMajorIcon(code)
+  const tRec = useTranslations('dashboard_recommendations')
 
   return (
     <button
@@ -54,27 +57,27 @@ function RecommendationCard({
         className='absolute top-4 right-4 bg-card backdrop-blur-md 
   px-3 py-1 rounded-full border border-white/10 text-on-surface font-bold text-[clamp(9px,0.75vw,11px)]'
       >
-        {percentage}% Match
+        {tRec('match_suffix', { percentage })}
       </div>
 
       {/* Chosen badge */}
       {isChosen && (
         <div
           className='absolute bottom-4 right-4 sm:bottom-auto sm:right-auto sm:top-4 sm:left-4 
-    bg-primary/30 text-on-primary text-[10px] font-extrabold px-2 py-0.5 rounded-full'
+    bg-primary/30 text-on-primary text-[10px] font-extrabold px-2 py-0.5 rounded-full z-10'
         >
-          ✓ Chosen
+          ✓ {tRec('chosen')}
         </div>
       )}
 
       {/* Content pinned to bottom */}
-      <div className='absolute inset-0 p-5 flex flex-col justify-end'>
+      <div className='absolute inset-0 p-5 flex flex-col justify-end z-0'>
         <Icon
           size={undefined}
           className='text-on-surface/80 mb-3 text-[clamp(22px,2.5vw,32px)]'
         />
-        <h4 className='text-[clamp(12px,1vw,15px)] font-bold text-on-surface mb-1 leading-tight'>
-          {nameEn}
+        <h4 className='text-[clamp(12px,1vw,15px)] font-bold text-on-surface mb-1 leading-tight line-clamp-2 pr-2'>
+          {displayName}
         </h4>
       </div>
     </button>
@@ -93,63 +96,72 @@ export function RecommendationsPanel({
   hasQuiz,
 }: Props) {
   const router = useRouter()
+  const locale = useLocale()
+  const tRec = useTranslations('dashboard_recommendations')
 
   return (
     <div className='bg-card rounded-xl border border-white/10 p-6'>
       <div className='flex items-center justify-between mb-5'>
         <h2 className='text-lg font-bold text-on-surface'>
-          My Recommendations
+          {tRec('title')}
         </h2>
         {hasQuiz && (
           <button
             onClick={() => router.push('/quiz/results')}
-            className='flex items-center gap-1 text-sm font-semibold text-primary hover:underline transition-all'
+            className='flex items-center gap-1 text-sm font-semibold text-primary hover:underline transition-all cursor-pointer bg-transparent border-0'
           >
-            View All <ArrowRight size={14} />
+            {tRec('view_all')} <ArrowRight size={14} />
           </button>
         )}
       </div>
 
       {recommendations.length > 0 ? (
         <div className='grid grid-cols-1 sm:grid-cols-3 gap-3'>
-          {recommendations.map((r, i) => (
-            <RecommendationCard
-              key={r.majorId}
-              code={r.code}
-              nameEn={r.nameEn}
-              percentage={r.similarityPercentage}
-              isChosen={selectedMajor?.majorId === r.majorId}
-              overlayClass={CARD_OVERLAYS[i] ?? CARD_OVERLAYS[0]}
-              onClick={() => router.push(`/majors/${r.majorId}`)}
-            />
-          ))}
+          {recommendations.map((r, i) => {
+            // Evaluates targeted language mapping definitions explicitly 
+            const localizedMajorName = locale === 'km' 
+              ? (r.nameKm || r.nameEn) 
+              : r.nameEn
+
+            return (
+              <RecommendationCard
+                key={r.majorId}
+                code={r.code}
+                displayName={localizedMajorName}
+                percentage={r.similarityPercentage}
+                isChosen={selectedMajor?.majorId === r.majorId}
+                overlayClass={CARD_OVERLAYS[i] ?? CARD_OVERLAYS[0]}
+                onClick={() => router.push(`/majors/${r.majorId}`)}
+              />
+            )
+          })}
         </div>
       ) : hasQuiz ? (
         <div className='flex flex-col items-center justify-center py-12 text-center'>
           <p className='text-2xl mb-3'>📊</p>
           <p className='text-sm text-on-surface-variant mb-4'>
-            Your results are saved, view them below.
+            {tRec('saved_results_desc')}
           </p>
           <Button
             variant='outline'
             onClick={() => router.push('/quiz/results')}
             className='px-5 py-2.5 border border-white/20 text-on-surface text-sm font-bold rounded-lg hover:bg-white/5 transition-all'
           >
-            View Results
+            {tRec('view_results_btn')}
           </Button>
         </div>
       ) : (
         <div className='flex flex-col items-center justify-center py-12 text-center'>
           <p className='text-2xl mb-3'>🎯</p>
-          <p className='text-sm text-on-surface-variant mb-4'>
-            Take the quiz to get personalised major recommendations.
+          <p className='text-sm text-on-surface-variant mb-4 px-4'>
+            {tRec('empty_quiz_desc')}
           </p>
           <Button
             variant='outline'
             onClick={() => router.push('/quiz')}
             className='px-6 py-2.5 bg-primary text-on-primary text-sm font-bold rounded-lg hover:shadow-[0_0_16px_#00e67680] transition-all active:scale-95'
           >
-            Start Assessment
+            {tRec('start_assessment_btn')}
           </Button>
         </div>
       )}
