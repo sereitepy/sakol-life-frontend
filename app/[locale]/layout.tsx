@@ -10,6 +10,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
+import Footer from "@/app/components/footer";
 
 const lexend = Lexend({
   variable: '--font-sans',
@@ -63,7 +64,7 @@ export default async function RootLayout({ children, params }: Props) {
           <div className='fixed bottom-10 right-10 z-50'>
             <TheSetting />
           </div>
-          <p>footer</p>
+          <Footer />
         </Providers>
       </body>
     </html>
