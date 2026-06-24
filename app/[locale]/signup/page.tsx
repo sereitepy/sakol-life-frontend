@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { handlePostAuth } from '@/lib/auth/post-auth'
 import { GoogleIcon } from '../../components/google-icon'
+import { useTranslations } from 'next-intl'
+
 
 type Stage = 'form' | 'transitioning' | 'confirmation' | 'confirmed' | 'exists'
 
@@ -21,7 +23,8 @@ export default function SignUpPage() {
   const [isGooglePending, startGoogleTransition] = useTransition()
   const emailRef = useRef<HTMLInputElement>(null)
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
-
+  const t = useTranslations('signup')
+  
   useEffect(() => {
     emailRef.current?.focus()
   }, [])
@@ -107,10 +110,10 @@ export default function SignUpPage() {
         <div className='w-full max-w-100 bg-card text-card-foreground border border-border rounded-lg p-8 flex flex-col gap-5'>
           <div className='flex flex-col gap-1'>
             <h1 className='text-2xl font-bold text-foreground'>
-              Create account
+            {t('create')}
             </h1>
             <p className='text-sm text-muted-foreground'>
-              Join Sakol Life today
+              {t('join')}
             </p>
           </div>
 
@@ -126,7 +129,7 @@ export default function SignUpPage() {
 
           <div className='flex items-center gap-3 text-xs text-muted-foreground'>
             <div className='flex-1 h-px bg-border' />
-            <span>or</span>
+            <span>{t('or')}</span>
             <div className='flex-1 h-px bg-border' />
           </div>
 
@@ -140,7 +143,7 @@ export default function SignUpPage() {
                 htmlFor='email'
                 className='text-sm font-medium text-foreground'
               >
-                Email
+                {t('email')}
               </label>
               <input
                 ref={emailRef}
@@ -161,7 +164,7 @@ export default function SignUpPage() {
                 htmlFor='password'
                 className='text-sm font-medium text-foreground'
               >
-                Password
+                {t('password')}
               </label>
               <input
                 id='password'
@@ -196,12 +199,13 @@ export default function SignUpPage() {
           </form>
 
           <p className='text-center text-sm text-muted-foreground'>
-            Already have an account?{' '}
+            {t('already')}{' '}
             <Link
               href='/signin'
               className='text-primary font-medium hover:underline'
             >
-              Sign in
+              {t('sign-in')}
+
             </Link>
           </p>
         </div>

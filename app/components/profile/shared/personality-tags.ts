@@ -1,6 +1,9 @@
 import { ProfileResponse } from '@/lib/profile/action'
 
-export type PersonalityTag = { label: string; color: string }
+export type PersonalityTag = { 
+  key: string // Replaced hardcoded 'label' with global translation key identifier
+  color: string 
+}
 
 export function derivePersonalityTags(
   answers: ProfileResponse['latestAnswers']
@@ -20,38 +23,38 @@ export function derivePersonalityTags(
 
   if (q4d >= 4 || q4a >= 4)
     tags.push({
-      label: 'Visual Thinker',
+      key: 'visual_thinker',
       color: 'bg-primary/10 text-primary border-primary/20',
     })
   if (q4b >= 4 || q4g >= 4)
     tags.push({
-      label: 'Problem Solver',
+      key: 'problem_solver',
       color: 'bg-accent text-accent-foreground border-accent-foreground/10',
     })
   if (q4c >= 4 || q4f >= 4)
     tags.push({
-      label: 'Logical',
+      key: 'logical',
       color:
         'bg-secondary text-secondary-foreground border-secondary-foreground/10',
     })
   if (q4e >= 3)
     tags.push({
-      label: 'Detail Oriented',
+      key: 'detail_oriented',
       color: 'bg-muted text-muted-foreground border-border',
     })
   if (q4a >= 3 && q4d >= 3)
     tags.push({
-      label: 'Creative Learner',
+      key: 'creative_learner',
       color: 'bg-primary/10 text-primary border-primary/20',
     })
 
   if (tags.length === 0) {
     tags.push({
-      label: 'Curious Learner',
+      key: 'curious_learner',
       color: 'bg-accent text-accent-foreground border-accent-foreground/10',
     })
     tags.push({
-      label: 'Analytical',
+      key: 'analytical',
       color:
         'bg-secondary text-secondary-foreground border-secondary-foreground/10',
     })

@@ -3,29 +3,32 @@ import {
   BuildingApartmentIcon,
   NotepadIcon,
 } from '@phosphor-icons/react/ssr'
+import { useTranslations } from 'next-intl'
+
 
 export default function HowItWorks() {
+    const t = useTranslations('homepages')
   const data = [
     {
       id: 'take-survey',
-      title: 'Take the Quiz',
-      des: 'Quick and easy interest assessment designed to understand your strengths and compatibilities.',
+      title: t("subheading1"),
+      des: t("body-text-1"),
       icon: NotepadIcon,
       color: '#0f6e56',
       bg_color: 'var(--icon-bg-teal)',
     },
     {
       id: 'get-recommendation',
-      title: 'Get Recommendations',
-      des: 'Mathematical computation matches for technology majors that fit your profile perfectly.',
+      title: t("subheading2"),
+      des: t("body-text-2"),
       icon: BrainIcon,
       color: '#7c3aed',
       bg_color: 'var(--icon-bg-violet)',
     },
     {
       id: 'university-info',
-      title: 'University Information',
-      des: 'Select a major and receives all local universities in Cambodia that offer your selected major.',
+      title: t("subheading3"),
+      des: t("body-text-3"),
       icon: BuildingApartmentIcon,
       color: '#c2410c',
       bg_color: 'var(--icon-bg-amber)',
@@ -35,10 +38,10 @@ export default function HowItWorks() {
     <div className='flex items-center justify-center p-8 md:p-10 bg-chart-3/20 dark:bg-secondary flex-col gap-5 md:gap-10'>
       <section className='flex flex-col gap-3 items-center justify-center'>
         <h1 className='text-2xl lg:text-3xl font-extrabold tracking-tight'>
-          How it works
+              {t("how-it-works")}
         </h1>
         <p className='text-accent-foreground'>
-          Your jouney to a dream major in 3 simple steps
+            {t("body-text")}
         </p>
       </section>
       <section className='flex flex-col md:flex-row gap-5 w-full max-w-5xl mx-auto'>

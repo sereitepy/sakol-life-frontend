@@ -17,7 +17,6 @@
       "navSecurity": "Security",
       "navLanguage": "Language",
       "navAccount": "Account",
-
       "sectionProfile": "Profile information",
       "sectionProfileDesc": "Update your display name, photo and language preference.",
       "sectionSecurity": "Security",
@@ -26,7 +25,6 @@
       "sectionLanguageDesc": "Choose the language you want to use across the site.",
       "sectionAccount": "Account",
       "sectionAccountDesc": "Sign out or permanently delete your account.",
-
       "displayName": "Display name",
       "displayNamePlaceholder": "Your name",
       "preferredLanguage": "Content language",
@@ -35,7 +33,6 @@
       "saving": "Saving…",
       "saved": "Saved!",
       "saveError": "Failed to save. Please try again.",
-
       "newPassword": "New password",
       "newPasswordHint": "Must be at least 8 characters.",
       "newPasswordPlaceholder": "Enter new password",
@@ -46,9 +43,7 @@
       "passwordUpdated": "Password updated!",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordMismatch": "Passwords do not match.",
-
       "languageSaveNote": "Your language preference is saved to your account and remembered next time you log in.",
-
       "signOut": "Sign out",
       "signOutDescription": "Sign out of your account on this device.",
       "deleteAccount": "Delete account",
@@ -63,7 +58,6 @@
       "photoUploadError": "Upload failed. Please try again.",
       "photoSizeError": "Image must be under 5 MB.",
       "photoTypeError": "Only JPG, PNG or WebP images are allowed.",
-
       "deleteAccountConfirmTitle": "Are you absolutely sure?",
       "deleteAccountConfirmDescription": "This will permanently delete your account, all quiz attempts, saved majors and answers. This cannot be undone.",
       "deleteTypeToConfirm": "Type DELETE to confirm",
@@ -90,12 +84,462 @@
     "confirm": "Confirm"
   },
   "homepages": {
+    "edu": "EDUCATION PLATFORM",
     "title-first-half": "Discover Your",
     "title-second-half": "Future Path",
     "title-des": "Answer 12 simple questions and get personalized recommendations for your technology university major!",
-    "trusted": "Trusted by 200+ Cambodian students"
+    "button-1": "Get Personal Package",
+    "button-result": "View My Results",
+    "button-2": "View Demo",
+    "trusted": "Trusted by 200+ Cambodian students",
+    "partners-universities": "PARTNERS & UNIVERSITIES",
+    "match": "Match Found",
+    "cs": "Computer Science at Paragon IU",
+    "98": "98% Match",
+    "how-it-works": "How it works",
+    "body-text": "Your jouney to a dream major in 3 simple steps",
+    "subheading1": "Take the Quiz",
+    "body-text-1": "Quick and easy interest assessment designed to understand your strengths and compatibilities.",
+    "subheading2": "Get Recommendations",
+    "body-text-2": "Mathematical computation matches for technology majors that fit your profile perfectly.",
+    "subheading3": "University Information",
+    "body-text-3": "Select a major and receives all local universities in Cambodia that offer your selected major.",
+    "success-stories": "Success Stories",
+    "body-text-4": "Hear from students who found their path with Sakol Life",
+    "testimonials": {
+      "sophea-chan": {
+        "name": "Sophea Chan",
+        "role": "Scholarship Winner, 2026",
+        "text": "I was confused about which major to pick, and the quiz questions were spot on! I'm now studying Computer Science."
+      },
+      "sereitepy-or": {
+        "name": "Sereitepy Or",
+        "role": "MIS Student at Paragon IU",
+        "text": "The university information were really helpful! Highly recommended!"
+      },
+      "bpha-ly": {
+        "name": "Bopha Ly",
+        "role": "Digital Design Major",
+        "text": "Sakol Life helped me realized that my hobby could be a career. And the start of that career is a perfect fit tech."
+      }
+    }
   },
   "header": {
-    "about-us": "About Us"
+    "about-us": "About Us",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
+  "about": {
+    "mission": "Our Misson",
+    "title-first": "Empowering Cambodian",
+    "title-second": "Tech Leaders",
+    "title-third": "of Tomorrow",
+    "title-des": "Sakol Life is a dedicated platform designed to bridge the gap between high school and higher education for Cambodian students. We focus on tech-driven majors to align with national STEM development goals.",
+    "quiz": "Take the Quiz",
+    "why": "Why Sakol Life?",
+    "body-text": "We have built the tools you need to make the biggest decision of your academic life easier, smarter, and way more fun.",
+    "subheading1": "Magic Match Quiz",
+    "body-text-1": "Our system analyzes your personality and passions to suggest tech majors you will actually love.",
+    "button-1": "Start your journey",
+    "subheading2": "University Insights. All in One Place",
+    "insights": {
+      "tuition": {
+        "label": "Tuition Fee",
+        "desc": "Check tuition fee"
+      },
+      "scholarships": {
+        "label": "Scholarships",
+        "desc": "Hidden funding gems"
+      },
+      "facilities": {
+        "label": "Campus Facilities",
+        "desc": "What campus provides"
+      },
+      "jobs": {
+        "label": "Job Outlook",
+        "desc": "High or low demand"
+      }
+    },
+    "title-first-built": "Built by MIS Students",
+    "title-second-built": "For Future Techies",
+    "title-built-des": "We know exactly how it feels to stand where you are. The confusion, the overwhelming choices, and the pressure of the future.",
+    "subheading4": "No Student Left Behind",
+    "body-text-2": "Tailored info for students in both urban and rural areas.",
+    "subheading5": "Trusted Data",
+    "body-text-3": "Validated info from Cambodian universities.",
+    "meet": "Meet the Crew",
+    "meet-des": "We are a group of MIS students, passionate about bridging the gap between high school and a successful tech university decision.",
+    "crew": {
+      "sereitepy-or": {
+        "name": "Sereitepy Or",
+        "role": "Full-Stack Developer"
+      },
+      "reaskmey-meas": {
+        "name": "Reaskmey Meas",
+        "role": "Project Researcher"
+      },
+      "ratanakvisal Chhouk": {
+        "name": "Ratanakvisal Chhouk",
+        "role": "Market Researcher"
+      }
+    }
+  },
+  "signin": {
+    "welcome": "Welcome back",
+    "sign-in": "Sign in to your account",
+    "or": "or",
+    "email": "Email",
+    "password": "Password",
+    "dont": "Don't have an account?",
+    "sign-up": "Sign Up"
+  },
+  "signup": {
+    "create": "Create account",
+    "join": "Join Sakol Life today",
+    "or": "or",
+    "email": "Email",
+    "password": "Password",
+    "already": "Already have an account?",
+    "sign-in": "Sign In"
+  },
+  "major-tab": {
+    "your-rec-majors": "Your Recommended Majors",
+    "based": "Based on your matching profile results, we found ",
+    "major": "major",
+    "ranked": "ranked specifically for you.",
+    "filters": "Filters",
+    "clear": "Clear All",
+    "try": "Search majors by title, code, or keyword...",
+    "no": "No Majors Match Your Current Filters",
+    "show-more": "Show More Options"
+  },
+  "major_card": {
+    "tab_majors": "Majors",
+    "tab_universities": "Universities",
+    "choose_major_first": "(Choose a Major First)",
+    "top_match": "TOP MATCH",
+    "chosen_status": "CHOSEN",
+    "match_percentage": "{{percentage}}% Match",
+    "compatibility": "Compatibility",
+    "view_details": "View Details",
+    "saving": "Saving…",
+    "chosen": "✓ Chosen",
+    "choose_major": "Choose Major",
+    "outlooks": {
+      "HIGH": "🔥 HIGH",
+      "MEDIUM": "📈 MEDIUM",
+      "LOW": "📉 LOW"
+    }
+  },
+  "career_categories": {
+    "title": "Field Category",
+    "SOFTWARE_DEVELOPMENT": "Software Development",
+    "ARTIFICIAL_INTELLIGENCE": "Artificial Intelligence (AI)",
+    "DATA_SCIENCE": "Data Science",
+    "COMPUTER_SCIENCE_IT": "Computer Science / IT",
+    "CYBERSECURITY": "Cybersecurity",
+    "NETWORKING": "Networking",
+    "DIGITAL_DESIGN": "Digital Design",
+    "MANAGEMENT_INFORMATION_SYSTEMS": "Management Information Systems",
+    "DIGITAL_BUSINESS": "Digital Business"
+  },
+ "job_outlooks": {
+    "title": "Job Outlook",
+    "HIGH": "High Demand",
+    "MEDIUM": "Medium Demand",
+    "LOW": "Low Demand"
+  },
+  "min_scores": {
+    "compatibility": "Compatibility Match",
+    "score_50": "All matches (50%+)",
+    "score_60": "Good (60%+)",
+    "score_75": "Strong (75%+)",
+    "score_90": "Excellent (90%+)"
+  },
+  "uni_card": {
+    "back_to_majors": "← Back to Majors",
+    "no_uni_data": "No university data",
+    "reselect_major_desc": "Please re-select your major.",
+    "universities_offering": "Universities offering",
+    "universities_found": "{count, plural, =1 {# university found} other {# universities found}}",
+    "all_types": "All Types",
+    "public": "Public",
+    "private": "Private"
+  },
+  "university_card": {
+    "fee_varies": "Fee varies",
+    "duration_years": "{years} yrs",
+    "tuition_fee": "${fee}/yr",
+    "types": {
+      "PUBLIC": "PUBLIC",
+      "PRIVATE": "PRIVATE"
+    }
+  },
+  "profile_nav": {
+    "dashboard": "My Dashboard",
+    "dashboard_small": "Dashboard",
+    "quiz_answers": "Quiz Answers",
+    "quiz_small": "Quiz",
+    "account_settings": "Account Settings",
+    "account_small": "Account"
+  },
+  "dashboard_assessment": {
+"title": "Current Assessment Status",
+    "desc_complete": "Your professional skills match assessment has been completed.",
+    "desc_empty": "Please take the assessment quiz to unlock your personalized major recommendations.",
+    "retake": "Retake Assessment",
+    "start_quiz": "Start Quiz",
+    "profile_completion": "Profile Completion Status",
+    "progress_status": "Progress Completed {percent}%"
+  },
+  "dashboard_stats": {
+    "total_assessments": "Total Assessments",
+    "assessments_taken": "{count} taken",
+    "updated_today": "Updated Today",
+    "top_match": "Top Match",
+    "accuracy": "{percentage}% Accuracy",
+    "selected_major": "Selected Major",
+    "active_journey": "Active Journey",
+    "not_available": "—"
+  },
+  "profile_hero": {
+    "edit_profile": "Edit Profile",
+    "location": "Phnom Penh, Cambodia"
+  },
+  "job_outlooks2": {
+    "demand_suffix": "{label} Demand",
+    "HIGH": "High",
+    "MEDIUM": "Medium",
+    "LOW": "Low"
+  },
+  "dashboard_recommendations": {
+    "title": "My Recommendations",
+    "view_all": "View All",
+    "match_suffix": "{percentage}% Match",
+    "chosen": "Chosen",
+    "saved_results_desc": "Your results are saved, view them below.",
+    "view_results_btn": "View Results",
+    "empty_quiz_desc": "Take the quiz to get personalized major recommendations.",
+    "start_assessment_btn": "Start Assessment"
+  },
+  "dashboard_shortcuts": {
+    "explore_majors": "Explore Majors",
+    "universities_match": "Universities Match",
+    "scholarship_guide": "Scholarship Guide",
+    "survey_history": "Survey History"
+  },
+  "personality_tags": {
+    "visual_thinker": "Visual Thinker",
+    "problem_solver": "Problem Solver",
+    "logical": "Logical",
+    "detail_oriented": "Detail Oriented",
+    "creative_learner": "Creative Learner",
+    "curious_learner": "Curious Learner",
+    "analytical": "Analytical"
+  },
+  "quiz_meta": {
+    "option_prefix": "Option {value}",
+    "Q1": {
+      "label": "New app/phone behaviour",
+      "A": "I set it up myself and explore all the settings on my own",
+      "B": "I watch a YouTube tutorial or read instructions to figure it out",
+      "C": "I ask a friend or family member to help me set it up",
+      "D": "I just use it for the basics without exploring much"
+    },
+    "Q2": {
+      "label": "Content you stop and watch",
+      "A": "Satisfying video edits, cool transitions, or visually beautiful content",
+      "B": "Interesting facts, news, or \"did you know\" type videos",
+      "C": "Business pages, brand stories, or people building their following",
+      "D": "Tutorials showing how to fix or build something",
+      "E": "Funny memes or entertainment with no particular theme"
+    },
+    "Q3": {
+      "label": "Digital content creation",
+      "A": "Yes, I do it often and genuinely enjoy making things look good",
+      "B": "Yes, but mainly just to get something done, not because I love it",
+      "C": "I have tried once or twice but it didn't really interest me",
+      "D": "No, I have never tried"
+    },
+    "Q4": {
+      "label": "Troubleshooting approach",
+      "A": "I try to fix it myself, restart, clear cache, Google the problem, test things",
+      "B": "I look for a YouTube video or forum that explains the fix",
+      "C": "I hand it to someone else to deal with",
+      "D": "I wait and hope it fixes itself"
+    },
+    "Q5": {
+      "label": "Comfort helping others with tech"
+    },
+    "Q6": {
+      "label": "Enjoyment of pattern-spotting"
+    },
+    "Q7": {
+      "label": "How you use your phone",
+      "A": "I customize everything: wallpapers, widgets, fonts, until it looks exactly right",
+      "B": "I use it to learn things: podcasts, articles, YouTube rabbit holes",
+      "C": "I am always in group chats, helping people, or organizing things for others",
+      "D": "I follow business or side-hustle pages, or I am already trying to sell something",
+      "E": "I like knowing how things work — I have searched things like \"how does WiFi actually work\"",
+      "F": "I keep notes, to-do lists, or manage files and schedules on my phone"
+    },
+    "Q8": {
+      "label": "Interest in visual design"
+    },
+    "Q9": {
+      "label": "What you would build with tech",
+      "A": "An app or game that people download and use every day",
+      "B": "A tool that looks amazing and is incredibly easy to use",
+      "C": "A system that analyzes data and gives smart recommendations to people",
+      "D": "A security system that protects accounts and keeps private data safe",
+      "E": "An online store or brand that earns real money",
+      "F": "A platform that connects people and helps communities work together",
+      "G": "An AI system that learns from data and gets smarter over time",
+      "H": "A network or infrastructure that keeps important systems running reliably"
+    },
+    "Q10": {
+      "label": "Most meaningful accomplishment",
+      "A": "Writing code that actually works and does something useful for people",
+      "B": "Designing something so clean and beautiful that everyone asks who made it",
+      "C": "Finding a pattern in a messy dataset that nobody else noticed",
+      "D": "Being the person who stopped a scam or prevented a data breach",
+      "E": "Growing a page or brand from zero to thousands of followers or customers",
+      "F": "Leading a team that ships a big technology project on time",
+      "G": "Building something creative that uses AI in a way no one has tried before",
+      "H": "Making sure a whole system keeps running with zero failures"
+    },
+    "Q11": {
+      "label": "Excitement about tech university major"
+    },
+    "Q12": {
+      "label": "What you want to learn more about",
+      "A": "How to build apps and write code that solves real problems",
+      "B": "How AI systems learn from data and make decisions on their own",
+      "C": "How to design websites and digital products that look and feel great",
+      "D": "How data is collected, analyzed, and turned into useful insights",
+      "E": "How hackers break into systems and how to stop them",
+      "F": "How the internet and networks actually work behind the scenes",
+      "G": "How to build and grow a business or brand online",
+      "H": "How technology is managed and led inside large organizations"
+    }
+  },
+  "survey_content": {
+    "title": "Survey Answers",
+    "desc_complete": "Detailed responses from your most recent assessment.",
+    "desc_empty": "Complete the assessment to see your answers here.",
+    "retake_btn": "Retake",
+    "no_answers_title": "No answers yet",
+    "no_answers_desc": "Complete the career assessment quiz to discover your recommended majors.",
+    "take_assessment_btn": "Take the Assessment",
+    "scale_ratings_title": "Scale Ratings",
+    "multiple_choice_title": "Multiple Choice",
+    "change_answers_hint": "To change your answers, retake the quiz",
+    "cta_title": "View Your Recommended Majors",
+    "cta_desc": "See how your answers map to the best-fit university majors for your profile.",
+    "see_results_btn": "See My Results"
+  },
+  "survey_summary": {
+    "total_attempts": "Total Attempts",
+    "attempts_suffix": "{count, plural, =1 {# time} other {# times}}",
+    "questions_answered": "Questions Answered",
+    "scale_ratings": "Scale Ratings",
+    "multiple_choice": "Multiple Choice",
+    "answered_suffix": "{count} / {total}",
+    "count_suffix": "{count} {count, plural, =1 {item} other {items}}"
+  },
+  "quiz_alert_dialog": {
+    "title": "You have a previous assessment",
+    "description": "You've already completed a major recommendation assessment. Would you like to review your results, or start a fresh assessment?",
+    "btn_start_fresh": "Start fresh",
+    "btn_view_results": "View my results"
+  },
+  "major-detail": {
+    "backToResults": "Back to Results",
+    "updated": "Updated",
+    "excellentMatch": "Excellent Match",
+    "basedOnInterests": "Based on your interests",
+    "labelDegree": "Degree",
+    "labelLanguage": "Language",
+    "titleStudy": "What You'll Study",
+    "studyDesc": "Explore major subject fields required inside this academic course timeline.",
+    "titleSkills": "Skills Acquired",
+    "subTechnicalSkills": "Technical Skills",
+    "subSoftSkills": "Soft Skills",
+    "titleCareers": "Career Opportunities",
+    "careersDesc": "Potential career branches and professional fields awaiting graduation.",
+    "jobMarketTitle": "Job Market Outlook",
+    "demandLabel": "Market Demand",
+    "demandVeryHigh": "Very High Demand",
+    "demandHigh": "High Demand",
+    "demandMedium": "Medium Demand",
+    "demandLow": "Low Demand",
+    "jobMarketDataYear": "Current Regional Trends for 2026",
+    "entrySalaryLabel": "Average Entry Salary",
+    "salaryPeriod": "Per {period}",
+    "btnFindUniversities": "Find Universities",
+    "titleRelatedMajors": "Related Majors",
+    "btnViewAllMajors": "View All Majors",
+    "btnChooseMajor": "Choose This Major",
+    "btnSaving": "Saving Choice...",
+    "btnMajorChosen": "Selected Specialization",
+    "errorLoading": "Failed to retrieve major detail contents.",
+    "majorNotFound": "Major information could not be found.",
+    "goBack": "Go Back"
+  },
+  "GuestGuard": {
+    "closeLabel": "Close",
+    "title": "Your results will be lost",
+    "description": "You haven't saved your quiz results yet. If you leave this page, your recommended majors and all quiz answers will be gone forever.\n\nCreate a free account to keep your results and come back anytime.",
+    "btnLeave": "Leave anyway",
+    "btnSignIn": "Sign in",
+    "btnSignUp": "Create free account"
+  },
+  "scale_badges": {
+    "high": "High",
+    "low_label": "Strongly Disagree",
+    "high_label": "Strongly Agree"
+  },
+  "university_detail": {
+    "loading": "Loading details...",
+    "error_not_found": "University not found",
+    "btn_go_back": "Go Back",
+    "back_to_tab": "Back to University Tab",
+    "public_uni": "Public University",
+    "private_uni": "Private University",
+    "apply_now": "Apply Now",
+    "visit_website": "Visit Website",
+    "nav_title": "Navigation",
+    "nav_subtitle": "Jump to section",
+    "help_title": "Need help applying?",
+    "help_desc": "Our counselors are ready to guide you through the process.",
+    "help_cta": "Chat with Counselor",
+    "sections": {
+      "overview": "Overview",
+      "major": "Selected Major",
+      "admission": "Admission Requirements",
+      "tuition": "Tuition & Fees",
+      "scholarships": "Scholarships",
+      "facilities": "Campus Facilities"
+    },
+    "established": "Established",
+    "type": "Type",
+    "accreditation": "Accreditation",
+    "change_major": "Change Major",
+    "duration": "Duration",
+    "duration_years": "{years} Years",
+    "credits": "Credits",
+    "credits_value": "{count} Credits",
+    "language": "Language",
+    "internship": "Internship",
+    "internship_required": "Required",
+    "internship_optional": "Optional",
+    "career_prospects": "Career Prospects",
+    "th_program_type": "Program Type",
+    "th_per_semester": "Per Semester",
+    "th_per_year": "Per Year",
+    "th_notes": "Notes",
+    "tuition_notice": "Fees are subject to change. Additional costs for books, uniforms, and administrative fees may apply. Contact the bursar office for the most current fee structure.",
+    "view_all": "View All",
+    "deadline": "Deadline: {date}"
   }
 }

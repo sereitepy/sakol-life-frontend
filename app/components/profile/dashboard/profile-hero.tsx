@@ -1,8 +1,11 @@
+'use client'
+
 import { useRouter } from 'next/navigation'
 import { MapPin, Pencil } from 'lucide-react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { ProfileResponse } from '@/lib/profile/action'
+import { useTranslations, useLocale } from 'next-intl'
 
 type Props = {
   displayName: string
@@ -18,6 +21,9 @@ export function ProfileHero({
   role,
 }: Props) {
   const router = useRouter()
+  const locale = useLocale()
+  const tHero = useTranslations('profile_hero')
+  const tOutlooks = useTranslations('job_outlooks2')
 
   const initials = displayName
     .split(' ')
@@ -25,6 +31,18 @@ export function ProfileHero({
     .join('')
     .toUpperCase()
     .slice(0, 2)
+
+  // Localize major name dynamically
+  const localizedMajorName = selectedMajor
+    ? locale === 'km'
+      ? (selectedMajor.nameKm || selectedMajor.nameEn)
+      : selectedMajor.nameEn
+    : ''
+
+  // Process the Job Outlook badge translation safely
+  const outlookLabel = selectedMajor?.jobOutlook && tOutlooks.has(selectedMajor.jobOutlook)
+    ? tOutlooks(selectedMajor.jobOutlook)
+    : selectedMajor?.jobOutlook || ''
 
   return (
     <div className='bg-card border border-border rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5'>
@@ -57,22 +75,22 @@ export function ProfileHero({
         </h1>
         <div className='flex items-center gap-1.5 mt-1 text-muted-foreground'>
           <MapPin size={12} />
-          <span className='text-xs'>Phnom Penh, Cambodia</span>
+          <span className='text-xs'>{tHero('location')}</span>
         </div>
         {selectedMajor && (
-          <div className='mt-2 flex items-center gap-2'>
+          <div className='mt-2 flex flex-wrap items-center gap-2'>
             <span className='text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20'>
-              🎓 {selectedMajor.nameEn}
+              🎓 {localizedMajorName}
             </span>
             {selectedMajor.jobOutlook && (
               <span
                 className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                   selectedMajor.jobOutlook === 'HIGH'
                     ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400'
-                    : 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                    : 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400'
                 }`}
               >
-                {selectedMajor.jobOutlook} Demand
+                {tOutlooks('demand_suffix', { label: outlookLabel })}
               </span>
             )}
           </div>
@@ -85,7 +103,7 @@ export function ProfileHero({
         className='shrink-0 gap-1.5 rounded-xl border-border'
         onClick={() => router.push('/profile/settings')}
       >
-        <Pencil size={13} /> Edit Profile
+        <Pencil size={13} /> {tHero('edit_profile')}
       </Button>
     </div>
   )

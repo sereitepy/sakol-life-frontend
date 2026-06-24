@@ -16,6 +16,7 @@ import {
   AlertDialogCancel,
 } from '@/components/ui/alert-dialog'
 import { X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 type CTAState = 'loading' | 'quiz' | 'results'
 
@@ -25,13 +26,15 @@ export default function CTAButton() {
   const [showDialog, setShowDialog] = useState(false)
   const [, startTransition] = useTransition()
   const [isPending, setIsPending] = useState(false)
+  
+  const t = useTranslations('homepages')
+  const tDialog = useTranslations('quiz_alert_dialog')
 
   useEffect(() => {
     const supabase = createClient()
     let cancelled = false
 
     async function resolve() {
-      // Single call — getSession includes user info and token together
       const { data } = await supabase.auth.getSession()
       if (cancelled) return
 
@@ -42,13 +45,11 @@ export default function CTAButton() {
         return
       }
 
-      // Logged in — check sessionStorage first (instant, no network)
       if (sessionStorage.getItem('quizResult')) {
         setState('results')
         return
       }
 
-      // Fall back to API only if sessionStorage is empty
       try {
         const history = await fetchQuizHistory(session.access_token)
         if (cancelled) return
@@ -64,26 +65,26 @@ export default function CTAButton() {
     }
   }, [])
 
-function handleClick() {
-  if (state === 'results') {
-    const hasPreviousResults = !!sessionStorage.getItem('quizResult')
-    if (hasPreviousResults) {
+  function handleClick() {
+    if (state === 'results') {
+      const hasPreviousResults = !!sessionStorage.getItem('quizResult')
+      if (hasPreviousResults) {
+        setShowDialog(true)
+        return
+      }
+      setIsPending(true)
+      startTransition(() => router.push('/quiz/results'))
+      return
+    }
+
+    if (sessionStorage.getItem('quizResult')) {
       setShowDialog(true)
       return
     }
+
     setIsPending(true)
-    startTransition(() => router.push('/quiz/results'))
-    return
+    startTransition(() => router.push('/quiz'))
   }
-
-  if (sessionStorage.getItem('quizResult')) {
-    setShowDialog(true)
-    return
-  }
-
-  setIsPending(true)
-  startTransition(() => router.push('/quiz'))
-}
 
   function handleViewResults() {
     setShowDialog(false)
@@ -103,39 +104,39 @@ function handleClick() {
       <Button
         onClick={handleClick}
         disabled={state === 'loading'}
-        className='w-full sm:w-fit rounded-md text-md h-12 px-4 font-bold'
+        className='w-full sm:w-fit rounded-md text-md h-12 px-4 font-bold cursor-pointer'
       >
         {state === 'loading' && (
           <span className='w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin mr-2' />
         )}
-        {state === 'results' ? 'View My Results' : 'Get Personal Package'}
+        {state === 'results' ? t('button-result') : t('button-1')}
       </Button>
 
       <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
         <AlertDialogContent className='max-w-md rounded-xl p-5'>
-          <AlertDialogCancel className='w-0 border-0 m-0 p-0 absolute right-2 rounded-lg top-1 hover:bg-transparent'>
+          <AlertDialogCancel className='w-0 border-0 m-0 p-0 absolute right-2 rounded-lg top-1 hover:bg-transparent cursor-pointer'>
             <X />
           </AlertDialogCancel>
           <AlertDialogHeader>
-            <AlertDialogTitle>You have a previous assessment</AlertDialogTitle>
+            <AlertDialogTitle className='text-foreground font-bold tracking-tight'>
+              {tDialog('title')}
+            </AlertDialogTitle>
             <AlertDialogDescription className='text-sm text-muted-foreground leading-relaxed'>
-              You&apos;ve already completed a major recommendation assessment.
-              Would you like to review your results, or start a fresh
-              assessment?
+              {tDialog('description')}
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className='flex-col gap-2 sm:flex-row'>
+          <AlertDialogFooter className='flex-col gap-2 sm:flex-row mt-4'>
             <AlertDialogCancel
               onClick={handleRetake}
-              className='w-full sm:w-auto border-secondary-foreground/30'
+              className='w-full sm:w-auto border-secondary-foreground/30 cursor-pointer font-semibold'
             >
-              Start fresh
+              {tDialog('btn_start_fresh')}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleViewResults}
-              className='w-full sm:w-auto rounded-md'
+              className='w-full sm:w-auto rounded-md cursor-pointer font-semibold'
             >
-              View my results
+              {tDialog('btn_view_results')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

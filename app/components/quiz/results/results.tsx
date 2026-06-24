@@ -5,10 +5,13 @@ import { useQuizResults } from './use-quiz-results'
 import { useFilters } from './use-filters'
 import MajorsTab from './majors-tab'
 import UniversitiesTab from './universities-tab'
+import { useTranslations } from 'next-intl'
 
 type Props = { searchParams: SearchParams }
 
 export default function ResultsClient({ searchParams }: Props) {
+  const tCard = useTranslations('major_card')
+  
   const {
     result,
     identity,
@@ -52,6 +55,12 @@ export default function ResultsClient({ searchParams }: Props) {
           {(['majors', 'universities'] as const).map(tab => {
             const isActive = activeTab === tab
             const isDisabled = tab === 'universities' && !hasChosen
+            
+            // Dynamically assign translated tab labels
+            const tabLabel = tab === 'majors' 
+              ? tCard('tab_majors') 
+              : tCard('tab_universities')
+
             return (
               <button
                 key={tab}
@@ -61,7 +70,7 @@ export default function ResultsClient({ searchParams }: Props) {
                   updateUrl({ tab: tab === 'majors' ? null : tab })
                 }
                 className={`
-                  py-3.5 text-sm font-semibold capitalize border-b-2 transition-colors -mb-px cursor-pointer
+                  py-3.5 text-sm font-semibold border-b-2 transition-colors -mb-px cursor-pointer
                   ${
                     isActive
                       ? 'border-primary text-foreground'
@@ -71,10 +80,10 @@ export default function ResultsClient({ searchParams }: Props) {
                   }
                 `}
               >
-                {tab}
+                {tabLabel}
                 {tab === 'universities' && !hasChosen && (
-                  <span className='ml-1.5 text-[10px] font-normal text-muted-foreground/50'>
-                    (choose a major first)
+                  <span className='ml-1.5 text-[10px] font-normal text-muted-foreground/50 normal-case'>
+                    {tCard('choose_major_first')}
                   </span>
                 )}
               </button>
