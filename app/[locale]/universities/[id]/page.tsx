@@ -59,7 +59,7 @@ function getAdmissionIcon(key: string | null): React.ElementType {
 
 const NAV_SECTIONS = [
   { id: 'overview', label: 'Overview', icon: BookOpen },
-  { id: 'major', label: 'Selected Major', icon: GraduationCap },
+  // { id: 'major', label: 'Selected Major', icon: GraduationCap },
   { id: 'admission', label: 'Admission', icon: ClipboardList },
   { id: 'tuition', label: 'Tuition & Fees', icon: DollarSign },
   { id: 'scholarships', label: 'Scholarships', icon: BookOpen },
@@ -186,7 +186,7 @@ export default function UniversityDetailPage() {
           onClick={() => router.back()}
           className='flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer'
         >
-          <ArrowLeft size={15} /> Back to University Tab
+          <ArrowLeft size={15} /> Back
         </button>
       </div>
 
